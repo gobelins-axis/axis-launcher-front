@@ -2,10 +2,10 @@
 
 ## Environments
 
-| Name           | URL                                                            |
-| -------------- | -------------------------------------------------------------- |
-| **Staging**    | [arcade-launcher.netlify.app](https://arcade-hub.netlify.app/) |
-| **Production** | To be defined                                                  |
+| Name           | URL                                                                 |
+| -------------- | ------------------------------------------------------------------- |
+| **Staging**    | [arcade-launcher.netlify.app](https://arcade-launcher.netlify.app/) |
+| **Production** | To be defined                                                       |
 
 ## Build Setup
 
