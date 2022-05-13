@@ -1,0 +1,21 @@
+.demo-text {
+    width: 100%;
+
+    margin-top: rem(100px, 'small');
+    
+    font-size: rem(40px, 'small');
+    text-align: center;
+    text-transform: uppercase;
+    
+    @include respond-to('medium') {
+        margin-top: rem(100px, 'medium');
+        
+        font-size: rem(30px, 'medium');
+    }
+    
+    @include respond-to('large') {
+        margin-top: rem(100px, 'large');
+
+        font-size: rem(30px, 'large');
+    }
+}

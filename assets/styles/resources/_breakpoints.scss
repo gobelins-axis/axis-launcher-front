@@ -1,0 +1,8 @@
+@each $name, $value in $breakpoints {
+    @media #{inspect(map-get($breakpoints, $name))} {
+        html:before {
+            display: none;
+            content: $name;
+        }
+    }
+}

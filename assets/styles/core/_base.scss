@@ -1,0 +1,21 @@
+html, body {
+    padding-left: rem(10px, 'large');
+
+    font-family: $font-primary, Arial, Helvetica, sans-serif;
+
+    font-size: base-font-size('small');
+
+    @include respond-to('medium') {
+        font-size: base-font-size('medium');
+    }
+
+    @include respond-to('large') {
+        font-size: base-font-size('large');
+    }
+
+    * {
+        box-sizing: border-box;
+           
+        @include unselectable();
+    }
+}

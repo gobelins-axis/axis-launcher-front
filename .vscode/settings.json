@@ -1,0 +1,15 @@
+
+{
+    "files.associations": {
+        "*.html": "vue-html,"
+    },
+    "emmet.includeLanguages": {
+        "vue-html": "html",
+        "vue": "html",
+        "javascript": "html"
+    },
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true,
+        "source.fixAll.eslint": true
+    }
+}
