@@ -1,7 +1,7 @@
 export default {
     // Global page headers: https://go.nuxtjs.dev/config-head
     head: {
-        title: 'Arcade Hub',
+        title: 'Axis Hub',
 
         htmlAttrs: {
             lang: 'en',
@@ -50,6 +50,7 @@ export default {
         '@/plugins/device.client.js',
         '@/plugins/breakpoints.client.js',
         '@/plugins/windowResizeObserver.client.js',
+        '@/plugins/axis.client.js',
     ],
 
     router: {

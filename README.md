@@ -1,11 +1,11 @@
-# 💻 Arcade Launcher Front
+# 💻 Axis Launcher Front
 
 ## Environments
 
-| Name           | URL                                                                 |
-| -------------- | ------------------------------------------------------------------- |
-| **Staging**    | [arcade-launcher.netlify.app](https://arcade-launcher.netlify.app/) |
-| **Production** | To be defined                                                       |
+| Name           | URL                                                             |
+| -------------- | --------------------------------------------------------------- |
+| **Staging**    | [axis-launcher.netlify.app](https://axis-launcher.netlify.app/) |
+| **Production** | To be defined                                                   |
 
 ## Build Setup
 
