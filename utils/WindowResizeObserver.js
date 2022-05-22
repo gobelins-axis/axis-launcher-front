@@ -1,50 +1,50 @@
 import EventDispatcher from './EventDispatcher';
 
+// Constants
 const DEBOUNCE_RATE = 250;
+const MAX_DPR = 2;
 
 class WindowResizeObserver extends EventDispatcher {
     constructor() {
         super();
 
-        this._width = null;
-        this._height = null;
-
-        this._viewportWidth = null;
-        this._viewportHeight = null;
-
-        this._ghostElement = this._createGhostElement();
-
+        // Setup
+        this._innerWidth = null;
+        this._innerHeight = null;
+        this._fullWidth = null;
+        this._fullHeight = null;
+        this._dpr = 1;
+        this._innerGhostElement = this._createGhostElement();
         this._bindHandlers();
         this._setupEventListeners();
-        this._updateDimensions();
-        this._updateViewportDimensions();
-        this._updateCSSVariables();
+        this._updateValues();
     }
 
     /**
      * Getters
      */
-    get width() {
-        return this._width;
+    get innerWidth() {
+        return this._innerWidth;
     }
 
-    get height() {
-        return this._height;
+    get innerHeight() {
+        return this._innerHeight;
     }
 
-    get viewportWidth() {
-        return this._viewportWidth;
+    get fullWidth() {
+        return this._fullWidth;
     }
 
-    get viewportHeight() {
-        return this._viewportHeight;
+    get fullHeight() {
+        return this._fullHeight;
     }
 
     /**
      * Public
      */
     triggerResize() {
-        this._debounce();
+        this._updateValues();
+        this._dispatchResizeEvent();
     }
 
     /**
@@ -73,39 +73,57 @@ class WindowResizeObserver extends EventDispatcher {
         return element;
     }
 
-    _updateDimensions() {
-        document.body.appendChild(this._ghostElement);
-        this._width = this._ghostElement.offsetWidth;
-        this._height = this._ghostElement.offsetHeight;
-        document.body.removeChild(this._ghostElement);
+    /**
+     * Get dimensions of the viewport on mobile WITH overlapping bars
+     */
+    _updateInnerDimensions() {
+        document.body.appendChild(this._innerGhostElement);
+        this._fullWidth = this._innerGhostElement.offsetWidth;
+        this._fullHeight = this._innerGhostElement.offsetHeight;
+        document.body.removeChild(this._innerGhostElement);
     }
 
-    _updateViewportDimensions() {
-        this._viewportWidth = window.innerWidth;
-        this._viewportHeight = window.innerHeight;
+    /**
+     * Get dimensions of the viewport on mobile WITHOUT overlapping bars
+     */
+    _updateFullDimensions() {
+        this._innerWidth = window.innerWidth;
+        this._innerHeight = window.innerHeight;
     }
 
     _updateCSSVariables() {
-        document.documentElement.style.setProperty('--vh', `${this._viewportHeight * 0.01}px`);
-        document.documentElement.style.setProperty('--vw', `${this._width * 0.01}px`);
-        document.documentElement.style.setProperty('--scrollbar-width', `${this._viewportWidth - this._width}px`);
+        document.documentElement.style.setProperty('--vh', `${this._innerHeight * 0.01}px`);
+        document.documentElement.style.setProperty('--vw', `${this._innerWidth * 0.01}px`);
+        document.documentElement.style.setProperty('--scrollbar-width', `${this._fullWidth - this._innerWidth}px`);
+    }
+
+    _updateDPR() {
+        this._dpr = Math.min(window.devicePixelRatio, MAX_DPR);
     }
 
     _dispatchResizeEvent() {
         this.dispatchEvent('resize', {
-            width: this._width,
-            height: this._height,
+            innerWidth: this._innerWidth,
+            innerHeight: this._innerHeight,
+            fullWidth: this._fullWidth,
+            fullHeight: this._fullHeight,
+            dpr: this._dpr,
         });
     }
 
     _debounce() {
         if (this._debounceTimeout) { clearTimeout(this._debounceTimeout); }
         this._debounceTimeout = setTimeout(() => {
-            this._updateDimensions();
-            this._updateViewportDimensions();
-            this._updateCSSVariables();
+            this._updateValues();
             this._dispatchResizeEvent();
         }, DEBOUNCE_RATE);
+    }
+
+    _updateValues() {
+        this._updateInnerDimensions();
+        this._updateFullDimensions();
+        this._updateCSSVariables();
+        this._updateDPR();
     }
 
     /**

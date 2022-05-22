@@ -1,9 +1,15 @@
 <template>
     <div class="default">
 
-        <Nuxt />
+        <client-only>
+            <CanvasWebGL ref="canvasWebGL" />
+        </client-only>
 
-        <Preloader />
+        <Nuxt class="page" />
+
+        <client-only>
+            <Preloader />
+        </client-only>
 
     </div>
 </template>

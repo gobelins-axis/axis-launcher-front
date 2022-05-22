@@ -1,8 +1,17 @@
+// Vendor
+import { mapGetters } from 'vuex';
+
 // Mixins
 import pageTransitions from '@/mixins/pageTransitions';
 
 export default {
     mixins: [pageTransitions],
+
+    computed: {
+        ...mapGetters({
+            games: 'data/games',
+        }),
+    },
 
     methods: {
         /**

@@ -1,4 +1,5 @@
 // Vendor
+import ResourceLoader from '@/vendor/resource-loader';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -15,18 +16,25 @@ export default {
     },
 
     mounted() {
-        this.loadResources();
+        this.resourceLoader = this.createResourceLoader();
+        this.setupEventListeners();
+
+        this.resourceLoader.preload();
     },
 
     methods: {
-        loadResources() {
-            setTimeout(() => {
-                this.$store.dispatch('preloader/setLoadingCompleted');
-            }, 10);
+        createResourceLoader() {
+            const resourceLoader = new ResourceLoader();
+            return resourceLoader;
+        },
 
-            setTimeout(() => {
-                this.$store.dispatch('preloader/setCompleted');
-            }, 20);
+        setupEventListeners() {
+            this.resourceLoader.addEventListener('complete', this.loadingCompleteHandler);
+        },
+
+        loadingCompleteHandler() {
+            this.$store.dispatch('preloader/setLoadingCompleted');
+            this.$store.dispatch('preloader/setCompleted');
         },
     },
 };

@@ -4,14 +4,13 @@ $color-white: #ffffff;
 
 // Fonts
 $font-primary: Arial;
-// $font-secondary: 'Roboto';
 
 // Misc
 
 // Base font sizes
 $base-font-sizes: (
     'small': 1vw,
-    'medium': 0.55vw,
+    'medium': 1vw,
     'large': 1vw,
 );
 
@@ -19,7 +18,7 @@ $base-font-sizes: (
 $base-viewport-widths: (
     'small': 375px,
     'medium': 768px,
-    'large': 1920px,
+    'large': 2560px,
 );
 
 // Max widths

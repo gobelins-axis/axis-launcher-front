@@ -44,6 +44,7 @@ export default {
     plugins: [
         // Server and client side
         '@/plugins/context.js',
+        '@/plugins/firebase.js',
         // Client Side
         '@/plugins/init.client.js',
         '@/plugins/browser.client.js',
@@ -122,7 +123,7 @@ export default {
 
     server: {
         host: '0.0.0.0',
-        port: 3000,
+        port: 8000,
     },
 
     env: {

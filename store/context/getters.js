@@ -1,4 +1,8 @@
 const getters = {
+    context(state) {
+        return state;
+    },
+
     isDebug(state) {
         return state.isDebug;
     },

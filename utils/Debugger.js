@@ -1,14 +1,14 @@
 // Vendor
-import Tweakpane from 'tweakpane';
+import { Pane } from 'tweakpane';
 
 // Utils
 import DragManager from './DragManager';
 
-class Debugger extends Tweakpane {
-    constructor(options) {
+class Debugger extends Pane {
+    constructor() {
         super();
 
-        this._title = options.title;
+        this._title = 'Debugger';
 
         this.__bindAll();
         this.__setup();
@@ -89,4 +89,4 @@ class Debugger extends Tweakpane {
     }
 }
 
-export default Debugger;
+export default new Debugger();

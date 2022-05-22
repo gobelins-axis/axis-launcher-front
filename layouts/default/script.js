@@ -1,6 +1,3 @@
-// Components
-import Preloader from '@/components/Preloader';
-
 export default {
     watch: {
         $route(to, from) {
@@ -15,7 +12,15 @@ export default {
     },
 
     components: {
-        Preloader,
+
+        // Client only
+        CanvasWebGL: () => {
+            if (process.client) return import('@/components/CanvasWebGL');
+        },
+
+        Preloader: () => {
+            if (process.client) return import('@/components/Preloader');
+        },
     },
 };
 
