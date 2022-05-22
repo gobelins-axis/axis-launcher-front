@@ -1,0 +1,28 @@
+.game-card {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+
+    width: rem(800px, 'large');
+    height: rem(350px, 'large');
+
+    margin: auto;
+
+    background-color: lightgray;
+
+    border: solid 2px grey;
+
+    border-radius: rem(40px, 'large');
+
+    will-change: transform;
+}
+
+.title {
+    margin-top: rem(30px, 'large');
+    margin-left: rem(30px, 'large');
+
+    font-size: rem(25px, 'large');
+
+    text-transform: uppercase;
+}

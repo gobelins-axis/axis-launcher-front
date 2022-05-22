@@ -1,13 +1,7 @@
 <template>
     <div class="page-home">
 
-        <h1>
-            Games
-        </h1>
-
-        <div v-for="(item, index) in games" :key="index">
-            {{ item.fields.title }}
-        </div>
+        <GameList :games="games" />
 
     </div>
 </template>
