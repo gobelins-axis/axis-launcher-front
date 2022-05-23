@@ -86,14 +86,12 @@ export default {
         keydownHandler(e) {
             if (e.key === 'ArrowUp') {
                 this.index--;
-                this.index = math.clamp(this.index, 0, (this.gameCards.length - 1));
-                this.position.target = -this.index * (this.cardBounds.height + this.padding);
+                this.$root.webgl.updateGalleryIndex(this.index);
             }
 
             if (e.key === 'ArrowDown') {
                 this.index++;
-                this.index = math.clamp(this.index, 0, (this.gameCards.length - 1));
-                this.position.target = -this.index * (this.cardBounds.height + this.padding);
+                this.$root.webgl.updateGalleryIndex(this.index);
             }
         },
     },

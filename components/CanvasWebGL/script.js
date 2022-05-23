@@ -8,7 +8,14 @@ export default {
     computed: {
         ...mapGetters({
             context: 'context/context',
+            isLoadingCompleted: 'preloader/isCompleted',
         }),
+    },
+
+    watch: {
+        isLoadingCompleted(isCompleted) {
+            if (isCompleted) this.$root.webgl.start();
+        },
     },
 
     mounted() {
@@ -33,6 +40,8 @@ export default {
             });
 
             this.$root.webgl.init();
+
+            if (this.isLoadingCompleted) this.$root.webgl.start();
         },
     },
 };

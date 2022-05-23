@@ -1,6 +1,16 @@
 // Vendor
 import ResourceLoader from '@/vendor/resource-loader';
+import ThreeTextureLoader from '@/vendor/loaders/ThreeTextureLoader';
 import { mapGetters } from 'vuex';
+
+// Utils
+import BMFontLoader from '@/utils/loaders/BMFontLoader';
+
+// Resources
+import resources from '@/webgl/resources';
+
+ResourceLoader.registerLoader(BMFontLoader, 'fnt');
+ResourceLoader.registerLoader(ThreeTextureLoader, 'texture');
 
 export default {
     computed: {
@@ -17,6 +27,8 @@ export default {
 
     mounted() {
         this.resourceLoader = this.createResourceLoader();
+        this.resourceLoader.add({ resources });
+
         this.setupEventListeners();
 
         this.resourceLoader.preload();

@@ -46,6 +46,10 @@ class WebGLApplication {
         return this._renderer;
     }
 
+    get scene() {
+        return this._scene;
+    }
+
     /**
      * Public
      */
@@ -60,6 +64,10 @@ class WebGLApplication {
         WindowResizeObserver.triggerResize();
     }
 
+    _start() {
+        this._scene.start();
+    }
+
     _createClock() {
         const clock = new Clock();
         return clock;
@@ -72,6 +80,7 @@ class WebGLApplication {
             antialias: false,
         });
         renderer.setClearColor(0xffffff);
+        renderer.setClearColor(0x000000);
         return renderer;
     }
 
