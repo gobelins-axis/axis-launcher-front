@@ -14,10 +14,12 @@ export default class GalleryComponent extends component(Object3D) {
     init(options = {}) {
         // Setup
         this._damping = 0.1;
-        this._offset = { target: 0, current: 0 };
+        this._offsetFactor = { target: 0, current: 0 };
         this._index = 0;
 
         this._colors = ['red', 'green', 'blue'];
+        this._data = this._createFakeData();
+        this._map = this._createPositionMap();
         this._cards = this._createCards();
     }
 
@@ -30,7 +32,7 @@ export default class GalleryComponent extends component(Object3D) {
 
     set index(index) {
         this._index = index;
-        this._offset.target = this._index;
+        this._offsetFactor.target = this._index;
     }
 
     /**
@@ -43,12 +45,46 @@ export default class GalleryComponent extends component(Object3D) {
     /**
      * Private
      */
-    _createCards() {
-        const amount = 11;
-        const cards = [];
+    _createFakeData() {
+        const data = [];
+        const amount = 30;
 
         for (let i = 0; i < amount; i++) {
-            const card = new CardComponent({ index: i, color: this._colors[i % 3] });
+            const game = { name: 'Game', id: i };
+            data.push(game);
+        }
+
+        return data;
+    }
+
+    _createPositionMap() {
+        const map = [];
+
+        const middle = Math.round(this._data.length / 2);
+        let a = -middle;
+        let b = 0;
+
+        for (let i = 0; i < this._data.length; i++) {
+            if (i < middle) {
+                map.push(a);
+                a++;
+            } else {
+                map.push(b);
+                b++;
+            }
+        }
+
+        return map;
+    }
+
+    _createCards() {
+        const cards = [];
+
+        for (let i = 0; i < this._data.length; i++) {
+            const card = new CardComponent({
+                index: i,
+                color: this._colors[i % 3],
+            });
             this.add(card);
             cards.push(card);
         }
@@ -65,16 +101,21 @@ export default class GalleryComponent extends component(Object3D) {
     }
 
     _updateOffset() {
-        this._offset.current = math.lerp(this._offset.current, this._offset.target, this._damping);
+        this._offsetFactor.current = math.lerp(this._offsetFactor.current, this._offsetFactor.target, this._damping);
     }
 
     _updateCardsPosition() {
         const offsetY = this._cards[0].height;
-        const globalOffset = offsetY * Math.round(this._cards.length / 2);
+        const offsetZ = 50;
+        const offsetX = 30;
+        const middle = Math.round(this._cards.length / 2);
+        const globalOffset = offsetY * middle;
 
         for (let i = 0; i < this._cards.length; i++) {
             const card = this._cards[i];
-            const index = i + this._offset.current;
+            const index = this._map[i] + this._offsetFactor.current;
+            card.position.z = -offsetZ * Math.abs(modulo(index, this._cards.length) - middle);
+            card.position.x = -offsetX * Math.abs(modulo(index, this._cards.length) - middle);
             card.position.y = -offsetY * modulo(index, this._cards.length);
             card.position.y += globalOffset;
         }
@@ -85,6 +126,8 @@ export default class GalleryComponent extends component(Object3D) {
      */
     onWindowResize(dimensions) {
         this._resizeCards(dimensions);
+
+        this._updateCardsPosition();
     }
 
     _resizeCards(dimensions) {

@@ -52,6 +52,8 @@ export default class CardComponent extends component(Object3D) {
     resize(dimensions) {
         this._width = Breakpoints.rem(500);
         this._height = Breakpoints.rem(220);
+        // this._width = Breakpoints.rem(200);
+        // this._height = Breakpoints.rem(100);
 
         this._resizeMesh(dimensions);
         this._resizeCardTextComponent(dimensions);
@@ -94,6 +96,8 @@ export default class CardComponent extends component(Object3D) {
     _createCardTextComponent() {
         const text = new CardTextComponent({
             text: `${this._index}`,
+            fontSize: 40,
+            letterSpacing: 0,
         });
         this.add(text);
         return text;

@@ -17,7 +17,7 @@ export default class CardTextComponent extends component(Object3D) {
         this._index = options.index;
         this._color = options.color;
         this._text = options.text;
-        this._fontSize = options.fontSize || 30;
+        this._fontSize = options.fontSize;
         this._letterSpacing = options.letterSpacing || 0;
 
         // Setup

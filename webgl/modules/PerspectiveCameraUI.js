@@ -20,7 +20,7 @@ export default class UIPerspectiveCamera extends component() {
      * Private
      */
     _createCamera() {
-        const camera = new PerspectiveCamera(45, 16 / 9, 0.1, 1000);
+        const camera = new PerspectiveCamera(45, 16 / 9, 0.1, 10000);
         camera.position.z = this._perspective;
         return camera;
     }
