@@ -8,6 +8,9 @@ import PerspectiveCameraUI from '@/webgl/modules/PerspectiveCameraUI';
 // Components
 import GalleryComponent from '../components/GalleryComponent';
 
+// Utils
+import Debugger from '@/utils/Debugger';
+
 export default class MainScene extends component(Scene) {
     init(options = {}) {
         // Setup

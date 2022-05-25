@@ -50,10 +50,10 @@ export default class CardComponent extends component(Object3D) {
     }
 
     resize(dimensions) {
+        // this._width = Breakpoints.rem(760);
+        // this._height = Breakpoints.rem(350);
         this._width = Breakpoints.rem(500);
         this._height = Breakpoints.rem(220);
-        // this._width = Breakpoints.rem(200);
-        // this._height = Breakpoints.rem(100);
 
         this._resizeMesh(dimensions);
         this._resizeCardTextComponent(dimensions);
