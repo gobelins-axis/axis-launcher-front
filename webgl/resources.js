@@ -11,6 +11,12 @@ const resources = [
         path: '/webgl/fonts/Roobert-Regular.png',
         preload: true,
     },
+    {
+        type: 'texture',
+        name: 'test-texture',
+        path: '/webgl/textures/test-texture.jpg',
+        preload: true,
+    },
 ];
 
 export default resources;

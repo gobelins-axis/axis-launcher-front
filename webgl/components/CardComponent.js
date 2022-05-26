@@ -85,6 +85,7 @@ export default class CardComponent extends component(Object3D) {
 
     _resizeMesh(dimensions) {
         this._mesh.scale.set(this._width, this._height, 1);
+        this._material.uniforms.uResolution.value.set(this._width, this._height);
     }
 
     _createComponents() {

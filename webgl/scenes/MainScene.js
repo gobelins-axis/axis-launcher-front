@@ -7,14 +7,14 @@ import PerspectiveCameraUI from '@/webgl/modules/PerspectiveCameraUI';
 
 // Components
 import GalleryComponent from '../components/GalleryComponent';
-
-// Utils
-import Debugger from '@/utils/Debugger';
+import BackgroundComponent from '../components/BackgroundComponent';
 
 export default class MainScene extends component(Scene) {
     init(options = {}) {
         // Setup
         this._camera = this._createCamera();
+
+        this._setupDebugger();
     }
 
     /**
@@ -38,6 +38,10 @@ export default class MainScene extends component(Scene) {
     /**
      * Private
      */
+    _setupDebugger() {
+        this.$debugger.addFolder({ title: 'Main Scene' });
+    }
+
     _createCamera() {
         const camera = new PerspectiveCameraUI().camera;
         return camera;
@@ -45,6 +49,7 @@ export default class MainScene extends component(Scene) {
 
     _createComponents() {
         const components = {};
+        components.background = this._createBackgroundComponent();
         components.gallery = this._createGalleryComponent();
         return components;
     }
@@ -53,6 +58,12 @@ export default class MainScene extends component(Scene) {
         const gallery = new GalleryComponent();
         this.add(gallery);
         return gallery;
+    }
+
+    _createBackgroundComponent() {
+        const background = new BackgroundComponent();
+        this.add(background);
+        return background;
     }
 
     /**

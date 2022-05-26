@@ -28,13 +28,15 @@ class WebGLApplication {
         this._nuxt = options.nuxt;
         this._store = options.store;
         this._context = options.context;
+        this._debugger = options.debugger;
 
         // Setup
+        this._registerBidelloGlobals();
+
         this._clock = this._createClock();
         this._renderer = this._createRenderer();
         this._scene = this._createScene();
 
-        this._registerBidelloGlobals();
         this._bindAll();
         this._setupEventListeners();
     }
@@ -146,6 +148,7 @@ class WebGLApplication {
         bidello.registerGlobal('nuxt', this._nuxt);
         bidello.registerGlobal('store', this._store);
         bidello.registerGlobal('context', this._context);
+        bidello.registerGlobal('debugger', this._debugger);
     }
 
     _bindAll() {

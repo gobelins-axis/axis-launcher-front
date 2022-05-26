@@ -111,6 +111,6 @@ export default class CardTextComponent extends component(Object3D) {
 
         // Style font size
         this._mesh.scale.set(fontScale, fontScale, 1);
-        this._mesh.position.y -= this._mesh.geometry.layout.height * fontScale;
+        this._mesh.position.y = -this._mesh.geometry.layout.height * fontScale;
     }
 }

@@ -4,11 +4,12 @@ import { Pane } from 'tweakpane';
 // Utils
 import DragManager from './DragManager';
 
-class Debugger extends Pane {
+export default class Debugger extends Pane {
     constructor() {
         super();
 
         this._title = 'Debugger';
+        this._folders = {};
 
         this.__bindAll();
         this.__setup();
@@ -22,9 +23,14 @@ class Debugger extends Pane {
         this.__removeEventListeners();
     }
 
+    getFolder(title) {
+        return this._folders[title];
+    }
+
     addFolder(options) {
         const folder = super.addFolder(options);
         folder.refresh = this.refresh;
+        this._folders[options.title] = folder;
 
         return folder;
     }
@@ -88,5 +94,3 @@ class Debugger extends Pane {
         this.__dragButtonElement.style.cursor = 'grab';
     }
 }
-
-export default new Debugger();

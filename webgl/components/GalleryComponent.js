@@ -1,6 +1,6 @@
 // Vendor
 import { Object3D } from 'three';
-import { component } from '../vendor/bidello';
+import { component } from '@/webgl/vendor/bidello';
 
 // Components
 import CardComponent from './CardComponent';
@@ -9,7 +9,6 @@ import CardComponent from './CardComponent';
 import Breakpoints from '@/utils/Breakpoints';
 import math from '@/utils/math';
 import modulo from '@/utils/number/modulo';
-import Debugger from '@/utils/Debugger';
 
 export default class GalleryComponent extends component(Object3D) {
     init(options = {}) {
@@ -34,7 +33,7 @@ export default class GalleryComponent extends component(Object3D) {
         this._map = this._createPositionMap();
         this._cards = this._createCards();
 
-        const folder = Debugger.addFolder({ title: 'Gallery' });
+        const folder = this.$debugger.getFolder('Main Scene').addFolder({ title: 'Gallery' });
         const folderOffset = folder.addFolder({ title: 'Cards offset' });
         folderOffset.addInput(this._settings.offset, 'x');
         folderOffset.addInput(this._settings.offset, 'y');
