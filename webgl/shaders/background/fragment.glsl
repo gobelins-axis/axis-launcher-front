@@ -9,8 +9,6 @@ uniform float uOverlayOpacity;
 // Varyings
 varying vec2 vUv;
 
-vec2 uv = vec2(0.0);
-
 vec2 resizedUv(vec2 uv, vec2 size, vec2 resolution) {
     vec2 ratio = vec2(
         min((resolution.x / resolution.y) / (size.x / size.y), 1.0),
@@ -37,17 +35,13 @@ void main() {
     gl_FragColor = mix(texture, vec4(uOverlayColor, 1.0), uOverlayOpacity);
 
     // Test rounded rect
-    // vec2 size = vec2(1000.0, 1000.0);
-    // vec2 location = vec2(0.0, 0.0);
-    // float edgeSoftness  = 2.0;
-    // vec4 radius = vec4((sin(uTime) + 1.0)) * vec4(10.0, 20.0, 40.0, 80.0);
-    // float dist = roundedBoxSDF(gl_FragCoord.xy - location, size / 2.0, radius);
-    // float smoothedAlpha =  1.0-smoothstep(0.0, edgeSoftness,dist);
-    // float borderThickness = 5.0;
-    // float borderSoftness  = 2.0;
-    // float borderAlpha     = 1.0-smoothstep(borderThickness - borderSoftness, borderThickness, abs(dist));
-    // vec4 rectColor = vec4(0.0, 0.2, 1.0, 1.0);
-    // vec4 borderColor = vec4(1.0, 0.6, 0.1, 1.0);
-    // vec4 bgColor = vec4(1.0, 1.0, 1.0, 1.0);
-    // gl_FragColor = mix(bgColor, mix(rectColor, borderColor, borderAlpha), smoothedAlpha);
+    vec2 size = uResolution;
+    vec2 pos = vec2(uResolution.x, uResolution.y);
+    float edgeSoftness  = 2.0;
+    vec4 radius = vec4(100.0);
+    float dist = roundedBoxSDF(gl_FragCoord.xy - pos, size, radius);
+    float smoothedAlpha =  1.0 - smoothstep(0.0, edgeSoftness, dist);
+    vec4 rectColor = texture;
+    vec4 bgColor = vec4(1.0, 1.0, 1.0, 1.0);
+    gl_FragColor = mix(bgColor, rectColor, smoothedAlpha);
 }
