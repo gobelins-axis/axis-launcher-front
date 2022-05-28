@@ -106,11 +106,12 @@ export default class CardTextComponent extends component(Object3D) {
         this._mesh.geometry.update({
             text: this._text,
             letterSpacing: this._letterSpacing,
-            align: 'left',
+            align: 'center',
         });
 
         // Style font size
         this._mesh.scale.set(fontScale, fontScale, 1);
-        this._mesh.position.y = -this._mesh.geometry.layout.height * fontScale;
+        this._mesh.position.y = -this._mesh.geometry.layout.height / 2 * fontScale;
+        this._mesh.position.x = -this._mesh.geometry.layout.width / 2 * fontScale;
     }
 }

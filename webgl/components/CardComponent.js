@@ -69,8 +69,12 @@ export default class CardComponent extends component(Object3D) {
             uniforms: {
                 uTime: { value: 0 },
                 uResolution: { value: new Vector2() },
-                uColor: { value: new Color(this._color) },
+                uBorderRadius: { value: 40 },
+                uBorderColor: { value: new Color('white') },
+                uBorderWidth: { value: 10 },
+                uBorderAlpha: { value: 1 },
             },
+            transparent: true,
         });
 
         return material;
@@ -105,8 +109,6 @@ export default class CardComponent extends component(Object3D) {
     }
 
     _resizeCardTextComponent(dimensions) {
-        this._components.text.position.x = -this._width / 2;
-        this._components.text.position.y = this._height / 2;
         this._components.text.resize(dimensions);
     }
 }

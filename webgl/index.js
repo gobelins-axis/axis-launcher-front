@@ -79,7 +79,7 @@ class WebGLApplication {
         const renderer = new WebGLRenderer({
             canvas: this._canvas,
             powerPreference: 'high-performance',
-            antialias: false,
+            antialias: true,
         });
         renderer.setClearColor(0xffffff);
         renderer.setClearColor(0x000000);
