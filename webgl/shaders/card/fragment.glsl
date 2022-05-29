@@ -1,13 +1,19 @@
 // Uniforms
 uniform float uTime;
 uniform vec2 uResolution;
+uniform sampler2D uTexture;
+uniform vec2 uTextureSize;
 uniform float uBorderRadius;
+uniform float uInsetBorderRadius;
 uniform float uBorderWidth;
 uniform vec3 uBorderColor;
 uniform float uBorderAlpha;
 
 // Varyings
 varying vec2 vUv;
+
+// Requires
+#pragma glslify: resizedUv = require(../partials/resizedUv)
 
 // https://www.shadertoy.com/view/tltXDl
 float roundedBoxSDF(vec2 pos, vec2 size, vec4 radius) {
@@ -19,7 +25,9 @@ float roundedBoxSDF(vec2 pos, vec2 size, vec4 radius) {
 }
 
 void main() {
-    vec2 cardSize = uResolution - 2.0;
+    vec4 texture = texture2D(uTexture, resizedUv(vUv, uTextureSize, uResolution));
+
+    vec2 cardSize = uResolution;
     vec2 cardPosition = vec2(uResolution.x, uResolution.y);
 
     vec2 insetCardSize = uResolution - uBorderWidth;
@@ -27,22 +35,23 @@ void main() {
     float edgeSoftness  = 2.0;
 
     vec4 radius = vec4(uBorderRadius);
+    vec4 insetRadius = vec4(uInsetBorderRadius);
 
     float cardAlpha = roundedBoxSDF(vUv * uResolution * 2.0 - cardPosition, cardSize, radius);
     cardAlpha = 1.0 - smoothstep(0.0, edgeSoftness, cardAlpha);
 
-    float insetCardAlpha = roundedBoxSDF(vUv * uResolution * 2.0 - cardPosition, insetCardSize, radius - uBorderWidth / 2.0);
+    float insetCardAlpha = roundedBoxSDF(vUv * uResolution * 2.0 - cardPosition, insetCardSize, insetRadius);
     insetCardAlpha = 1.0 - smoothstep(0.0, edgeSoftness, insetCardAlpha);
 
     float cardBorderAlpha = (1.0 - insetCardAlpha) * cardAlpha;
 
-    vec4 background = vec4(1.0, 0.0, 0.0, 1.0);
-    background.a *= cardAlpha - cardBorderAlpha;
+    vec4 background = texture;
+    background *= cardAlpha - cardBorderAlpha;
+    // background.a *= cardAlpha;
 
     vec4 border = vec4(uBorderColor, uBorderAlpha);
-    border.a *= cardBorderAlpha;
+    border *= cardBorderAlpha;
     
     gl_FragColor = background + border;
-    gl_FragColor = mix(background, border, border.a - background.a);
-    // gl_FragColor = border;
+    // gl_FragColor = background;
 }

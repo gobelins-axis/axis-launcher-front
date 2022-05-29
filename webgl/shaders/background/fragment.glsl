@@ -9,17 +9,8 @@ uniform float uOverlayOpacity;
 // Varyings
 varying vec2 vUv;
 
-vec2 resizedUv(vec2 uv, vec2 size, vec2 resolution) {
-    vec2 ratio = vec2(
-        min((resolution.x / resolution.y) / (size.x / size.y), 1.0),
-        min((resolution.y / resolution.x) / (size.y / size.x), 1.0)
-    );
-
-    return vec2(
-        uv.x * ratio.x + (1.0 - ratio.x) * 0.5,
-        uv.y * ratio.y + (1.0 - ratio.y) * 0.5
-    );
-}
+// Requires
+#pragma glslify: resizedUv = require(../partials/resizedUv)
 
 void main() {
     vec2 uv = resizedUv(vUv, uTextureSize, uResolution);
