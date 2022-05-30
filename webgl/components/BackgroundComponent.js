@@ -1,6 +1,6 @@
 // Vendor
 import { gsap } from 'gsap';
-import { Object3D, ShaderMaterial, Vector2, PlaneGeometry, Mesh, Color } from 'three';
+import { Object3D, ShaderMaterial, Vector2, PlaneGeometry, Mesh, Color, Vector4 } from 'three';
 import { component } from '../vendor/bidello';
 import ResourceLoader from '@/vendor/resource-loader';
 
@@ -11,14 +11,6 @@ import fragment from '@/webgl/shaders/background/fragment.glsl';
 export default class BackgroundComponent extends component(Object3D) {
     init(options = {}) {
         // Setup
-        this._settings = {};
-        this._focusIndex = 0;
-        this._direction = 0;
-        this._data = this.$store.state.data.gameList;
-        this._textures = this._getTextures();
-        this._material = this._createMaterial();
-        this._mesh = this._createMesh();
-
         this._settings = {
             transition: {
                 scale: 1.06,
@@ -28,7 +20,17 @@ export default class BackgroundComponent extends component(Object3D) {
                     y: 0,
                 },
             },
+            gradient: {
+                color: '#000000',
+            },
         };
+
+        this._focusIndex = 0;
+        this._direction = 0;
+        this._data = this.$store.state.data.gameList;
+        this._textures = this._getTextures();
+        this._material = this._createMaterial();
+        this._mesh = this._createMesh();
 
         this._setupDebug();
     }
@@ -83,13 +85,45 @@ export default class BackgroundComponent extends component(Object3D) {
     _setupDebug() {
         const folder = this.$debugger.getFolder('Main Scene').addFolder({ title: 'Background' });
 
+        // Transition
         const folderTransition = folder.addFolder({ title: 'Transition' });
         folderTransition.addInput(this._settings.transition, 'scale', { label: 'scale', min: 0, max: 2, step: 0.01 });
         folderTransition.addInput(this._settings.transition, 'rotation', { label: 'rotation', step: 0.01 });
         folderTransition.addInput(this._settings.transition, 'translate', { label: 'translate', min: -1, max: 1, step: 0.001 });
 
+        // Gradient
+        const folderGradient = folder.addFolder({ title: 'Gradient' });
+        folderGradient.addInput(this._settings.gradient, 'color', { label: 'Color' }).on('change', () => { this._material.uniforms.uGradientColor.value.set(this._settings.gradient.color); });
+        folderGradient.addInput(this._material.uniforms.uGradientAlphaX, 'value', { label: 'Alpha X', min: 0, max: 1 });
+        folderGradient.addBlade({
+            view: 'cubicbezier',
+            value: [
+                this._material.uniforms.uGradientCurveX.value.x, // X1
+                this._material.uniforms.uGradientCurveX.value.y, // Y1
+                this._material.uniforms.uGradientCurveX.value.z, // X2
+                this._material.uniforms.uGradientCurveX.value.w, // Y2
+            ],
+            expanded: true,
+            label: 'Curve X',
+            picker: 'inline',
+        }).on('change', (e) => { this._material.uniforms.uGradientCurveX.value.set(e.value.x1, e.value.y1, e.value.x2, e.value.y2); });
+        folderGradient.addInput(this._material.uniforms.uGradientAlphaY, 'value', { label: 'Alpha Y', min: 0, max: 1 });
+        folderGradient.addBlade({
+            view: 'cubicbezier',
+            value: [
+                this._material.uniforms.uGradientCurveY.value.x, // X1
+                this._material.uniforms.uGradientCurveY.value.y, // Y1
+                this._material.uniforms.uGradientCurveY.value.z, // X2
+                this._material.uniforms.uGradientCurveY.value.w, // Y2
+            ],
+            expanded: true,
+            label: 'Curve Y',
+            picker: 'inline',
+        }).on('change', (e) => { this._material.uniforms.uGradientCurveY.value.set(e.value.x1, e.value.y1, e.value.x2, e.value.y2); });
+
+        // Overlay
         const folderOverlay = folder.addFolder({ title: 'Overlay' });
-        folderOverlay.addInput(this._material.uniforms.uOverlayOpacity, 'value', { label: 'Opacity' });
+        folderOverlay.addInput(this._material.uniforms.uOverlayOpacity, 'value', { label: 'Opacity', min: 0, max: 1 });
     }
 
     _getTextures() {
@@ -106,6 +140,8 @@ export default class BackgroundComponent extends component(Object3D) {
 
     _createMaterial() {
         const texture = ResourceLoader.get(this._data[this._focusIndex].fields.largeImage.name);
+
+        console.log(this._settings);
 
         const material = new ShaderMaterial({
             fragmentShader: fragment,
@@ -128,9 +164,15 @@ export default class BackgroundComponent extends component(Object3D) {
                 uRotateCurrent: { value: 0 },
                 uTranslateCurrent: { value: new Vector2(0, 0) },
                 uAlphaCurrent: { value: 1 },
+                // Gradient
+                uGradientColor: { value: new Color(this._settings.gradient.color) },
+                uGradientCurveX: { value: new Vector4(0.42, 0.0, 0.46, 1) },
+                uGradientAlphaX: { value: 0.5 },
+                uGradientCurveY: { value: new Vector4(0.42, 0.0, 0.46, 1) },
+                uGradientAlphaY: { value: 0.5 },
                 // Overlay
                 uOverlayColor: { value: new Color('black') },
-                uOverlayOpacity: { value: 0.35 },
+                uOverlayOpacity: { value: 0 },
             },
         });
 

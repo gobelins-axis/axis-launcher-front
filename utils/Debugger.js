@@ -1,5 +1,6 @@
 // Vendor
 import { Pane } from 'tweakpane';
+import * as EssentialsPlugin from '@tweakpane/plugin-essentials';
 
 // Utils
 import DragManager from './DragManager';
@@ -7,6 +8,8 @@ import DragManager from './DragManager';
 export default class Debugger extends Pane {
     constructor() {
         super();
+
+        this.registerPlugin(EssentialsPlugin);
 
         this._title = 'Debugger';
         this._folders = {};

@@ -99,7 +99,7 @@ export default class GalleryComponent extends component(Object3D) {
      * Private
      */
     _setupDebugger() {
-        const folder = this.$debugger.getFolder('Main Scene').addFolder({ title: 'Gallery' });
+        const folder = this.$debugger.getFolder('Main Scene').addFolder({ title: 'Gallery', expanded: false });
 
         const folderPosition = folder.addFolder({ title: 'Position' });
         folderPosition.addInput(this._settings.position, 'x').on('change', () => { WindowResizeObserver.triggerResize(); });
