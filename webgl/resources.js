@@ -1,14 +1,14 @@
 const resources = [
     {
         type: 'fnt',
-        name: 'roobert-regular-fnt',
-        path: '/webgl/fonts/Roobert-Regular.fnt',
+        name: 'darker-grotesque-fnt',
+        path: '/webgl/fonts/darker-grotesque/DarkerGrotesque-Medium.fnt',
         preload: true,
     },
     {
         type: 'texture',
-        name: 'roobert-regular-atlas',
-        path: '/webgl/fonts/Roobert-Regular.png',
+        name: 'darker-grotesque-atlas',
+        path: '/webgl/fonts/darker-grotesque/DarkerGrotesque-Medium.png',
         preload: true,
     },
     {

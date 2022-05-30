@@ -8,9 +8,11 @@ html, body {
 
     margin: 0;
 
-    font-family: $font-primary, Arial, Helvetica, sans-serif;
+    font-family: $font-primary;
 
     font-size: base-font-size('small');
+
+    color: $color-white;
 
     @include respond-to('medium') {
         font-size: base-font-size('medium');

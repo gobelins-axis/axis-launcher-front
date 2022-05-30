@@ -81,13 +81,13 @@ export default {
     },
 
     i18n: {
-        locales: ['en'],
-        defaultLocale: 'en',
+        locales: ['fr'],
+        defaultLocale: 'fr',
         strategy: 'prefix_except_default',
         vueI18n: {
-            fallbackLocale: 'en',
+            fallbackLocale: 'fr',
             messages: {
-                en: require('./locales/en'),
+                fr: require('./locales/fr'),
             },
         },
     },

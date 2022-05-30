@@ -8,6 +8,8 @@ uniform float uInsetBorderRadius;
 uniform float uBorderWidth;
 uniform vec3 uBorderColor;
 uniform float uBorderAlpha;
+uniform vec3 uOverlayColor;
+uniform float uOverlayAlpha;
 
 // Varyings
 varying vec2 vUv;
@@ -46,6 +48,7 @@ void main() {
     float cardBorderAlpha = (1.0 - insetCardAlpha) * cardAlpha;
 
     vec4 background = texture;
+    background.rgb = mix(uOverlayColor, background.rgb, uOverlayAlpha);
     background *= cardAlpha - cardBorderAlpha;
     // background.a *= cardAlpha;
 

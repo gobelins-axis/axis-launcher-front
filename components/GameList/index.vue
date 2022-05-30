@@ -1,9 +1,9 @@
 <template>
     <ul class="game-list">
 
-        <li v-for="(item, i) in gameCards" ref="listItem" :key="i" class="game-list-item">
+        <li v-for="(item, i) in gameList" ref="listItem" :key="i" class="game-list-item">
 
-            <GameCard ref="card" :game="item" :active="index === i" />
+            <GameDetails ref="details" :game="item" :active="gameIndex === i" />
 
         </li>
 

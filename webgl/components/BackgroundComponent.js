@@ -49,7 +49,7 @@ export default class BackgroundComponent extends component(Object3D) {
                 uTexture: { value: texture },
                 uTextureSize: { value: new Vector2(texture.image.width, texture.image.height) },
                 uOverlayColor: { value: new Color('black') },
-                uOverlayOpacity: { value: 0.2 },
+                uOverlayOpacity: { value: 0.35 },
             },
         });
 

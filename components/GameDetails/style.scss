@@ -1,0 +1,15 @@
+.game-details {
+    position: absolute;
+    top: rem(500px, 'large');
+    left: rem(1300px, 'large');
+}
+
+.title {
+    margin-bottom: rem(20px, 'large');
+
+    font-size: rem(150px, 'large');
+}
+
+.description {
+    font-size: rem(50px, 'large');
+}

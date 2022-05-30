@@ -45,7 +45,7 @@ export default class CardTextComponent extends component(Object3D) {
      * Private
      */
     _createGeometry() {
-        const font = ResourceLoader.get('roobert-regular-fnt');
+        const font = ResourceLoader.get('darker-grotesque-fnt');
         const geometry = createGeometry({
             font,
             flipY: true,
@@ -54,13 +54,11 @@ export default class CardTextComponent extends component(Object3D) {
     }
 
     _createMaterial() {
-        const texture = ResourceLoader.get('roobert-regular-atlas');
+        const texture = ResourceLoader.get('darker-grotesque-atlas');
         texture.minFilter = LinearFilter;
         texture.magFilter = LinearFilter;
 
         const material = new ShaderMaterial({
-            side: FrontSide,
-            transparent: true,
             uniforms: {
                 // Base
                 opacity: { value: 1 },
@@ -76,6 +74,9 @@ export default class CardTextComponent extends component(Object3D) {
             },
             vertexShader: vertex,
             fragmentShader: fragment,
+            side: FrontSide,
+            transparent: true,
+            depthTest: false,
             extensions: {
                 derivatives: true,
             },
@@ -96,7 +97,7 @@ export default class CardTextComponent extends component(Object3D) {
     }
 
     _updateMesh() {
-        const font = ResourceLoader.get('roobert-regular-fnt');
+        const font = ResourceLoader.get('darker-grotesque-fnt');
 
         // Calculate font size
         const fontSize = Breakpoints.rem(this._fontSize);

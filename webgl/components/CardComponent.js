@@ -1,5 +1,5 @@
 // Vendor
-import { Object3D, ShaderMaterial, Vector2, PlaneGeometry, Mesh, Color } from 'three';
+import { Object3D, ShaderMaterial, Vector2, PlaneGeometry, Mesh, Color, DoubleSide } from 'three';
 import { component } from '@/webgl/vendor/bidello';
 
 // Utils
@@ -24,6 +24,7 @@ export default class CardComponent extends component(Object3D) {
         this._active = false;
         this._width = null;
         this._height = null;
+        this._distanceFromCenter = 0;
 
         this._properties = {
             target: {
@@ -63,7 +64,9 @@ export default class CardComponent extends component(Object3D) {
         this.active = this._active;
         this._material.uniforms.uBorderRadius.value = this._settings.borderRadius;
         this._material.uniforms.uInsetBorderRadius.value = this._settings.insetBorderRadius;
+        this._material.uniforms.uBorderColor.value.set(this._settings.borderColor);
         this._material.uniforms.uBorderWidth.value = this._settings.borderWidth;
+        this._material.uniforms.uOverlayColor.value.set(this._settings.overlayColor);
     }
 
     get active() {
@@ -81,6 +84,22 @@ export default class CardComponent extends component(Object3D) {
             this._properties.target.offsetX = 0;
             this._properties.target.borderAlpha = 0;
         };
+    }
+
+    get distanceFromCenter() {
+        return this._distanceFromCenter;
+    }
+
+    set distanceFromCenter(distance) {
+        this._distanceFromCenter = distance;
+        this._material.uniforms.uOverlayAlpha.value = 1 - this._distanceFromCenter * this._settings.alphaOffset;
+
+        // Performance
+        if (this._distanceFromCenter >= this._settings.visibilityThreshold) {
+            this.visible = false;
+        } else {
+            this.visible = true;
+        }
     }
 
     /**
@@ -130,11 +149,14 @@ export default class CardComponent extends component(Object3D) {
                 uTextureSize: { value: new Vector2(texture.image.width, texture.image.height) },
                 uBorderRadius: { value: this._settings.borderRadius },
                 uInsetBorderRadius: { value: this._settings.insetBorderRadius },
-                uBorderColor: { value: new Color('white') },
+                uBorderColor: { value: new Color(this._settings.borderColor) },
+                uOverlayColor: { value: new Color(this._settings.overlayColor) },
+                uOverlayAlpha: { value: 0 },
                 uBorderWidth: { value: this._settings.borderWidth },
                 uBorderAlpha: { value: 1 },
             },
             transparent: true,
+            side: DoubleSide,
         });
 
         return material;
