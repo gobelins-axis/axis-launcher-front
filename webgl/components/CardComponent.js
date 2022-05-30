@@ -68,6 +68,10 @@ export default class CardComponent extends component(Object3D) {
         this._material.uniforms.uBorderColor.value.set(this._settings.borderColor);
         this._material.uniforms.uBorderWidth.value = this._settings.borderWidth;
         this._material.uniforms.uOverlayColor.value.set(this._settings.overlayColor);
+
+        this._width = Breakpoints.rem(this._settings.width);
+        this._height = Breakpoints.rem(this._settings.height);
+        this._resizeMesh();
     }
 
     get active() {
@@ -127,10 +131,10 @@ export default class CardComponent extends component(Object3D) {
     resize(dimensions) {
         // this._width = Breakpoints.rem(760);
         // this._height = Breakpoints.rem(350);
-        this._width = Breakpoints.rem(500);
-        this._height = Breakpoints.rem(220);
+        this._width = Breakpoints.rem(this._settings.width);
+        this._height = Breakpoints.rem(this._settings.height);
 
-        this._resizeMesh(dimensions);
+        this._resizeMesh();
         this._resizeCardTextComponent(dimensions);
     }
 

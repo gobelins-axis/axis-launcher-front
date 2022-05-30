@@ -25,12 +25,12 @@ export default class GalleryComponent extends component(Object3D) {
 
         this._settings = {
             position: {
-                x: 602,
-                y: 0,
+                x: 462,
+                y: 86.10,
             },
             offset: {
                 x: 152,
-                y: 240,
+                y: 340,
                 z: 119,
             },
             // Deg
@@ -40,16 +40,18 @@ export default class GalleryComponent extends component(Object3D) {
                 z: 0,
             },
             card: {
+                width: 610,
+                height: 310,
                 borderColor: '#ffffff',
                 borderRadius: 20,
                 insetBorderRadius: 14,
                 borderWidth: 6,
-                alphaOffset: 0.1,
+                alphaOffset: 0.21,
                 overlayColor: '#000000',
                 visibilityThreshold: 6,
                 activeProperties: {
-                    scale: 1.3,
-                    offsetX: 91,
+                    scale: 1.25,
+                    offsetX: 101,
                 },
             },
         };
@@ -101,11 +103,11 @@ export default class GalleryComponent extends component(Object3D) {
     _setupDebugger() {
         const folder = this.$debugger.getFolder('Main Scene').addFolder({ title: 'Gallery', expanded: false });
 
-        const folderPosition = folder.addFolder({ title: 'Position' });
+        const folderPosition = folder.addFolder({ title: 'Container Position' });
         folderPosition.addInput(this._settings.position, 'x').on('change', () => { WindowResizeObserver.triggerResize(); });
         folderPosition.addInput(this._settings.position, 'y').on('change', () => { WindowResizeObserver.triggerResize(); });
 
-        const folderCardsOffset = folder.addFolder({ title: 'Cards offset' });
+        const folderCardsOffset = folder.addFolder({ title: 'Cards position offset' });
         folderCardsOffset.addInput(this._settings.offset, 'x');
         folderCardsOffset.addInput(this._settings.offset, 'y');
         folderCardsOffset.addInput(this._settings.offset, 'z');
@@ -115,7 +117,9 @@ export default class GalleryComponent extends component(Object3D) {
         folderCardsRotationOffset.addInput(this._settings.rotationOffset, 'y');
         folderCardsRotationOffset.addInput(this._settings.rotationOffset, 'z');
 
-        const folderCard = folder.addFolder({ title: 'Card' });
+        const folderCard = folder.addFolder({ title: 'Card properties' });
+        folderCard.addInput(this._settings.card, 'width').on('change', () => { this._updateCardsSettings(); });
+        folderCard.addInput(this._settings.card, 'height').on('change', () => { this._updateCardsSettings(); });
         folderCard.addInput(this._settings.card, 'borderRadius').on('change', () => { this._updateCardsSettings(); });
         folderCard.addInput(this._settings.card, 'insetBorderRadius').on('change', () => { this._updateCardsSettings(); });
         folderCard.addInput(this._settings.card, 'borderColor').on('change', () => { this._updateCardsSettings(); });
@@ -124,7 +128,7 @@ export default class GalleryComponent extends component(Object3D) {
         folderCard.addInput(this._settings.card, 'overlayColor').on('change', () => { this._updateCardsSettings(); });
         folderCard.addInput(this._settings.card, 'visibilityThreshold').on('change', () => { this._updateCardsSettings(); });
 
-        const folderActiveCard = folderCard.addFolder({ title: 'Active Card' });
+        const folderActiveCard = folderCard.addFolder({ title: 'Active Card properties' });
         folderActiveCard.addInput(this._settings.card.activeProperties, 'scale').on('change', () => { this._updateCardsSettings(); });
         folderActiveCard.addInput(this._settings.card.activeProperties, 'offsetX').on('change', () => { this._updateCardsSettings(); });
     }

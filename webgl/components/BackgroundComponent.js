@@ -166,10 +166,10 @@ export default class BackgroundComponent extends component(Object3D) {
                 uAlphaCurrent: { value: 1 },
                 // Gradient
                 uGradientColor: { value: new Color(this._settings.gradient.color) },
-                uGradientCurveX: { value: new Vector4(0.42, 0.0, 0.46, 1) },
-                uGradientAlphaX: { value: 0.5 },
-                uGradientCurveY: { value: new Vector4(0.42, 0.0, 0.46, 1) },
-                uGradientAlphaY: { value: 0.5 },
+                uGradientCurveX: { value: new Vector4(0.06, 0.78, 0.33, 1.12) },
+                uGradientAlphaX: { value: 0.78 },
+                uGradientCurveY: { value: new Vector4(0.19, 0.46, 0.54, 0.16) },
+                uGradientAlphaY: { value: 0.84 },
                 // Overlay
                 uOverlayColor: { value: new Color('black') },
                 uOverlayOpacity: { value: 0 },
