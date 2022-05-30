@@ -18,6 +18,7 @@ export default class CardComponent extends component(Object3D) {
     init(options = {}) {
         // Props
         this._index = options.index;
+        this._data = options.data;
         this._settings = options.settings;
 
         // Setup
@@ -137,7 +138,7 @@ export default class CardComponent extends component(Object3D) {
      * Private
      */
     _createMaterial() {
-        const texture = ResourceLoader.get('test-texture-card');
+        const texture = ResourceLoader.get(this._data.fields.mediumImage.name);
 
         const material = new ShaderMaterial({
             fragmentShader: fragment,
@@ -186,7 +187,7 @@ export default class CardComponent extends component(Object3D) {
             fontSize: 40,
             letterSpacing: 0,
         });
-        this.add(text);
+        // this.add(text);
         return text;
     }
 

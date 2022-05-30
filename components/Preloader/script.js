@@ -16,6 +16,7 @@ export default {
     computed: {
         ...mapGetters({
             isLoadingCompleted: 'preloader/isLoadingCompleted',
+            games: 'data/gameList',
         }),
     },
 
@@ -26,8 +27,9 @@ export default {
     },
 
     mounted() {
+        this._resources = this.getResources();
         this.resourceLoader = this.createResourceLoader();
-        this.resourceLoader.add({ resources });
+        this.resourceLoader.add({ resources: this._resources });
 
         this.setupEventListeners();
 
@@ -35,6 +37,43 @@ export default {
     },
 
     methods: {
+        getResources() {
+            const clonedResources = JSON.parse(JSON.stringify(resources));
+
+            for (let i = 0; i < this.games.length; i++) {
+                const game = this.games[i].fields;
+
+                const textureLarge = {
+                    type: 'texture',
+                    name: game.largeImage.name,
+                    path: game.largeImage.url,
+                    preload: true,
+                };
+
+                const textureMedium = {
+                    type: 'texture',
+                    name: game.mediumImage.name,
+                    path: game.mediumImage.url,
+                    preload: true,
+                };
+
+                // Don't load duplicated resource
+                const names = [];
+                const paths = [];
+
+                for (let i = 0; i < clonedResources.length; i++) {
+                    const resource = clonedResources[i];
+                    names.push(resource.name);
+                    paths.push(resource.path);
+                }
+
+                if (!(names.includes(textureLarge.name) && paths.includes(textureLarge.path))) clonedResources.push(textureLarge);
+                if (!(names.includes(textureMedium.name) && paths.includes(textureMedium.path))) clonedResources.push(textureMedium);
+            }
+
+            return clonedResources;
+        },
+
         createResourceLoader() {
             const resourceLoader = new ResourceLoader();
             return resourceLoader;

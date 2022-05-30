@@ -1,6 +1,10 @@
+// Vendor
 import { initializeApp, getApps } from 'firebase/app';
 import { getFirestore, collection, getDocs, getDoc, doc } from 'firebase/firestore';
 import { getStorage, ref } from 'firebase/storage';
+
+// Config
+import games from '@/config/games';
 
 const config = {
     apiKey: process.env.FIREBASE_API_KEY,
@@ -24,12 +28,15 @@ export default ({ store }, inject) => {
         const collectionRef = collection(firestore, 'games');
 
         const promise = new Promise((resolve, reject) => {
-            getDocs(collectionRef).then((response) => {
-                const games = response.docs.map((doc) => {
-                    return { id: doc.id, fields: doc.data() };
-                });
-                resolve(games);
-            });
+            // getDocs(collectionRef).then((response) => {
+            //     const games = response.docs.map((doc) => {
+            //         return { id: doc.id, fields: doc.data() };
+            //     });
+            //     resolve(games);
+            // });
+
+            // Debug
+            resolve(games);
         });
         return promise;
     }

@@ -11,6 +11,8 @@ import math from '@/utils/math';
 import modulo from '@/utils/number/modulo';
 import WindowResizeObserver from '@/utils/WindowResizeObserver';
 import degreesToRadians from '@/utils/number/degreesToRadians';
+import TextureManager from '@/webgl/utils/TextureManager';
+import ResourceLoader from '@/vendor/resource-loader';
 
 export default class GalleryComponent extends component(Object3D) {
     init(options = {}) {
@@ -165,6 +167,7 @@ export default class GalleryComponent extends component(Object3D) {
         for (let i = 0; i < this._data.length; i++) {
             const card = new CardComponent({
                 index: i,
+                data: this._data[i],
                 settings: this._settings.card,
             });
 

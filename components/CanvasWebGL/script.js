@@ -17,7 +17,10 @@ export default {
 
     watch: {
         isLoadingCompleted(isCompleted) {
-            if (isCompleted) this.$root.webgl.start();
+            if (isCompleted) {
+                this.$root.webgl.prepare();
+                this.$root.webgl.start();
+            }
         },
     },
 
@@ -47,7 +50,10 @@ export default {
 
             this.$root.webgl.init();
 
-            if (this.isLoadingCompleted) this.$root.webgl.start();
+            if (this.isLoadingCompleted) {
+                this.$root.webgl.prepare();
+                this.$root.webgl.start();
+            }
         },
     },
 };

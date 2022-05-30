@@ -6,6 +6,7 @@ import bidello from '@/webgl/vendor/bidello';
 // Utils
 import Debugger from '@/utils/Debugger';
 import WindowResizeObserver from '@/utils/WindowResizeObserver';
+import TextureManager from '@/webgl/utils/TextureManager';
 
 // API
 import API from '@/webgl/api';
@@ -39,6 +40,10 @@ class WebGLApplication {
 
         this._bindAll();
         this._setupEventListeners();
+
+        window.getTextureCount = () => {
+            console.log(this._renderer.info.memory.textures);
+        };
     }
 
     /**
@@ -66,6 +71,10 @@ class WebGLApplication {
         WindowResizeObserver.triggerResize();
     }
 
+    _prepare() {
+        TextureManager.compute(this._renderer);
+    }
+
     _start() {
         this._scene.start();
     }
@@ -81,7 +90,6 @@ class WebGLApplication {
             powerPreference: 'high-performance',
             antialias: true,
         });
-        renderer.setClearColor(0xffffff);
         renderer.setClearColor(0x000000);
         return renderer;
     }

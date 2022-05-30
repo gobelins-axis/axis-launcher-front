@@ -39,7 +39,7 @@ export default class MainScene extends component(Scene) {
      * Private
      */
     _setupDebugger() {
-        this.$debugger.addFolder({ title: 'Main Scene' });
+        this.$debugger.addFolder({ title: 'Main Scene', expanded: false });
     }
 
     _createCamera() {

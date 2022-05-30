@@ -1,3 +1,6 @@
+// Vendor
+import { mapGetters } from 'vuex';
+
 // Components
 import GameDetails from '@/components/GameDetails';
 import modulo from '@/utils/number/modulo';
@@ -6,7 +9,7 @@ import modulo from '@/utils/number/modulo';
 import debounce from '@/utils/debounce';
 
 // Seconds
-const DEBOUNCE_DELAY = 0.5;
+const DEBOUNCE_DELAY = 0.2;
 
 export default {
     props: ['games'],
@@ -19,19 +22,13 @@ export default {
     },
 
     computed: {
-        gameList() {
-            const minAmount = 10;
-            let games = this.games;
-
-            while (games.length < minAmount) {
-                games = [...games, ...this.games];
-            }
-
-            return games;
-        },
+        ...mapGetters({
+            gameList: 'data/gameList',
+        }),
     },
 
     mounted() {
+        this.direction = 0;
         this.setupEventListeners();
     },
 
@@ -60,6 +57,7 @@ export default {
                 const previousIndex = this.gameIndex;
                 this.$refs.details[previousIndex].hide();
                 this.index--;
+                this.direction = -1;
                 this.gameIndex = modulo(this.index, this.gameList.length);
                 this.$root.webgl.updateGalleryIndex(this.index);
                 this.debounceKeyDown = debounce(this.keydownDebouncedHandler, DEBOUNCE_DELAY * 1000, this.debounceKeyDown);
@@ -69,6 +67,7 @@ export default {
                 const previousIndex = this.gameIndex;
                 this.$refs.details[previousIndex].hide();
                 this.index++;
+                this.direction = 1;
                 this.gameIndex = modulo(this.index, this.gameList.length);
                 this.$root.webgl.updateGalleryIndex(this.index);
                 this.debounceKeyDown = debounce(this.keydownDebouncedHandler, DEBOUNCE_DELAY * 1000, this.debounceKeyDown);
@@ -77,7 +76,7 @@ export default {
 
         keydownDebouncedHandler() {
             this.$refs.details[this.gameIndex].show();
-            this.$root.webgl.updateGalleryFocusIndex(this.gameIndex);
+            this.$root.webgl.updateGalleryFocusIndex(this.gameIndex, this.direction);
         },
     },
 

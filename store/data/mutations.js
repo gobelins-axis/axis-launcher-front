@@ -1,12 +1,7 @@
-const min = 12;
+// Config
+import placeholderGame from '@/config/placeholder-game';
 
-const gamePlaceholder = {
-    isPlaceholder: true,
-    fields: {
-        name: 'Placeholder',
-        description: 'Placeholder',
-    },
-};
+const min = 12;
 
 const mutations = {
     SET_GAMES(state, games) {
@@ -17,7 +12,7 @@ const mutations = {
         state.gameList = games;
 
         while (state.gameList.length < min) {
-            state.gameList.push(gamePlaceholder);
+            state.gameList.push(placeholderGame);
         }
     },
 };

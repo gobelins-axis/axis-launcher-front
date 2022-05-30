@@ -1,5 +1,9 @@
+// Vendor
 import { Loader } from '@/vendor/resource-loader';
 import { TextureLoader } from 'three';
+
+// Utils
+import TextureManager from '@/webgl/utils/TextureManager';
 
 class ThreeTextureLoader extends Loader {
     constructor(options) {
@@ -13,7 +17,15 @@ class ThreeTextureLoader extends Loader {
      */
     load({ path }) {
         const promise = new Promise((resolve, reject) => {
-            this._loader.load(path, resolve, null, reject);
+            this._loader.load(
+                path,
+                (texture) => {
+                    TextureManager.add(texture);
+                    resolve(texture);
+                },
+                null,
+                reject,
+            );
         });
 
         return promise;
