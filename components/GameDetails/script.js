@@ -1,6 +1,10 @@
 // Vendor
 import { gsap } from 'gsap';
 
+// Components
+import GameCredits from '@/components/GameCredits';
+import GameLeaderboard from '@/components/GameLeaderboard';
+
 export default {
     props: ['game', 'active'],
 
@@ -29,5 +33,10 @@ export default {
             this.timelineHide = new gsap.timeline();
             this.timelineHide.to(this.$el, { duration: 0.1, alpha: 0, ease: 'sine.inOut' });
         },
+    },
+
+    components: {
+        GameCredits,
+        GameLeaderboard,
     },
 };

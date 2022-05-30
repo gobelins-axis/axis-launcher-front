@@ -1,16 +1,33 @@
 .game-details {
-    display: none;
     position: absolute;
-    top: rem(500px, 'large');
-    left: rem(1300px, 'large');
+    top: rem(390, 'large');
+    left: rem(1000px, 'large');
 }
 
 .title {
-    margin-bottom: rem(20px, 'large');
+    width: rem(810px, 'large');
 
-    font-size: rem(150px, 'large');
+    margin-bottom: rem(30px, 'large');
+
+    font-weight: 800;
+    font-size: rem(96px, 'large');
+    line-height: rem(130px, 'large');
 }
 
 .description {
-    font-size: rem(50px, 'large');
+    width: rem(810px, 'large');
+
+    margin-bottom: rem(40px, 'large');
+
+    font-weight: 700;
+    font-size: rem(24px, 'large');
+    line-height: rem(33px, 'large');
+}
+
+.game-leaderboard {
+    margin-bottom: rem(68px, 'large');
+}
+
+.game-credits {
+    // margin-bottom: rem(55px, 'large');
 }

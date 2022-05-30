@@ -9,6 +9,10 @@
             {{ game.fields.description || 'Description' }}
         </h3>
 
+        <GameLeaderboard :data="null" />
+
+        <GameCredits :data="game.fields.credits" />
+
     </div>
 </template>
 

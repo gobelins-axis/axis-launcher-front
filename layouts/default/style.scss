@@ -1,3 +1,12 @@
 .page {
     position: relative;
 }
+
+.logo {
+    position: absolute;
+    top: rem(80px, 'large');
+    right: rem(80px, 'large');
+
+    width: rem(152.5px, 'large');
+    height: rem(60px, 'large');
+}

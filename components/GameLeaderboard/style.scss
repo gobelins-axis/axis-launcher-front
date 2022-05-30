@@ -1,0 +1,91 @@
+.score-list-item {
+    display: flex;
+
+    position: relative;
+
+    justify-content: space-between;
+    align-items: center;
+
+    width: rem(810px, 'large');
+    height: rem(60px, 'large');
+
+    padding-right: rem(34px, 'large');
+    padding-left: rem(34px, 'large');
+
+    &:not(:last-child) {
+        margin-bottom: rem(13px, 'large');
+    }
+
+    &:before {
+        opacity: 0.2;
+
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        width: 100%;
+        height: 100%;
+
+        background-color: $color-white;
+
+        // backdrop-filter: blur(10px);
+
+        border-radius: rem(10px, 'large');
+
+        content: '';
+    }
+
+    &:nth-child(1) {
+        &:before {
+            opacity: 0.6;
+        }   
+    }
+
+    &:nth-child(2) {
+        &:before {
+            opacity: 0.5;
+        }   
+    }
+
+    &:nth-child(3) {
+        &:before {
+            opacity: 0.4;
+        }   
+    }
+}
+
+.col-left, .col-right {
+    display: flex;
+    position: relative;
+
+    justify-content: space-between;
+    align-items: center;
+
+    height: 100%;
+}
+
+.col-left {
+    width: rem(178px, 'large');
+}
+
+.col-right {
+    width: rem(189px, 'large');
+}
+
+.ranking {
+    font-weight: 800;
+    font-size: rem(40px, 'large');
+    line-height: rem(54px, 'large');
+}
+
+.username {
+    font-weight: 700;
+    font-size: rem(40px, 'large');
+    line-height: rem(54px, 'large');
+}
+
+.score {
+    font-weight: 800;
+    font-size: rem(40px, 'large');
+    line-height: rem(54px, 'large');
+}

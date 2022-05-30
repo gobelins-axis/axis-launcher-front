@@ -25,12 +25,12 @@ export default class GalleryComponent extends component(Object3D) {
 
         this._settings = {
             position: {
-                x: 462,
-                y: 86.10,
+                x: 352,
+                y: 112,
             },
             offset: {
-                x: 152,
-                y: 340,
+                x: 242,
+                y: 350,
                 z: 119,
             },
             // Deg

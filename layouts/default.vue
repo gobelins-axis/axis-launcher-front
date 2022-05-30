@@ -5,6 +5,8 @@
             <CanvasWebGL ref="canvasWebGL" />
         </client-only>
 
+        <img class="logo" src="~/assets/images/logo.png" />
+
         <Nuxt class="page" />
 
         <client-only>
