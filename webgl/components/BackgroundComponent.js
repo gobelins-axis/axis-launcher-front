@@ -10,6 +10,7 @@ import BlurManager from '../modules/BlurManager';
 // Shaders
 import vertex from '@/webgl/shaders/background/vertex.glsl';
 import fragment from '@/webgl/shaders/background/fragment.glsl';
+import frameTimeout from '@/utils/frameTimeout';
 
 export default class BackgroundComponent extends component(Object3D) {
     init(options = {}) {
@@ -27,7 +28,7 @@ export default class BackgroundComponent extends component(Object3D) {
                 color: '#000000',
             },
             blur: {
-                intensity: 0.59,
+                intensity: 0.26,
             },
         };
 
@@ -37,6 +38,11 @@ export default class BackgroundComponent extends component(Object3D) {
         this._blurManager = this._createBlurManager();
         this._material = this._createMaterial();
         this._mesh = this._createMesh();
+
+        // Apply blur after first render
+        frameTimeout(() => {
+            this._material.uniforms.uTextureCurrent.value = this._blurManager.output;
+        }, 1);
 
         this._setupDebug();
     }
@@ -62,14 +68,14 @@ export default class BackgroundComponent extends component(Object3D) {
         this._focusIndex = index;
         const texture = ResourceLoader.get(this._data[this._focusIndex].fields.largeImage.name);
 
+        // Previous
+        this._material.uniforms.uTexturePrevious.value = this._material.uniforms.uTextureCurrent.value;
+        this._material.uniforms.uTextureSizePrevious.value.set(this._material.uniforms.uTextureSizeCurrent.value.x, this._material.uniforms.uTextureSizeCurrent.value.y);
+
         this._blurManager.texture = texture;
 
-        // Previous
-        // this._material.uniforms.uTexturePrevious.value = this._material.uniforms.uTextureCurrent.value;
-        // this._material.uniforms.uTextureSizePrevious.value.set(this._material.uniforms.uTextureSizeCurrent.value.x, this._material.uniforms.uTextureSizeCurrent.value.y);
-
         // Next
-        // this._material.uniforms.uTextureCurrent.value = texture;
+        this._material.uniforms.uTextureCurrent.value = this._blurManager.output;
         this._material.uniforms.uTextureSizeCurrent.value.set(texture.image.width, texture.image.height);
 
         this._timelineUpdate?.kill();
@@ -176,7 +182,6 @@ export default class BackgroundComponent extends component(Object3D) {
                 // Blur
                 uBlurTextureSize: { value: new Vector2(0, 0) },
                 // Current
-                // uTextureCurrent: { value: texture },
                 uTextureCurrent: { value: this._blurManager.output },
                 uTextureSizeCurrent: { value: new Vector2(texture.image.width, texture.image.height) },
                 uScaleCurrent: { value: 1 },
@@ -210,7 +215,6 @@ export default class BackgroundComponent extends component(Object3D) {
      */
     onUpdate({ time, delta }) {
         this._blurManager.render();
-        this._material.uniforms.uTextureCurrent.value = this._blurManager.output;
         this._material.uniforms.uTime.value = time;
     }
 

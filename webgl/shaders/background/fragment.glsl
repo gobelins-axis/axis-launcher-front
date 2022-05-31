@@ -9,7 +9,7 @@ uniform float uRotatePrevious;
 uniform vec2 uTranslatePrevious;
 uniform float uAlphaPrevious;
 
-uniform float uBlurTextureSize;
+uniform vec2 uBlurTextureSize;
 
 uniform sampler2D uTextureCurrent;
 uniform vec2 uTextureSizeCurrent;
@@ -56,7 +56,7 @@ float plot(float t, float pct){
 
 void main() {
     // Previous
-    vec2 uvPrevious = resizedUv(vUv, uTextureSizePrevious / uBlurTextureSize, uResolution);
+    vec2 uvPrevious = resizedUv(vUv, uTextureSizePrevious * uBlurTextureSize.x / uBlurTextureSize.y, uResolution);
     uvPrevious = scaleUv(uvPrevious, uScalePrevious);
     uvPrevious = rotateUv(uvPrevious, uRotatePrevious);
     uvPrevious.x += uTranslatePrevious.x;
@@ -66,7 +66,7 @@ void main() {
     texturePrevious.a *= uAlphaPrevious;
 
     // Current
-    vec2 uvCurrent = resizedUv(vUv, uTextureSizeCurrent / uBlurTextureSize, uResolution);
+    vec2 uvCurrent = resizedUv(vUv, uTextureSizeCurrent * uBlurTextureSize.x / uBlurTextureSize.y, uResolution);
     uvCurrent = scaleUv(uvCurrent, uScaleCurrent);
     uvCurrent = rotateUv(uvCurrent, uRotateCurrent);
     uvCurrent.x += uTranslateCurrent.x;
@@ -90,6 +90,8 @@ void main() {
     // Debug
     // float pct = plot(vUv.y, gradientY);
     // gl_FragColor = vec4(pct, 0.0, 0.0, 1.0);
+    // vec4 textureCombined = mix(textureCurrent, texturePrevious, step(vUv.x, 0.5));
+    // gl_FragColor = textureCombined;
 
     // Output
     gl_FragColor = mix(textureCurrent, vec4(uGradientColor, 1.0), gradientX);

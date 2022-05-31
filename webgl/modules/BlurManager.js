@@ -1,7 +1,7 @@
 // Modules
 import BlurPlaneBuffer from './BlurPlaneBuffer';
 
-const BUFFER_QUALITY_FACTOR = 0.4;
+const BUFFER_QUALITY_FACTOR = 0.5;
 
 export default class BlurManager {
     constructor(options = {}) {
