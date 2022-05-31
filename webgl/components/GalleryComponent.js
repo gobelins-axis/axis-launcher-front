@@ -11,8 +11,6 @@ import math from '@/utils/math';
 import modulo from '@/utils/number/modulo';
 import WindowResizeObserver from '@/utils/WindowResizeObserver';
 import degreesToRadians from '@/utils/number/degreesToRadians';
-import TextureManager from '@/webgl/utils/TextureManager';
-import ResourceLoader from '@/vendor/resource-loader';
 
 export default class GalleryComponent extends component(Object3D) {
     init(options = {}) {
@@ -22,14 +20,16 @@ export default class GalleryComponent extends component(Object3D) {
         this._index = 0;
         this._activeIndex = 0;
         this._focusIndex = 0;
+        this._speed = 0;
 
         this._settings = {
+            velocityFactor: 0.5,
             position: {
-                x: 352,
-                y: 112,
+                x: 422,
+                y: 0,
             },
             offset: {
-                x: 242,
+                x: 222,
                 y: 350,
                 z: 119,
             },
@@ -37,7 +37,7 @@ export default class GalleryComponent extends component(Object3D) {
             rotationOffset: {
                 x: 0,
                 y: 0,
-                z: 0,
+                z: 2.8,
             },
             card: {
                 width: 610,
@@ -46,12 +46,12 @@ export default class GalleryComponent extends component(Object3D) {
                 borderRadius: 20,
                 insetBorderRadius: 14,
                 borderWidth: 6,
-                alphaOffset: 0.21,
+                alphaOffset: 0.35,
                 overlayColor: '#000000',
                 visibilityThreshold: 6,
                 activeProperties: {
                     scale: 1.25,
-                    offsetX: 101,
+                    offsetX: 51,
                 },
             },
         };
@@ -95,6 +95,7 @@ export default class GalleryComponent extends component(Object3D) {
      */
     destroy() {
         super.destroy();
+        this._destroyCards();
     }
 
     /**
@@ -102,6 +103,8 @@ export default class GalleryComponent extends component(Object3D) {
      */
     _setupDebugger() {
         const folder = this.$debugger.getFolder('Main Scene').addFolder({ title: 'Gallery', expanded: false });
+
+        folder.addInput(this._settings, 'velocityFactor');
 
         const folderPosition = folder.addFolder({ title: 'Container Position' });
         folderPosition.addInput(this._settings.position, 'x').on('change', () => { WindowResizeObserver.triggerResize(); });
@@ -140,7 +143,6 @@ export default class GalleryComponent extends component(Object3D) {
         //     const game = { name: 'Game', id: i };
         //     data.push(game);
         // }
-
         const data = this.$store.state.data.gameList;
         return data;
     }
@@ -185,6 +187,12 @@ export default class GalleryComponent extends component(Object3D) {
         return cards;
     }
 
+    _destroyCards() {
+        for (let i = 0; i < this._cards.length; i++) {
+            this._cards[i].destroy();
+        }
+    }
+
     _updateCardsSettings() {
         for (let i = 0; i < this._cards.length; i++) {
             this._cards[i].settings = this._settings.card;
@@ -201,7 +209,9 @@ export default class GalleryComponent extends component(Object3D) {
     }
 
     _updateOffset() {
+        const previous = this._offsetFactor.current;
         this._offsetFactor.current = math.lerp(this._offsetFactor.current, this._offsetFactor.target, this._damping);
+        this._speed = this._offsetFactor.current - previous;
     }
 
     _updateCardsPosition() {

@@ -111,7 +111,9 @@ export default class CardComponent extends component(Object3D) {
      * Public
      */
     destroy() {
-
+        super.destroy();
+        this._material.dispose();
+        this._mesh.geometry.dispose();
     }
 
     update({ time, delta }) {
@@ -129,8 +131,6 @@ export default class CardComponent extends component(Object3D) {
     }
 
     resize(dimensions) {
-        // this._width = Breakpoints.rem(760);
-        // this._height = Breakpoints.rem(350);
         this._width = Breakpoints.rem(this._settings.width);
         this._height = Breakpoints.rem(this._settings.height);
 

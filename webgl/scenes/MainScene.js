@@ -35,6 +35,11 @@ export default class MainScene extends component(Scene) {
         this._components = this._createComponents();
     }
 
+    destroy() {
+        super.destroy();
+        this._destroyComponents();
+    }
+
     /**
      * Private
      */
@@ -64,6 +69,13 @@ export default class MainScene extends component(Scene) {
         const background = new BackgroundComponent();
         this.add(background);
         return background;
+    }
+
+    _destroyComponents() {
+        if (!this._components) return;
+        for (const key in this._components) {
+            if (typeof this._components[key].destroy === 'function') this._components[key].destroy();
+        }
     }
 
     /**

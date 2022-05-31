@@ -9,6 +9,8 @@ uniform float uRotatePrevious;
 uniform vec2 uTranslatePrevious;
 uniform float uAlphaPrevious;
 
+uniform float uBlurTextureSize;
+
 uniform sampler2D uTextureCurrent;
 uniform vec2 uTextureSizeCurrent;
 uniform float uScaleCurrent;
@@ -54,7 +56,7 @@ float plot(float t, float pct){
 
 void main() {
     // Previous
-    vec2 uvPrevious = resizedUv(vUv, uTextureSizePrevious, uResolution);
+    vec2 uvPrevious = resizedUv(vUv, uTextureSizePrevious / uBlurTextureSize, uResolution);
     uvPrevious = scaleUv(uvPrevious, uScalePrevious);
     uvPrevious = rotateUv(uvPrevious, uRotatePrevious);
     uvPrevious.x += uTranslatePrevious.x;
@@ -64,7 +66,7 @@ void main() {
     texturePrevious.a *= uAlphaPrevious;
 
     // Current
-    vec2 uvCurrent = resizedUv(vUv, uTextureSizeCurrent, uResolution);
+    vec2 uvCurrent = resizedUv(vUv, uTextureSizeCurrent / uBlurTextureSize, uResolution);
     uvCurrent = scaleUv(uvCurrent, uScaleCurrent);
     uvCurrent = rotateUv(uvCurrent, uRotateCurrent);
     uvCurrent.x += uTranslateCurrent.x;

@@ -23,6 +23,14 @@ class TextureManager {
         return this._textures;
     }
 
+    get scene() {
+        return this._scene;
+    }
+
+    get camera() {
+        return this._camera;
+    }
+
     /**
      * Public
      */

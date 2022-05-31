@@ -2,9 +2,10 @@
 import { gsap } from 'gsap';
 import { WebGLRenderer, Color, Clock } from 'three';
 import bidello from '@/webgl/vendor/bidello';
+import { GPUStatsPanel } from 'three/examples/jsm/utils/GPUStatsPanel.js';
+import Stats from 'stats-js';
 
 // Utils
-import Debugger from '@/utils/Debugger';
 import WindowResizeObserver from '@/utils/WindowResizeObserver';
 import TextureManager from '@/webgl/utils/TextureManager';
 
@@ -38,12 +39,13 @@ class WebGLApplication {
         this._renderer = this._createRenderer();
         this._scene = this._createScene();
 
+        if (this._context.isDevelopment) {
+            this._stats = this._createStats();
+            this._statsGpuPanel = this._createStatsGpuPanel();
+        }
+
         this._bindAll();
         this._setupEventListeners();
-
-        window.getTextureCount = () => {
-            console.log(this._renderer.info.memory.textures);
-        };
     }
 
     /**
@@ -61,7 +63,9 @@ class WebGLApplication {
      * Public
      */
     destroy() {
+        this._removeStats();
         this._removeEventListeners();
+        this._scene?.destroy();
     }
 
     /**
@@ -72,6 +76,7 @@ class WebGLApplication {
     }
 
     _prepare() {
+        console.log('compute');
         TextureManager.compute(this._renderer);
     }
 
@@ -99,12 +104,33 @@ class WebGLApplication {
         return scene;
     }
 
+    _createStats() {
+        const stats = new Stats();
+        document.body.appendChild(stats.dom);
+        return stats;
+    }
+
+    _createStatsGpuPanel() {
+        const panel = new GPUStatsPanel(this._renderer.getContext());
+        this._stats.addPanel(panel);
+        this._stats.showPanel(0);
+        return panel;
+    }
+
+    _removeStats() {
+        if (!this._stats) return;
+        document.body.removeChild(this._stats.dom);
+        this._stats = null;
+    }
+
     /**
      * Update
      */
     _tick() {
+        this._stats?.begin();
         this._update();
         this._render();
+        this._stats?.end();
     }
 
     _update() {
@@ -122,7 +148,11 @@ class WebGLApplication {
     }
 
     _render() {
+        this._statsGpuPanel?.startQuery();
+
         this._renderer.render(this._scene, this._scene.camera);
+
+        this._statsGpuPanel?.endQuery();
     }
 
     /**
