@@ -4,7 +4,7 @@ import { getFirestore, collection, getDocs, getDoc, doc } from 'firebase/firesto
 import { getStorage, ref } from 'firebase/storage';
 
 // Config
-import games from '@/config/games';
+import debugGames from '@/config/games';
 
 const config = {
     apiKey: process.env.FIREBASE_API_KEY,
@@ -25,19 +25,30 @@ export default ({ store }, inject) => {
     const storageRef = ref(storage);
 
     function getGames() {
-        const collectionRef = collection(firestore, 'games');
+        const collectionRefGames = collection(firestore, 'games');
 
-        const promise = new Promise((resolve, reject) => {
-            // getDocs(collectionRef).then((response) => {
-            //     const games = response.docs.map((doc) => {
-            //         return { id: doc.id, fields: doc.data() };
-            //     });
-            //     resolve(games);
-            // });
+        const promise = new Promise((resolve) => {
+            getDocs(collectionRefGames).then((gamesResponse) => {
+                const games = gamesResponse.docs.map((doc) => {
+                    return { id: doc.id, fields: doc.data() };
+                });
 
-            // Debug
-            resolve(games);
+                const leaderboardPromises = [];
+                for (let i = 0; i < games.length; i++) {
+                    leaderboardPromises.push(getGameLeaderboard(games[i].id));
+                }
+
+                Promise.all(leaderboardPromises).then((responses) => {
+                    for (let i = 0; i < responses.length; i++) {
+                        const scores = responses[i];
+                        games[i].scores = scores;
+                    }
+
+                    resolve(games);
+                });
+            });
         });
+
         return promise;
     }
 
