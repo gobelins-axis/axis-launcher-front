@@ -1,12 +1,34 @@
 export default [
     {
+        id: 'a-cairn-tale',
+        fields: {
+            name: 'A Cairn Tale',
+            description: 'Incarnez Kar, un voyageur que le destin a lié à un lourd fardeau.',
+            url: 'https://www.acairntale.com/',
+            players: 1,
+            credits: 'BDDI 2019',
+            colors: {
+                first: '#5C88D4',
+                secondary: '#5E8376',
+            },
+            largeImage: {
+                name: 'cairn-background.jpg',
+                url: '/webgl/textures/cairn-background.jpg',
+            },
+            mediumImage: {
+                name: 'cairn-card.png',
+                url: '/webgl/textures/cairn-card.png',
+            },
+        },
+    },
+    {
         id: 'oversight',
         fields: {
             name: 'Oversight',
             description: 'Dans un système totalitaire, les habitants sont observés par les caméras de l’état pour être notés sur leurs moindres faits et gestes.',
-            credits: 'BDDI 2020',
             url: 'https://oversight.emilienvandevelde.fr/',
             players: 1,
+            credits: 'BDDI 2020',
             colors: {
                 first: '#A54C6A',
                 secondary: '#FBEBFA',
@@ -26,9 +48,9 @@ export default [
         fields: {
             name: 'Beyond Memories',
             description: 'Avec l’aide d’Elmo son ami imaginaire, Éddie, doit utiliser les jeux, les jouets, les objets pour les faire vivre à nouveau grâce à ses souvenirs et éviter que son rêve disparaisse.',
-            credits: 'BDDI 2021',
             url: 'https://beyond-memories.world/',
             players: 1,
+            credits: 'BDDI 2021',
             colors: {
                 first: '#58BFE1',
                 secondary: '#CF4751',
@@ -48,9 +70,9 @@ export default [
         fields: {
             name: 'Pa[i]ndemie',
             description: 'Vous avez un temps imparti pour raconter un mensonge farfelu et ainsi protéger votre petit-fils.',
-            credits: 'BDDI 2021',
             url: 'https://paindemie.netlify.app/',
             players: 1,
+            credits: 'BDDI 2021',
             colors: {
                 first: '#F5B840',
                 secondary: '#DA5D58',
@@ -70,9 +92,9 @@ export default [
         fields: {
             name: 'Mamie Danger',
             description: 'Une mamie qui a bien du mal à traverser la rue seule.',
-            credits: 'BDDI 2021',
             url: 'http://mamiedanger.app/',
             players: 1,
+            credits: 'BDDI 2021',
             colors: {
                 first: '#F1B447',
                 secondary: '#5359B9',

@@ -9,9 +9,11 @@ import Stats from 'stats-js';
 import WindowResizeObserver from '@/utils/WindowResizeObserver';
 import TextureManager from '@/webgl/utils/TextureManager';
 
+// Scenes
+import MainScene from './scenes/MainScene';
+
 // API
 import API from '@/webgl/api';
-import MainScene from './scenes/MainScene';
 
 // Watch hot reload
 let isHotReload = false;
