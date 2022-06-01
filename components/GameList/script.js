@@ -77,6 +77,8 @@ export default {
         keydownDebouncedHandler() {
             this.$refs.details[this.gameIndex].show();
             this.$root.webgl.updateGalleryFocusIndex(this.gameIndex, this.direction);
+            console.log(this.games[this.gameIndex].fields.colors);
+            this.$axis.ledManager.leds[0].setColor(this.games[this.gameIndex].fields.colors.secondary);
         },
     },
 
