@@ -45,11 +45,13 @@ export default {
          * Events
          */
         setupEventListeners() {
+            this.$axis.joystick1.addEventListener('joystick:quickmove', this.joystickMoveHandler);
             window.addEventListener('keydown', this.keydownHandler);
         },
 
         removeEventListeners() {
             window.removeEventListener('keydown', this.keydownHandler);
+            this.$axis.joystick1.removeEventListener('joystick:quickmove', this.joystickMoveHandler);
         },
 
         keydownHandler(e) {
@@ -74,10 +76,31 @@ export default {
             }
         },
 
+        joystickMoveHandler(e) {
+            if (e.direction === 'up') {
+                const previousIndex = this.gameIndex;
+                this.$refs.details[previousIndex].hide();
+                this.index--;
+                this.direction = -1;
+                this.gameIndex = modulo(this.index, this.gameList.length);
+                this.$root.webgl.updateGalleryIndex(this.index);
+                this.debounceKeyDown = debounce(this.keydownDebouncedHandler, DEBOUNCE_DELAY * 1000, this.debounceKeyDown);
+            }
+
+            if (e.direction === 'down') {
+                const previousIndex = this.gameIndex;
+                this.$refs.details[previousIndex].hide();
+                this.index++;
+                this.direction = 1;
+                this.gameIndex = modulo(this.index, this.gameList.length);
+                this.$root.webgl.updateGalleryIndex(this.index);
+                this.debounceKeyDown = debounce(this.keydownDebouncedHandler, DEBOUNCE_DELAY * 1000, this.debounceKeyDown);
+            }
+        },
+
         keydownDebouncedHandler() {
             this.$refs.details[this.gameIndex].show();
             this.$root.webgl.updateGalleryFocusIndex(this.gameIndex, this.direction);
-            console.log(this.games[this.gameIndex].fields.colors);
             this.$axis.ledManager.leds[0].setColor(this.games[this.gameIndex].fields.colors.secondary);
         },
     },
