@@ -9,11 +9,12 @@ export default {
     props: ['game', 'active'],
 
     mounted() {
-        if (this.active) this.$el.style.opacity = 1;
-        else this.$el.style.opacity = 0;
+        this.setupEventListeners();
+        this.setupStyle();
     },
 
     beforeDestroy() {
+        this.removeEventListeners();
         this.timelineShow?.kill();
         this.timelineHide?.kill();
     },
@@ -32,6 +33,26 @@ export default {
             this.timelineShow?.kill();
             this.timelineHide = new gsap.timeline();
             this.timelineHide.to(this.$el, { duration: 0.1, alpha: 0, ease: 'sine.inOut' });
+        },
+
+        /**
+         * Private
+         */
+        setupStyle() {
+            if (this.active) this.$el.style.opacity = 1;
+            else this.$el.style.opacity = 0;
+        },
+
+        setupEventListeners() {
+            this.$axis.addEventListener('keydown', this.keydownHandler);
+        },
+
+        removeEventListeners() {
+
+        },
+
+        keydownHandler(e) {
+            console.log(e);
         },
     },
 

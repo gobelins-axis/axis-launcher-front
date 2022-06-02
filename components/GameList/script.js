@@ -40,62 +40,63 @@ export default {
         /**
          * Private
          */
+        goToPrevious() {
+            const previousIndex = this.gameIndex;
+            this.$refs.details[previousIndex].hide();
+            this.index--;
+            this.direction = -1;
+            this.gameIndex = modulo(this.index, this.gameList.length);
+            this.$root.webgl.updateGalleryIndex(this.index);
+            this.debounceKeyDown = debounce(this.keydownDebouncedHandler, DEBOUNCE_DELAY * 1000, this.debounceKeyDown);
+        },
+
+        goToNext() {
+            const previousIndex = this.gameIndex;
+            this.$refs.details[previousIndex].hide();
+            this.index++;
+            this.direction = 1;
+            this.gameIndex = modulo(this.index, this.gameList.length);
+            this.$root.webgl.updateGalleryIndex(this.index);
+            this.debounceKeyDown = debounce(this.keydownDebouncedHandler, DEBOUNCE_DELAY * 1000, this.debounceKeyDown);
+        },
+
+        selectGame() {
+            // this.gameIndex
+            const selectedGame = this.games[this.gameIndex];
+            console.log(selectedGame.fields.url);
+            this.$axis.ipcRenderer.send('url:changed', { url: selectedGame.fields.url });
+        },
 
         /**
          * Events
          */
         setupEventListeners() {
+            this.$axis.addEventListener('keydown', this.keydownHandler);
             this.$axis.joystick1.addEventListener('joystick:quickmove', this.joystickMoveHandler);
+
+            // Debug
             window.addEventListener('keydown', this.keydownHandler);
         },
 
         removeEventListeners() {
-            window.removeEventListener('keydown', this.keydownHandler);
+            this.$axis.removeEventListener('keydown', this.keydownHandler);
             this.$axis.joystick1.removeEventListener('joystick:quickmove', this.joystickMoveHandler);
+
+            // Debug
+            window.removeEventListener('keydown', this.keydownHandler);
         },
 
         keydownHandler(e) {
-            if (e.key === 'ArrowUp') {
-                const previousIndex = this.gameIndex;
-                this.$refs.details[previousIndex].hide();
-                this.index--;
-                this.direction = -1;
-                this.gameIndex = modulo(this.index, this.gameList.length);
-                this.$root.webgl.updateGalleryIndex(this.index);
-                this.debounceKeyDown = debounce(this.keydownDebouncedHandler, DEBOUNCE_DELAY * 1000, this.debounceKeyDown);
-            }
+            if (e.key === 'a') this.selectGame();
 
-            if (e.key === 'ArrowDown') {
-                const previousIndex = this.gameIndex;
-                this.$refs.details[previousIndex].hide();
-                this.index++;
-                this.direction = 1;
-                this.gameIndex = modulo(this.index, this.gameList.length);
-                this.$root.webgl.updateGalleryIndex(this.index);
-                this.debounceKeyDown = debounce(this.keydownDebouncedHandler, DEBOUNCE_DELAY * 1000, this.debounceKeyDown);
-            }
+            // Debug
+            if (e.key === 'ArrowUp') this.goToPrevious();
+            if (e.key === 'ArrowDown') this.goToNext();
         },
 
         joystickMoveHandler(e) {
-            if (e.direction === 'up') {
-                const previousIndex = this.gameIndex;
-                this.$refs.details[previousIndex].hide();
-                this.index--;
-                this.direction = -1;
-                this.gameIndex = modulo(this.index, this.gameList.length);
-                this.$root.webgl.updateGalleryIndex(this.index);
-                this.debounceKeyDown = debounce(this.keydownDebouncedHandler, DEBOUNCE_DELAY * 1000, this.debounceKeyDown);
-            }
-
-            if (e.direction === 'down') {
-                const previousIndex = this.gameIndex;
-                this.$refs.details[previousIndex].hide();
-                this.index++;
-                this.direction = 1;
-                this.gameIndex = modulo(this.index, this.gameList.length);
-                this.$root.webgl.updateGalleryIndex(this.index);
-                this.debounceKeyDown = debounce(this.keydownDebouncedHandler, DEBOUNCE_DELAY * 1000, this.debounceKeyDown);
-            }
+            if (e.direction === 'up') this.goToPrevious();
+            if (e.direction === 'down') this.goToNext();
         },
 
         keydownDebouncedHandler() {

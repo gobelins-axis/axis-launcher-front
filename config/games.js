@@ -22,6 +22,28 @@ export default [
         },
     },
     {
+        id: 'silly-billy',
+        fields: {
+            name: 'Silly Billy',
+            description: 'Part à la recherche d’une prime peu commune mais qui semble rapporter gros… Les bottes du maire.',
+            url: 'https://designinteractif.gobelins.fr/2021/12/10/silly-billy/',
+            players: 1,
+            credits: 'DMII1 2021',
+            colors: {
+                first: '#8E714A',
+                secondary: '#8E714A',
+            },
+            largeImage: {
+                name: 'silly-billy-background',
+                url: '/webgl/textures/silly-billy.jpg',
+            },
+            mediumImage: {
+                name: 'silly-billy-card',
+                url: '/webgl/textures/silly-billy-background.png',
+            },
+        },
+    },
+    {
         id: 'oversight',
         fields: {
             name: 'Oversight',
