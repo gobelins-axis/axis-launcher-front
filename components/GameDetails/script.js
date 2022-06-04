@@ -11,7 +11,7 @@ export default {
     props: ['game', 'active'],
 
     mounted() {
-        console.log(this.game);
+        this.isScoresOpen = false;
         this.setupStyle();
     },
 
@@ -34,6 +34,16 @@ export default {
             this.timelineShow?.kill();
             this.timelineHide = new gsap.timeline();
             this.timelineHide.to(this.$el, { duration: 0.1, alpha: 0, ease: 'sine.inOut' });
+        },
+
+        openScores() {
+            this.isScoresOpen = true;
+            this.$refs.leaderboard.open();
+        },
+
+        closeScores() {
+            this.isScoresOpen = false;
+            this.$refs.leaderboard.close();
         },
 
         /**

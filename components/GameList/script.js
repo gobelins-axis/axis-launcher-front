@@ -61,10 +61,16 @@ export default {
         },
 
         selectGame() {
-            // this.gameIndex
             const selectedGame = this.games[this.gameIndex];
-            console.log(selectedGame.fields.url);
             this.$axis.ipcRenderer.send('url:changed', { url: selectedGame.fields.url });
+        },
+
+        openScores() {
+            this.$refs.details[this.gameIndex].openScores();
+        },
+
+        closeScores() {
+            this.$refs.details[this.gameIndex].closeScores();
         },
 
         /**
@@ -88,6 +94,8 @@ export default {
 
         keydownHandler(e) {
             if (e.key === 'a') this.selectGame();
+            if (e.key === 'c') this.openScores();
+            if (e.key === 'b') this.closeScores();
 
             // Debug
             if (e.key === 'ArrowUp') this.goToPrevious();

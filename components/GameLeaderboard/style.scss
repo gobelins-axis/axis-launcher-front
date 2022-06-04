@@ -34,7 +34,7 @@
 
     background: linear-gradient(180deg, rgba(255, 255, 255, 0) 47.4%, rgba(255, 255, 255, 0.3) 100%), rgba(255, 255, 255, 0.2);
 
-    // transform: translateX(rem(273px, 'large'));
+    transform: translateX(rem(273px, 'large'));
 
     border-top-left-radius: rem(10px, 'large');
     border-top-right-radius: rem(0, 'large');
@@ -42,6 +42,7 @@
     border-bottom-left-radius: rem(10px, 'large');
 
     backdrop-filter: blur(20px);
+    will-change: transform;
 
     &:not(:last-child) {
         margin-bottom: rem(15px, 'large');
@@ -133,6 +134,8 @@
 }
 
 .score {
+    opacity: 0;
+
     width: rem(163px, 'large');
 
     margin-top: rem(4px, 'large');
@@ -146,6 +149,8 @@
 }
 
 .date {
+    opacity: 0;
+
     margin-top: rem(4px, 'large');
 
     font-weight: 500;

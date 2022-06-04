@@ -3,7 +3,7 @@
 
         <ul class="score-list">
 
-            <li v-for="(item, index) in scores" :key="index" class="score-list-item">
+            <li v-for="(item, index) in scores" ref="score" :key="index" class="score-list-item">
 
                 <div class="col-left">
 
