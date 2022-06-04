@@ -40,18 +40,18 @@ export default class GalleryComponent extends component(Object3D) {
                 z: 2.8,
             },
             card: {
-                width: 610,
+                width: 620,
                 height: 310,
                 borderColor: '#ffffff',
-                borderRadius: 20,
-                insetBorderRadius: 14,
+                borderRadius: 50,
+                insetBorderRadius: 46,
                 borderWidth: 6,
                 alphaOffset: 0.35,
                 overlayColor: '#000000',
                 visibilityThreshold: 6,
                 activeProperties: {
                     scale: 1.25,
-                    offsetX: 51,
+                    offsetX: 60,
                 },
             },
         };

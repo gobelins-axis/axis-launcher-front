@@ -3,14 +3,22 @@ export default [
         id: 'a-cairn-tale',
         fields: {
             name: 'A Cairn Tale',
-            description: 'Incarnez Kar, un voyageur que le destin a lié à un lourd fardeau.',
+            description: 'Dans ce jeu vidéo vous incarnez Kar, un voyageur que le destin a lié à un lourd fardeau : dans votre dos sont attachées de mystérieuses pierres.',
             url: 'https://www.acairntale.com/',
             players: 1,
             credits: 'BDDI 2019',
+            date: '2020',
             colors: {
                 first: '#5C88D4',
                 secondary: '#5E8376',
             },
+            filters: {
+                experience: true,
+                game: true,
+                multiPlayer: true,
+                onePlayer: true,
+            },
+            leaderboardActive: true,
             largeImage: {
                 name: 'cairn-background.jpg',
                 url: '/webgl/textures/cairn-background.jpg',
@@ -33,6 +41,13 @@ export default [
                 first: '#8E714A',
                 secondary: '#8E714A',
             },
+            filters: {
+                experience: true,
+                game: true,
+                multiPlayer: true,
+                onePlayer: true,
+            },
+            leaderboardActive: true,
             largeImage: {
                 name: 'silly-billy-background',
                 url: '/webgl/textures/silly-billy.jpg',
@@ -55,6 +70,13 @@ export default [
                 first: '#A54C6A',
                 secondary: '#FBEBFA',
             },
+            filters: {
+                experience: true,
+                game: true,
+                multiPlayer: true,
+                onePlayer: true,
+            },
+            leaderboardActive: true,
             largeImage: {
                 name: 'oversight-large',
                 url: '/webgl/textures/oversight.png',
@@ -69,7 +91,7 @@ export default [
         id: 'beyond-memories',
         fields: {
             name: 'Beyond Memories',
-            description: 'Avec l’aide d’Elmo son ami imaginaire, Éddie, doit utiliser les jeux, les jouets, les objets pour les faire vivre à nouveau grâce à ses souvenirs et éviter que son rêve disparaisse.',
+            description: 'Éddie doit utiliser les jeux, les jouets, les objets pour les faire vivre à nouveau grâce à ses souvenirs et éviter que son rêve disparaisse.',
             url: 'https://beyond-memories.world/',
             players: 1,
             credits: 'BDDI 2021',
@@ -77,6 +99,13 @@ export default [
                 first: '#58BFE1',
                 secondary: '#CF4751',
             },
+            filters: {
+                experience: true,
+                game: true,
+                multiPlayer: true,
+                onePlayer: true,
+            },
+            leaderboardActive: true,
             largeImage: {
                 name: 'memories-large',
                 url: '/webgl/textures/memories.png',
@@ -99,6 +128,13 @@ export default [
                 first: '#F5B840',
                 secondary: '#DA5D58',
             },
+            filters: {
+                experience: true,
+                game: true,
+                multiPlayer: true,
+                onePlayer: true,
+            },
+            leaderboardActive: true,
             largeImage: {
                 name: 'pandemie-large',
                 url: '/webgl/textures/pandemie.jpg',
@@ -121,6 +157,13 @@ export default [
                 first: '#F1B447',
                 secondary: '#5359B9',
             },
+            filters: {
+                experience: true,
+                game: true,
+                multiPlayer: true,
+                onePlayer: true,
+            },
+            leaderboardActive: true,
             largeImage: {
                 name: 'mamie-large',
                 url: '/webgl/textures/mamie.png',

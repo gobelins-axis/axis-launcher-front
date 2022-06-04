@@ -3,18 +3,18 @@ import { gsap } from 'gsap';
 
 // Components
 import GameCredits from '@/components/GameCredits';
+import GameDate from '@/components/GameDate';
 import GameLeaderboard from '@/components/GameLeaderboard';
+import GameTags from '@/components/GameTags';
 
 export default {
     props: ['game', 'active'],
 
     mounted() {
-        this.setupEventListeners();
         this.setupStyle();
     },
 
     beforeDestroy() {
-        this.removeEventListeners();
         this.timelineShow?.kill();
         this.timelineHide?.kill();
     },
@@ -42,22 +42,12 @@ export default {
             if (this.active) this.$el.style.opacity = 1;
             else this.$el.style.opacity = 0;
         },
-
-        setupEventListeners() {
-            this.$axis.addEventListener('keydown', this.keydownHandler);
-        },
-
-        removeEventListeners() {
-
-        },
-
-        keydownHandler(e) {
-            console.log(e);
-        },
     },
 
     components: {
+        GameDate,
         GameCredits,
         GameLeaderboard,
+        GameTags,
     },
 };

@@ -1,7 +1,7 @@
 <template>
-    <div class="preloader">
+    <div class="game-tags">
 
-        <img class="logo" src="~/assets/images/logo.png" />
+        <GameTag v-for="(item, index) in tags" :key="index" :data="item" />
 
     </div>
 </template>

@@ -1,8 +1,8 @@
 <template>
-    <div class="game-credits">
+    <div class="game-date">
         <p class="content">
             <span class="label">
-                Crédits :
+                Date :
             </span>
             {{ data }}
         </p>

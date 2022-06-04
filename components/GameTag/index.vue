@@ -1,7 +1,10 @@
 <template>
-    <div class="preloader">
+    <div class="game-tag">
 
-        <img class="logo" src="~/assets/images/logo.png" />
+        <component :is="icon"></component>
+        <!-- <IconSolo /> -->
+
+        {{ content }}
 
     </div>
 </template>

@@ -44,7 +44,8 @@ export default ({ store }, inject) => {
                         games[i].scores = scores;
                     }
 
-                    resolve(games);
+                    // resolve(games);
+                    resolve(debugGames);
                 });
             });
         });

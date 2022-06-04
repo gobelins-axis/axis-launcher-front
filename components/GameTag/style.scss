@@ -1,0 +1,30 @@
+.game-tag {
+    display: flex;
+
+    align-items: center;
+
+    padding-top: rem(3px, 'large');
+    padding-right: rem(12px, 'large');
+    padding-bottom: rem(5px, 'large');
+    padding-left: rem(12px, 'large');
+
+    font-weight: 700;
+    font-size: rem(20px, 'large');
+    line-height: rem(27px, 'large');
+
+    color: $color-black-1;
+
+    background-color: $color-white;
+
+    border-top-left-radius: rem(20px, 'large');
+    border-top-right-radius: rem(20px, 'large');
+    border-bottom-right-radius: rem(20px, 'large');
+    border-bottom-left-radius: rem(0, 'large');
+}
+
+svg {
+    width: auto;
+    height: rem(20px, 'large');
+
+    margin-right: rem(10px, 'large');
+}

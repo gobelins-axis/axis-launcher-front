@@ -1,27 +1,36 @@
 .game-details {
     position: absolute;
-    top: rem(390, 'large');
-    left: rem(1000px, 'large');
+    top: rem(491px, 'large');
+    left: rem(992px, 'large');
 }
 
 .title {
-    width: rem(810px, 'large');
+    display: flex;
 
-    margin-bottom: rem(30px, 'large');
+    align-items: flex-end;
 
-    font-weight: 800;
-    font-size: rem(96px, 'large');
-    line-height: rem(130px, 'large');
-}
-
-.description {
-    width: rem(810px, 'large');
+    width: rem(848px, 'large');
+    max-height: rem(115px, 'large');
 
     margin-bottom: rem(40px, 'large');
 
+    font-weight: 800;
+    font-size: rem(128px, 'large');
+    line-height: rem(115px, 'large');
+}
+
+.game-tags {
+    margin-bottom: rem(12px, 'large');
+}
+
+.description {
+    width: rem(780px, 'large');
+
+    margin-bottom: rem(9px, 'large');
+
     font-weight: 700;
-    font-size: rem(24px, 'large');
-    line-height: rem(33px, 'large');
+    font-size: rem(36px, 'large');
+    line-height: rem(49px, 'large');
 }
 
 .game-leaderboard {
