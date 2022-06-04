@@ -1,0 +1,11 @@
+.inputs {
+    display: flex;
+
+    position: absolute;
+    right: rem(80px, 'large');
+    bottom: rem(80px, 'large');
+}
+
+.input-indicator {
+    margin-left: rem(30px, 'large');
+}

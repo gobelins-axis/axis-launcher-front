@@ -1,0 +1,13 @@
+.input-indicator {
+    display: flex;
+
+    align-items: center;
+}
+
+.label {
+    margin-left: rem(20px, 'large');
+
+    font-weight: 700;
+    font-size: rem(32px, 'large');
+    line-height: rem(43px, 'large');
+}

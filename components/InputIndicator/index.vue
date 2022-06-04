@@ -1,9 +1,9 @@
 <template>
-    <div class="game-tag">
+    <div class="input-indicator">
 
         <component :is="icon"></component>
 
-        {{ content }}
+        <span class="label">{{ input.label }}</span>
 
     </div>
 </template>

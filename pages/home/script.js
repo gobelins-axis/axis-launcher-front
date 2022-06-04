@@ -3,6 +3,7 @@ import { mapGetters } from 'vuex';
 
 // Components
 import GameList from '@/components/GameList';
+import Inputs from '@/components/Inputs';
 
 // Mixins
 import pageTransitions from '@/mixins/pageTransitions';
@@ -31,5 +32,6 @@ export default {
 
     components: {
         GameList,
+        Inputs,
     },
 };

@@ -3,6 +3,13 @@
 
         <GameList :games="games" />
 
+        <Inputs
+            :inputs="[
+                { key: 'a', label: 'Sélectionner' },
+                { key: 'i', label: 'Scores' },
+            ]"
+        />
+
     </div>
 </template>
 

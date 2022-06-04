@@ -9,31 +9,17 @@ export default {
 
     computed: {
         content() {
-            let content = '';
-
-            if (this.data.type === 'solo') content = '1 joueur';
-
-            if (this.data.type === 'multi') content = `${this.data.players} Joueurs`;
-
-            if (this.data.type === 'game') content = 'Jeu';
-
-            if (this.data.type === 'experience') content = 'Experience';
-
-            return content;
+            if (this.data.type === 'solo') return '1 joueur';
+            if (this.data.type === 'multi') return `${this.data.players} Joueurs`;
+            if (this.data.type === 'game') return 'Jeu';
+            if (this.data.type === 'experience') return 'Experience';
         },
 
         icon() {
-            let icon = '';
-
-            if (this.data.type === 'solo') icon = 'IconSolo';
-
-            if (this.data.type === 'multi') icon = 'IconMulti';
-
-            if (this.data.type === 'game') icon = 'IconGame';
-
-            if (this.data.type === 'experience') icon = 'IconExperience';
-
-            return icon;
+            if (this.data.type === 'solo') return 'IconSolo';
+            if (this.data.type === 'multi') return 'IconMulti';
+            if (this.data.type === 'game') return 'IconGame';
+            if (this.data.type === 'experience') return 'IconExperience';
         },
     },
 
