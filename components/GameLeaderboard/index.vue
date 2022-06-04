@@ -7,12 +7,16 @@
 
                 <div class="col-left">
 
-                    <div class="ranking">
+                    <div v-if="index === 0" class="ranking">
+                        <IconFirst />
+                    </div>
+                    <div v-else class="ranking">
                         {{ index + 1 }}
                     </div>
 
                     <div class="username">
-                        {{ item.username }}
+                        Leotte
+                        <!-- {{ item.username }} -->
                     </div>
 
                 </div>

@@ -11,6 +11,7 @@ export default {
     props: ['game', 'active'],
 
     mounted() {
+        console.log(this.game);
         this.setupStyle();
     },
 
