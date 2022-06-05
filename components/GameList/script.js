@@ -31,6 +31,7 @@ export default {
         this.isGameSelected = false;
         this.direction = 0;
         this.setupEventListeners();
+        this.transitionIn();
     },
 
     beforeDestroy() {
@@ -38,6 +39,13 @@ export default {
     },
 
     methods: {
+        /**
+         * Public
+         */
+        transitionIn() {
+            this.$refs.details[this.gameIndex].show();
+        },
+
         /**
          * Private
          */

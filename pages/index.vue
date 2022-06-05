@@ -3,13 +3,7 @@
 
         <GameList :games="games" @selectGame="selectGameHandler" />
 
-        <Inputs
-            ref="inputs"
-            :inputs="[
-                { key: 'a', label: 'Sélectionner' },
-                { key: 'i', label: 'Scores' },
-            ]"
-        />
+        <Inputs ref="inputs" :inputs="inputs" />
 
         <GameSplashScreen ref="gameSplashScreen" :data="selectedGame" />
 

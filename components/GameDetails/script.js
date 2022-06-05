@@ -11,6 +11,8 @@ export default {
     props: ['game', 'active'],
 
     mounted() {
+        this.isLeaderboardOpen = false;
+        this.isLeaderboardAvailable = this.game.fields.leaderboardActive && this.game.scores.length > 0;
         this.setupStyle();
     },
 
@@ -41,13 +43,15 @@ export default {
 
             this.timelineSelect = new gsap.timeline();
             this.timelineSelect.to(this.$el, { duration: 0.5, alpha: 0, ease: 'sine.inOut' });
-            // this.timelineSelect.call(() => { this.$axis.ipcRenderer?.send('url:changed', { url: this.game.fields.url }); }, null, 10);
+            this.timelineSelect.call(() => { this.$axis.ipcRenderer?.send('url:changed', { url: this.game.fields.url }); }, null, 5);
         },
 
         show() {
             this.timelineHide?.kill();
             this.timelineShow = new gsap.timeline();
             this.timelineShow.to(this.$el, { duration: 1, alpha: 1, ease: 'sine.inOut' });
+
+            this.setInputs();
         },
 
         hide() {
@@ -57,19 +61,44 @@ export default {
         },
 
         openScores() {
+            if (!this.isLeaderboardAvailable) return;
+            if (this.isLeaderboardOpen) return;
+            this.isLeaderboardOpen = true;
             this.$refs.leaderboard?.open();
+            this.setInputs();
         },
 
         closeScores() {
+            if (!this.isLeaderboardAvailable) return;
+            if (!this.isLeaderboardOpen) return;
+            this.isLeaderboardOpen = false;
             this.$refs.leaderboard?.close();
+            this.setInputs();
         },
 
         /**
          * Private
          */
         setupStyle() {
-            if (this.active) this.$el.style.opacity = 1;
-            else this.$el.style.opacity = 0;
+            // if (this.active) this.$el.style.opacity = 1;
+            // else this.$el.style.opacity = 0;
+        },
+
+        setInputs() {
+            if (this.isLeaderboardOpen) {
+                this.$store.dispatch('inputs/setInputs', [
+                    { key: 'x', label: 'Retour' },
+                ]);
+            } else if (!this.isLeaderboardOpen && this.isLeaderboardAvailable) {
+                this.$store.dispatch('inputs/setInputs', [
+                    { key: 'a', label: 'Sélectionner' },
+                    { key: 'i', label: 'Scores' },
+                ]);
+            } else {
+                this.$store.dispatch('inputs/setInputs', [
+                    { key: 'a', label: 'Sélectionner' },
+                ]);
+            }
         },
     },
 

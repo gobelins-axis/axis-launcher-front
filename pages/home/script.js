@@ -21,6 +21,7 @@ export default {
     computed: {
         ...mapGetters({
             games: 'data/gameList',
+            inputs: 'inputs/inputs',
         }),
     },
 
