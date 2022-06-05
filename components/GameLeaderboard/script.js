@@ -2,27 +2,35 @@
 import { gsap } from 'gsap';
 
 // Components
-import IconFirst from '@/assets/icons/first.svg?inline';
+import Score from '@/components/Score';
 
 export default {
     props: ['data'],
 
-    data() {
-        return {
-            scores: [
-                { username: 'JuJU', value: '1,243,758', date: '01/06/21' },
-                { username: 'JuJU', value: '243,758', date: '01/06/21' },
-                { username: 'JuJU', value: '43,758', date: '01/06/21' },
-                { username: 'JuJU', value: '3,758', date: '01/06/21' },
-                { username: 'JuJU', value: '758', date: '01/06/21' },
-                { username: 'JuJU', value: '58', date: '01/06/21' },
-                { username: 'JuJU', value: '8', date: '01/06/21' },
-                { username: 'JuJU', value: '3', date: '01/06/21' },
-            ],
-        };
+    computed: {
+        scores() {
+            if (this.data && this.data.length > 0) {
+                const min = 8;
+                const scores = [...this.data];
+                const placeholder = { value: '-', username: '-', date: '-', isPlaceholder: false };
+
+                while (scores.length < min) {
+                    scores.push(placeholder);
+                }
+
+                return scores;
+            }
+        },
+    },
+
+    mounted() {
+        this.isOpen = false;
     },
 
     beforeDestroy() {
+        this.timelineShow?.kill();
+        this.timelineHide?.kill();
+
         this.timelineOpen?.kill();
         this.timelineClose?.kill();
     },
@@ -31,23 +39,59 @@ export default {
         /**
          * Public
          */
+        show() {
+            this.timelineHide?.kill();
+            this.timelineShow = new gsap.timeline();
+        },
+
+        hide() {
+            this.timelineShow?.kill();
+            this.timelineHide = new gsap.timeline();
+        },
+
         open() {
+            if (this.isOpen) return;
+
+            this.isOpen = true;
+
             this.timelineClose?.kill();
             this.timelineOpen = new gsap.timeline();
-            this.timelineOpen.to(this.$refs.score, { x: 0, duration: 1, stagger: 0.05, ease: 'power3.inOut' }, 0);
+
+            const stagger = 0.02;
+            for (let i = 0; i < this.$refs.score.length; i++) {
+                const score = this.$refs.score[i];
+                this.timelineOpen.add(score.open(), i * stagger);
+            }
+        },
+
+        close() {
+            if (!this.isOpen) return;
+
+            this.isOpen = false;
+
+            this.timelineOpen?.kill();
+            this.timelineClose = new gsap.timeline();
+
+            const stagger = 0.02;
+            for (let i = 0; i < this.$refs.score.length; i++) {
+                const score = this.$refs.score[i];
+                this.timelineClose.add(score.close(), i * stagger);
+            }
+        },
+
+        reset() {
+            this.isOpen = false;
+            for (let i = 0; i < this.$refs.score.length; i++) {
+                this.$refs.score[i].reset();
+            }
         },
 
         /**
          * Private
          */
-        close() {
-            this.timelineOpen?.kill();
-            this.timelineClose = new gsap.timeline();
-            this.timelineClose.to(this.$refs.score, { x: this.$breakpoints.rem(273), duration: 1, stagger: 0.1, ease: 'power3.out' }, 0);
-        },
     },
 
     components: {
-        IconFirst,
+        Score,
     },
 };

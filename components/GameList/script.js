@@ -77,7 +77,7 @@ export default {
          * Events
          */
         setupEventListeners() {
-            this.$axis.addEventListener('keydown', this.keydownHandler);
+            this.$axis.addEventListener('keydown', this.axisKeydownHandler);
             this.$axis.joystick1.addEventListener('joystick:quickmove', this.joystickMoveHandler);
 
             // Debug
@@ -85,18 +85,20 @@ export default {
         },
 
         removeEventListeners() {
-            this.$axis.removeEventListener('keydown', this.keydownHandler);
+            this.$axis.removeEventListener('keydown', this.axisKeydownHandler);
             this.$axis.joystick1.removeEventListener('joystick:quickmove', this.joystickMoveHandler);
 
             // Debug
             window.removeEventListener('keydown', this.keydownHandler);
         },
 
-        keydownHandler(e) {
+        axisKeydownHandler(e) {
             if (e.key === 'a') this.selectGame();
             if (e.key === 'c') this.openScores();
             if (e.key === 'b') this.closeScores();
+        },
 
+        keydownHandler(e) {
             // Debug
             if (e.key === 'ArrowUp') this.goToPrevious();
             if (e.key === 'ArrowDown') this.goToNext();

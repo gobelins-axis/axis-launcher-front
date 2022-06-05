@@ -11,7 +11,7 @@
             {{ game.fields.description || 'Description' }}
         </h3>
 
-        <GameLeaderboard ref="leaderboard" :data="null" />
+        <GameLeaderboard v-if="game.scores && game.scores.length > 0" ref="leaderboard" :data="game.scores" />
 
         <GameCredits v-if="game.fields.credits" :data="game.fields.credits" />
 

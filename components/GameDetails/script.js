@@ -11,13 +11,23 @@ export default {
     props: ['game', 'active'],
 
     mounted() {
-        this.isScoresOpen = false;
         this.setupStyle();
     },
 
     beforeDestroy() {
         this.timelineShow?.kill();
         this.timelineHide?.kill();
+    },
+
+    watch: {
+        active(current, previous) {
+            if (current) clearTimeout(this.resetTimeout);
+            if (previous && !current) {
+                this.resetTimeout = setTimeout(() => {
+                    this.$refs.leaderboard?.reset();
+                }, 1000);
+            }
+        },
     },
 
     methods: {
@@ -37,13 +47,11 @@ export default {
         },
 
         openScores() {
-            this.isScoresOpen = true;
-            this.$refs.leaderboard.open();
+            this.$refs.leaderboard?.open();
         },
 
         closeScores() {
-            this.isScoresOpen = false;
-            this.$refs.leaderboard.close();
+            this.$refs.leaderboard?.close();
         },
 
         /**
