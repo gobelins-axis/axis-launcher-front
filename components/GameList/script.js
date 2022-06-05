@@ -28,6 +28,7 @@ export default {
     },
 
     mounted() {
+        this.isGameSelected = false;
         this.direction = 0;
         this.setupEventListeners();
     },
@@ -61,8 +62,10 @@ export default {
         },
 
         selectGame() {
-            const selectedGame = this.games[this.gameIndex];
-            this.$axis.ipcRenderer.send('url:changed', { url: selectedGame.fields.url });
+            this.isGameSelected = true;
+            this.$emit('selectGame', this.games[this.gameIndex]);
+            this.$refs.details[this.gameIndex].select();
+            this.$root.webgl.hideGallery();
         },
 
         openScores() {
@@ -93,23 +96,31 @@ export default {
         },
 
         axisKeydownHandler(e) {
-            if (e.key === 'a') this.selectGame();
+            if (this.isGameSelected) return;
+
+            if (e.key === 'a' || e.key === 'Enter') this.selectGame();
             if (e.key === 'c') this.openScores();
             if (e.key === 'b') this.closeScores();
         },
 
         keydownHandler(e) {
+            if (this.isGameSelected) return;
+
             // Debug
             if (e.key === 'ArrowUp') this.goToPrevious();
             if (e.key === 'ArrowDown') this.goToNext();
         },
 
         joystickMoveHandler(e) {
+            if (this.isGameSelected) return;
+
             if (e.direction === 'up') this.goToPrevious();
             if (e.direction === 'down') this.goToNext();
         },
 
         keydownDebouncedHandler() {
+            if (this.isGameSelected) return;
+
             this.$refs.details[this.gameIndex].show();
             this.$root.webgl.updateGalleryFocusIndex(this.gameIndex, this.direction);
             this.$axis.ledManager.leds[0].setColor(this.games[this.gameIndex].fields.colors.secondary);

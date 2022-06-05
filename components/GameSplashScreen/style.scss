@@ -1,0 +1,23 @@
+.game-splash-screen {
+    display: flex;
+
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: rem(181px, 'large');
+
+    align-items: flex-end;
+
+    width: rem(848px, 'large');
+    height: rem(87px, 'large');
+
+    margin: auto;
+
+    font-weight: 800;
+    font-size: rem(128px, 'large');
+    line-height: rem(115px, 'large');
+}
+
+.name {
+    opacity: 0;
+}

@@ -1,4 +1,5 @@
 // Vendor
+import { gsap } from 'gsap';
 import { Object3D } from 'three';
 import { component } from '@/webgl/vendor/bidello';
 
@@ -96,6 +97,20 @@ export default class GalleryComponent extends component(Object3D) {
     destroy() {
         super.destroy();
         this._destroyCards();
+        this._timelineHide?.kill();
+    }
+
+    hide() {
+        const offsetX = -WindowResizeObserver.innerWidth / 2 + Breakpoints.rem(-500);
+        this._settings.position.x = offsetX;
+
+        this._timelineHide?.kill();
+        this._timelineHide = new gsap.timeline();
+        this._timelineHide.to(this._settings.offset, { duration: 1, z: 0, ease: 'power3.inOut' }, 0);
+        this._timelineHide.to(this._settings.offset, { duration: 1, x: 0, ease: 'power3.inOut' }, 0);
+        this._timelineHide.to(this._settings.offset, { duration: 1, y: 0, ease: 'power3.inOut' }, 0);
+        this._timelineHide.to(this._settings.rotationOffset, { duration: 1, z: 0, ease: 'power3.inOut' }, 0);
+        this._timelineHide.to(this.position, { duration: 1, x: offsetX, ease: 'power3.inOut' }, 0);
     }
 
     /**
@@ -137,12 +152,6 @@ export default class GalleryComponent extends component(Object3D) {
     }
 
     _getData() {
-        // const data = [];
-        // const amount = 10;
-        // for (let i = 0; i < amount; i++) {
-        //     const game = { name: 'Game', id: i };
-        //     data.push(game);
-        // }
         const data = this.$store.state.data.gameList;
         return data;
     }

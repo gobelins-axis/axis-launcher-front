@@ -22,4 +22,9 @@ export default {
         this.scene.components.background.direction = direction;
         this.scene.components.background.focusIndex = index;
     },
+
+    hideGallery() {
+        if (!this.scene.components.gallery) return;
+        this.scene.components.gallery.hide();
+    },
 };

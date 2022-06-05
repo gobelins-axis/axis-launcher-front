@@ -15,6 +15,7 @@ export default {
     },
 
     beforeDestroy() {
+        this.timelineSelect?.kill();
         this.timelineShow?.kill();
         this.timelineHide?.kill();
     },
@@ -34,6 +35,15 @@ export default {
         /**
          * Public
          */
+        select() {
+            this.timelineHide?.kill();
+            this.timelineShow?.kill();
+
+            this.timelineSelect = new gsap.timeline();
+            this.timelineSelect.to(this.$el, { duration: 0.5, alpha: 0, ease: 'sine.inOut' });
+            // this.timelineSelect.call(() => { this.$axis.ipcRenderer?.send('url:changed', { url: this.game.fields.url }); }, null, 10);
+        },
+
         show() {
             this.timelineHide?.kill();
             this.timelineShow = new gsap.timeline();

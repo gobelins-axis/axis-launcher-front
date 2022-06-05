@@ -4,7 +4,7 @@
         @enter="onEnter"
         @leave="onLeave"
     >
-        <div class="inputs">
+        <div ref="inputs" class="inputs">
 
             <InputIndicator v-for="(item, index) in inputs" :key="index" :input="item" />
 
