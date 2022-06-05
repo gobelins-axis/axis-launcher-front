@@ -26,9 +26,11 @@ export default {
         active(current, previous) {
             if (current) clearTimeout(this.resetTimeout);
             if (previous && !current) {
-                this.resetTimeout = setTimeout(() => {
-                    this.$refs.leaderboard?.reset();
-                }, 1000);
+                if (this.isLeaderboardAvailable && this.isLeaderboardOpen) {
+                    this.resetTimeout = setTimeout(() => {
+                        this.resetScores();
+                    }, 1000);
+                };
             }
         },
     },
@@ -74,6 +76,11 @@ export default {
             this.isLeaderboardOpen = false;
             this.$refs.leaderboard?.close();
             this.setInputs();
+        },
+
+        resetScores() {
+            this.isLeaderboardOpen = false;
+            this.$refs.leaderboard?.reset();
         },
 
         /**

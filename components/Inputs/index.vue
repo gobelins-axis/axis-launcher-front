@@ -1,15 +1,9 @@
 <template>
-    <Transition
-        :css="false"
-        @enter="onEnter"
-        @leave="onLeave"
-    >
-        <div ref="inputs" class="inputs">
+    <div class="inputs">
 
-            <InputIndicator v-for="(item, index) in inputs" :key="index" :input="item" />
+        <InputIndicator v-for="(item, index) in currentInputs" :key="index" :input="item" />
 
-        </div>
-    </Transition>
+    </div>
 </template>
 
 <script src="./script.js"></script>
