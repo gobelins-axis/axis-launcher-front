@@ -14,6 +14,8 @@ html, body {
 
     color: $color-white;
 
+    background-color: $color-black-1;
+
     @include respond-to('medium') {
         font-size: base-font-size('medium');
     }

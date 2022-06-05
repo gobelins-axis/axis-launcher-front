@@ -1,14 +1,34 @@
+// Vendor
+import { gsap } from 'gsap';
+import { mapGetters } from 'vuex';
+
 export default {
+    computed: {
+        ...mapGetters({
+            isCompleted: 'preloader/isCompleted',
+        }),
+    },
+
     watch: {
         $route(to, from) {
             // Store routing history for page transitions
             this.$store.dispatch('router/setCurrent', to);
             this.$store.dispatch('router/setPrevious', from);
         },
+
+        isCompleted(isCompleted) {
+            this._transitionIn();
+        },
     },
 
     mounted() {
         this.$store.dispatch('router/setCurrent', this.$route);
+    },
+
+    methods: {
+        _transitionIn() {
+            gsap.to(this.$refs.logo, { duration: 0.5, alpha: 1, ease: 'sine.inOut' });
+        },
     },
 
     components: {

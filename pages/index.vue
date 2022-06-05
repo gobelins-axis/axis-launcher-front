@@ -1,7 +1,7 @@
 <template>
     <div class="page-home">
 
-        <GameList :games="games" @selectGame="selectGameHandler" />
+        <GameList ref="gameList" :games="games" @selectGame="selectGameHandler" />
 
         <Inputs ref="inputs" :inputs="inputs" />
 

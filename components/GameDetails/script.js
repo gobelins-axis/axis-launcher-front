@@ -45,7 +45,7 @@ export default {
 
             this.timelineSelect = new gsap.timeline();
             this.timelineSelect.to(this.$el, { duration: 0.5, alpha: 0, ease: 'sine.inOut' });
-            this.timelineSelect.call(() => { this.$axis.ipcRenderer?.send('url:changed', { url: this.game.fields.url }); }, null, 5);
+            this.timelineSelect.call(() => { this.$axis.ipcRenderer?.send('url:changed', { url: this.game.fields.url }); }, null, 3.5);
         },
 
         show() {
@@ -54,12 +54,16 @@ export default {
             this.timelineShow.to(this.$el, { duration: 1, alpha: 1, ease: 'sine.inOut' });
 
             this.setInputs();
+
+            return this.timelineShow;
         },
 
         hide() {
             this.timelineShow?.kill();
             this.timelineHide = new gsap.timeline();
             this.timelineHide.to(this.$el, { duration: 0.1, alpha: 0, ease: 'sine.inOut' });
+
+            return this.timelineHide;
         },
 
         openScores() {

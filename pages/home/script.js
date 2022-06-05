@@ -1,5 +1,6 @@
 // Vendor
 import { mapGetters } from 'vuex';
+import { gsap } from 'gsap';
 
 // Components
 import GameSplashScreen from '@/components/GameSplashScreen';
@@ -30,7 +31,10 @@ export default {
          * Public
          */
         transitionIn(done, routeInfos) {
-            if (done) done();
+            this.timelineIn = new gsap.timeline();
+            this.timelineIn.to(this.$el, { duration: 1, alpha: 1, ease: 'sine.inOut' }, 0);
+            this.timelineIn.add(this.$refs.gameList.transitionIn(), 0);
+            if (done) this.timelineIn.call(done, null);
         },
 
         transitionOut(done, routeInfos) {
