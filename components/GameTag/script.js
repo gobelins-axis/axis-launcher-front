@@ -9,8 +9,8 @@ export default {
 
     computed: {
         content() {
-            if (this.data.type === 'solo') return '1 joueur';
-            if (this.data.type === 'multi') return `${this.data.players} Joueurs`;
+            if (this.data.type === 'solo') return 'Solo';
+            if (this.data.type === 'multi') return 'Multi';
             if (this.data.type === 'game') return 'Jeu';
             if (this.data.type === 'experience') return 'Experience';
         },
