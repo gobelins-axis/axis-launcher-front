@@ -1,5 +1,5 @@
 // import Axis from 'axis-api';
-import Axis from '../../axis-api/src/index';
+import Axis from '../../axis-api/build/bundle';
 import { gsap } from 'gsap';
 
 export default (context, inject) => {

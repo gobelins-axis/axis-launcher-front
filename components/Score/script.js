@@ -10,7 +10,7 @@ export default {
     computed: {
         date() {
             if (this.data.createdAt) {
-                const dateString = this.data.createdAt.toDate().toLocaleDateString('fr-FR');
+                const dateString = new Date(this.data.createdAt).toLocaleDateString('fr-FR');
                 const year = dateString.split('/')[2];
                 const formattedString = dateString.replace(year, `${year[2]}${year[3]}`);
                 return formattedString;

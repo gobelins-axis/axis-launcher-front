@@ -8,13 +8,7 @@ html, body {
 
     margin: 0;
 
-    font-family: $font-primary;
-
     font-size: base-font-size('small');
-
-    color: $color-white;
-
-    background-color: $color-black-1;
 
     @include respond-to('medium') {
         font-size: base-font-size('medium');
@@ -23,7 +17,16 @@ html, body {
     @include respond-to('large') {
         font-size: base-font-size('large');
     }
+}
 
+body {
+    font-family: $font-primary;
+    color: $color-white;
+
+    background-color: $color-black-1;
+}
+
+body {
     * {
         box-sizing: border-box;
            
