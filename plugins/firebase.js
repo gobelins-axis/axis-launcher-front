@@ -40,7 +40,12 @@ export default ({ store }, inject) => {
 
                 Promise.all(leaderboardPromises).then((responses) => {
                     for (let i = 0; i < responses.length; i++) {
-                        const scores = responses[i];
+                        const scores = responses[i].sort((a, b) => {
+                            if (a.value > b.value) return -1;
+                            if (a.value < b.value) return 1;
+                            return 0;
+                        });
+
                         games[i].scores = scores;
                     }
 
