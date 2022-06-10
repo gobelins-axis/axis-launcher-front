@@ -24,6 +24,8 @@ export default ({ store }, inject) => {
     const storage = getStorage(firebaseApp);
     const storageRef = ref(storage);
 
+    console.log('Hello world from firebase plugin');
+
     function getGames() {
         const collectionRefGames = collection(firestore, 'games');
 
@@ -48,6 +50,8 @@ export default ({ store }, inject) => {
 
                         games[i].scores = scores;
                     }
+
+                    console.log('Fetching new datas...');
 
                     resolve(games);
                     // resolve(debugGames);
