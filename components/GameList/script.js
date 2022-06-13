@@ -106,8 +106,8 @@ export default {
             if (this.isGameSelected) return;
 
             if (e.key === 'a' || e.key === 'Enter') this.selectGame();
-            if (e.key === 'c') this.openScores();
-            if (e.key === 'b') this.closeScores();
+            if (e.key === 'i') this.openScores();
+            if (e.key === 'x') this.closeScores();
         },
 
         keydownHandler(e) {
