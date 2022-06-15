@@ -1,6 +1,6 @@
 // Vendor
 import { gsap } from 'gsap';
-import { WebGLRenderer, Color, Clock } from 'three';
+import { WebGLRenderer, Color, Clock, WebGLRenderTarget } from 'three';
 import bidello from '@/webgl/vendor/bidello';
 import { GPUStatsPanel } from 'three/examples/jsm/utils/GPUStatsPanel.js';
 import Stats from 'stats-js';
@@ -11,6 +11,7 @@ import TextureManager from '@/webgl/utils/TextureManager';
 
 // Scenes
 import MainScene from './scenes/MainScene';
+import AxisScene from './scenes/AxisScene';
 
 // API
 import API from '@/webgl/api';
@@ -39,7 +40,9 @@ class WebGLApplication {
 
         this._clock = this._createClock();
         this._renderer = this._createRenderer();
-        this._scene = this._createScene();
+        this._renderTarget = this._createRenderTarget();
+        this._mainScene = this._createMainScene();
+        this._axisScene = this._createAxisScene();
 
         if (this._context.isDevelopment) {
             this._stats = this._createStats();
@@ -57,8 +60,16 @@ class WebGLApplication {
         return this._renderer;
     }
 
-    get scene() {
-        return this._scene;
+    get mainScene() {
+        return this._mainScene;
+    }
+
+    get axisScene() {
+        return this._axisScene;
+    }
+
+    get renderTarget() {
+        return this._renderTarget;
     }
 
     /**
@@ -67,7 +78,8 @@ class WebGLApplication {
     destroy() {
         this._removeStats();
         this._removeEventListeners();
-        this._scene?.destroy();
+        this._mainScene?.destroy();
+        this._axisScene?.destroy();
     }
 
     /**
@@ -78,12 +90,12 @@ class WebGLApplication {
     }
 
     _prepare() {
-        console.log('compute');
         TextureManager.compute(this._renderer);
     }
 
     _start() {
-        this._scene.start();
+        this._mainScene.start();
+        this._axisScene.start();
     }
 
     _createClock() {
@@ -96,13 +108,25 @@ class WebGLApplication {
             canvas: this._canvas,
             powerPreference: 'high-performance',
             antialias: true,
+            logarithmicDepthBuffer: true,
         });
         renderer.setClearColor(0x000000);
         return renderer;
     }
 
-    _createScene() {
+    _createRenderTarget() {
+        const renderTarget = new WebGLRenderTarget();
+        renderTarget.samples = 1;
+        return renderTarget;
+    }
+
+    _createMainScene() {
         const scene = new MainScene();
+        return scene;
+    }
+
+    _createAxisScene() {
+        const scene = new AxisScene();
         return scene;
     }
 
@@ -152,7 +176,12 @@ class WebGLApplication {
     _render() {
         this._statsGpuPanel?.startQuery();
 
-        this._renderer.render(this._scene, this._scene.camera);
+        this._renderer.setRenderTarget(this._renderTarget);
+        this._renderer.render(this._axisScene, this._axisScene.camera);
+        this._renderer.clear(true, false, false);
+
+        this._renderer.setRenderTarget(null);
+        this._renderer.render(this._mainScene, this._mainScene.camera);
 
         this._statsGpuPanel?.endQuery();
     }
@@ -163,6 +192,7 @@ class WebGLApplication {
     _resize(dimensions) {
         this._resizeCanvas(dimensions);
         this._resizeRenderer(dimensions);
+        this._resizeRenderTarget(dimensions);
         this._triggerBidelloResize(dimensions);
     }
 
@@ -174,6 +204,10 @@ class WebGLApplication {
     _resizeRenderer(dimensions) {
         this._renderer.setPixelRatio(dimensions.dpr);
         this._renderer.setSize(dimensions.innerWidth, dimensions.innerHeight, true);
+    }
+
+    _resizeRenderTarget(dimensions) {
+        this._renderTarget.setSize(dimensions.innerWidth, dimensions.innerHeight);
     }
 
     _triggerBidelloResize(dimensions) {

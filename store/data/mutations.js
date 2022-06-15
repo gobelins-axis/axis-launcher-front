@@ -10,9 +10,11 @@ const mutations = {
 
         // Game List
         state.gameList = games;
+        state.gameList.push(placeholderGame);
 
         while (state.gameList.length < min) {
-            state.gameList.push(placeholderGame);
+            // state.gameList.push(placeholderGame);
+            state.gameList = [...state.gameList, ...games];
         }
     },
 };

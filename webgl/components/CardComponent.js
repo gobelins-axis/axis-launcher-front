@@ -32,11 +32,13 @@ export default class CardComponent extends component(Object3D) {
                 borderAlpha: 0,
                 scale: 1,
                 offsetX: 0,
+                borderWidth: 1,
             },
             current: {
                 borderAlpha: 0,
                 scale: 1,
                 offsetX: 0,
+                borderWidth: 1,
             },
         };
 
@@ -84,10 +86,12 @@ export default class CardComponent extends component(Object3D) {
             this._properties.target.scale = this._settings.activeProperties.scale;
             this._properties.target.offsetX = Breakpoints.rem(this._settings.activeProperties.offsetX);
             this._properties.target.borderAlpha = 1;
+            this._properties.target.borderWidth = this._settings.borderWidth;
         } else {
             this._properties.target.scale = 1;
             this._properties.target.offsetX = 0;
             this._properties.target.borderAlpha = 0;
+            this._properties.target.borderWidth = 0;
         };
     }
 
@@ -122,10 +126,12 @@ export default class CardComponent extends component(Object3D) {
 
     _updateProperties() {
         this._properties.current.borderAlpha = math.lerp(this._properties.current.borderAlpha, this._properties.target.borderAlpha, 0.1);
+        this._properties.current.borderWidth = math.lerp(this._properties.current.borderWidth, this._properties.target.borderWidth, 0.1);
         this._properties.current.scale = math.lerp(this._properties.current.scale, this._properties.target.scale, 0.1);
         this._properties.current.offsetX = math.lerp(this._properties.current.offsetX, this._properties.target.offsetX, 0.1);
 
         this._material.uniforms.uBorderAlpha.value = this._properties.current.borderAlpha;
+        this._material.uniforms.uBorderWidth.value = this._properties.current.borderWidth;
         this.scale.set(this._properties.current.scale, this._properties.current.scale, 1.0);
         this._mesh.position.x = this._properties.current.offsetX;
     }

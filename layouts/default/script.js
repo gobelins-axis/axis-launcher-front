@@ -2,6 +2,9 @@
 import { gsap } from 'gsap';
 import { mapGetters } from 'vuex';
 
+// Components
+import Logo from '@/assets/icons/logo.svg?inline';
+
 export default {
     computed: {
         ...mapGetters({
@@ -32,7 +35,6 @@ export default {
     },
 
     components: {
-
         // Client only
         CanvasWebGL: () => {
             if (process.client) return import('@/components/CanvasWebGL');
@@ -41,6 +43,12 @@ export default {
         Preloader: () => {
             if (process.client) return import('@/components/Preloader');
         },
+
+        SleepScreen: () => {
+            if (process.client) return import('@/components/SleepScreen');
+        },
+
+        Logo,
     },
 };
 

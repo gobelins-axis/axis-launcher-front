@@ -1,0 +1,47 @@
+.axis-details {
+    opacity: 0;
+    
+    // Debug
+    // display: none;
+
+    position: absolute;
+    top: rem(491px, 'large');
+    left: rem(992px, 'large');
+}
+
+.title {
+    display: flex;
+
+    align-items: flex-end;
+
+    width: rem(848px, 'large');
+    max-height: rem(115px, 'large');
+
+    margin-bottom: rem(40px, 'large');
+
+    font-weight: 800;
+    font-size: rem(128px, 'large');
+    line-height: rem(115px, 'large');
+}
+
+.game-tags {
+    margin-bottom: rem(12px, 'large');
+}
+
+.description {
+    width: rem(780px, 'large');
+
+    margin-bottom: rem(9px, 'large');
+
+    font-weight: 700;
+    font-size: rem(36px, 'large');
+    line-height: rem(49px, 'large');
+}
+
+.game-leaderboard {
+    margin-bottom: rem(68px, 'large');
+}
+
+.game-credits {
+    // margin-bottom: rem(55px, 'large');
+}

@@ -7,8 +7,13 @@
 
         <GameTags v-if="game.fields.filters" :data="game.fields" />
 
-        <h3 class="description">
+        <h3 v-if="typeof game.fields.description === 'string'" class="description">
             {{ game.fields.description || 'Description' }}
+        </h3>
+        <h3 v-else class="description">
+            <p v-for="(item, index) in game.fields.description" :key="index">
+                {{ item }}
+            </p>
         </h3>
 
         <GameLeaderboard v-if="game.scores && game.scores.length > 0" ref="leaderboard" :data="game.scores" />

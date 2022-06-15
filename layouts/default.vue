@@ -5,12 +5,16 @@
             <CanvasWebGL ref="canvasWebGL" />
         </client-only>
 
-        <img ref="logo" class="logo" src="~/assets/images/logo.png" />
+        <Logo ref="logo" class="logo" />
 
         <Nuxt class="page" />
 
         <client-only>
             <Preloader />
+        </client-only>
+
+        <client-only>
+            <SleepScreen />
         </client-only>
 
     </div>

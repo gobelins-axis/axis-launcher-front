@@ -3,6 +3,7 @@ import { mapGetters } from 'vuex';
 
 // Components
 import GameDetails from '@/components/GameDetails';
+import AxisDetails from '@/components/AxisDetails';
 import modulo from '@/utils/number/modulo';
 
 // Utils
@@ -69,10 +70,11 @@ export default {
         },
 
         selectGame() {
+            if (this.games[this.gameIndex].isPlaceholder) return;
             this.isGameSelected = true;
-            this.$emit('selectGame', this.games[this.gameIndex]);
             this.$refs.details[this.gameIndex].select();
             this.$root.webgl.hideGallery();
+            this.$emit('selectGame', this.games[this.gameIndex]);
         },
 
         openScores() {
@@ -136,5 +138,6 @@ export default {
 
     components: {
         GameDetails,
+        AxisDetails,
     },
 };

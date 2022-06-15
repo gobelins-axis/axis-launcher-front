@@ -4,6 +4,7 @@ import { component } from '@/webgl/vendor/bidello';
 
 // Modules
 import PerspectiveCameraUI from '@/webgl/modules/PerspectiveCameraUI';
+import DebugCamera from '@/webgl/modules/DebugCamera';
 
 // Components
 import GalleryComponent from '../components/GalleryComponent';
@@ -13,6 +14,11 @@ export default class MainScene extends component(Scene) {
     init(options = {}) {
         // Setup
         this._camera = this._createCamera();
+        this._debugCamera = this._createDebugCamera();
+
+        this._settings = {
+            isDebugCamera: false,
+        };
 
         this._setupDebugger();
     }
@@ -21,7 +27,7 @@ export default class MainScene extends component(Scene) {
      * Getters & Setters
      */
     get camera() {
-        return this._camera;
+        return this._settings.isDebugCamera ? this._debugCamera : this._camera;
     }
 
     get components() {
@@ -44,12 +50,20 @@ export default class MainScene extends component(Scene) {
      * Private
      */
     _setupDebugger() {
-        this.$debugger.addFolder({ title: 'Main Scene', expanded: false });
+        const folder = this.$debugger.addFolder({ title: 'Main Scene', expanded: false });
+
+        const cameras = folder.addFolder({ title: 'Cameras' });
+        cameras.addInput(this._settings, 'isDebugCamera');
     }
 
     _createCamera() {
         const camera = new PerspectiveCameraUI().camera;
         return camera;
+    }
+
+    _createDebugCamera() {
+        const debugCamera = new DebugCamera().camera;
+        return debugCamera;
     }
 
     _createComponents() {

@@ -53,7 +53,10 @@ export default class BackgroundComponent extends component(Object3D) {
         if (this._data[this._focusIndex].fields.largeImage.name === this._data[index].fields.largeImage.name) return;
 
         this._focusIndex = index;
-        const texture = ResourceLoader.get(this._data[this._focusIndex].fields.largeImage.name);
+
+        const isPlaceholder = this._data[this._focusIndex].isPlaceholder;
+
+        const texture = isPlaceholder ? this.$root.renderTarget.texture : ResourceLoader.get(this._data[this._focusIndex].fields.largeImage.name);
 
         // Previous
         this._material.uniforms.uTexturePrevious.value = this._material.uniforms.uTextureCurrent.value;
@@ -69,6 +72,7 @@ export default class BackgroundComponent extends component(Object3D) {
         this._timelineUpdate.fromTo(this._material.uniforms.uRotateCurrent, { value: this._settings.transition.rotation * this._direction }, { duration: 0.5, value: 0, ease: 'circ.out' }, 0);
         this._timelineUpdate.fromTo(this._material.uniforms.uTranslateCurrent.value, { x: this._settings.transition.translate.x * this._direction }, { duration: 0.5, x: 0, ease: 'circ.out' }, 0);
         this._timelineUpdate.fromTo(this._material.uniforms.uTranslateCurrent.value, { y: this._settings.transition.translate.y * this._direction }, { duration: 0.5, y: 0, ease: 'circ.out' }, 0);
+        if (isPlaceholder) this._timelineUpdate.add(this.$root.axisScene.show(), 0);
     }
 
     /**

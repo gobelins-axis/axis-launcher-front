@@ -12,19 +12,19 @@ export default {
     },
 
     updateGalleryIndex(index) {
-        if (!this.scene.components.gallery) return;
-        this.scene.components.gallery.index = index;
+        if (!this.mainScene.components.gallery) return;
+        this.mainScene.components.gallery.index = index;
     },
 
     updateGalleryFocusIndex(index, direction) {
-        if (!this.scene.components.gallery) return;
-        this.scene.components.gallery.focusIndex = index;
-        this.scene.components.background.direction = direction;
-        this.scene.components.background.focusIndex = index;
+        if (!this.mainScene.components.gallery) return;
+        this.mainScene.components.gallery.focusIndex = index;
+        this.mainScene.components.background.direction = direction;
+        this.mainScene.components.background.focusIndex = index;
     },
 
     hideGallery() {
-        if (!this.scene.components.gallery) return;
-        this.scene.components.gallery.hide();
+        if (!this.mainScene.components.gallery) return;
+        this.mainScene.components.gallery.hide();
     },
 };

@@ -1,7 +1,7 @@
 <template>
     <div class="preloader">
 
-        <img class="logo" src="~/assets/images/logo.png" />
+        <Logo class="logo" />
 
     </div>
 </template>

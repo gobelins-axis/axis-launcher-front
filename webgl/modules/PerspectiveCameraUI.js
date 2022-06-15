@@ -7,6 +7,8 @@ export default class UIPerspectiveCamera extends component() {
         // Setup
         this._perspective = 800;
         this._camera = this._createCamera();
+
+        this._setupDebugger();
     }
 
     /**
@@ -23,6 +25,10 @@ export default class UIPerspectiveCamera extends component() {
         const camera = new PerspectiveCamera(45, 16 / 9, 0.1, 10000);
         camera.position.z = this._perspective;
         return camera;
+    }
+
+    _setupDebugger() {
+        // const folder = this.$debugger.getFolder('Main Scene').addFolder({ title: 'UI Perspective Camera', expanded: false });
     }
 
     /**

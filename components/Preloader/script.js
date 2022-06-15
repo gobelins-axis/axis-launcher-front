@@ -1,6 +1,7 @@
 // Vendor
 import ResourceLoader from '@/vendor/resource-loader';
 import ThreeTextureLoader from '@/vendor/loaders/ThreeTextureLoader';
+import ThreeGLTFDracoLoader from '@/vendor/loaders/ThreeGLTFDracoLoader';
 import { mapGetters } from 'vuex';
 
 // Utils
@@ -9,8 +10,12 @@ import BMFontLoader from '@/utils/loaders/BMFontLoader';
 // Resources
 import resources from '@/webgl/resources';
 
+// Components
+import Logo from '@/assets/icons/logo.svg?inline';
+
 ResourceLoader.registerLoader(BMFontLoader, 'fnt');
 ResourceLoader.registerLoader(ThreeTextureLoader, 'texture');
+ResourceLoader.registerLoader(ThreeGLTFDracoLoader, 'gltf');
 
 export default {
     computed: {
@@ -87,5 +92,9 @@ export default {
             this.$store.dispatch('preloader/setLoadingCompleted');
             this.$store.dispatch('preloader/setCompleted');
         },
+    },
+
+    components: {
+        Logo,
     },
 };
