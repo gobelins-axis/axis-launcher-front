@@ -25,6 +25,17 @@ uniform float uGradientAlphaY;
 uniform vec3 uOverlayColor;
 uniform float uOverlayOpacity;
 
+uniform sampler2D uAxisBackgroundTexture;
+uniform vec2 uAxisBackgroundTextureSize;
+uniform float uAxisBackgroundTextureScale;
+uniform float uAxisBackgroundTextureRotate;
+uniform vec2 uAxisBackgroundTextureTranslate;
+uniform float uAxisBackgroundTextureAlpha;
+
+uniform sampler2D uAxisMachineTexture;
+
+uniform float uIsAxis;
+
 // Varyings
 varying vec2 vUv;
 
@@ -85,6 +96,22 @@ void main() {
     vec3 gradientYcurve = bezier(vec3(0.0, 0.0, 0.0), gradientYcp1, gradientYcp2, vec3(1.0, 1.0, 0.0), vUv.y);
     float gradientY = (1.0 - gradientYcurve.y) * uGradientAlphaY;
 
+    // Axis Background
+    vec2 uvAxisBackgroundTexture = vUv;
+    uvAxisBackgroundTexture = rotateUv(uvAxisBackgroundTexture, uAxisBackgroundTextureRotate);
+    uvAxisBackgroundTexture = resizedUv(uvAxisBackgroundTexture, uAxisBackgroundTextureSize, uResolution);
+    uvAxisBackgroundTexture = scaleUv(uvAxisBackgroundTexture, uAxisBackgroundTextureScale);
+    uvAxisBackgroundTexture.x += uAxisBackgroundTextureTranslate.x;
+    uvAxisBackgroundTexture.y += uAxisBackgroundTextureTranslate.y;
+    vec4 axisBackgroundTexture = texture2D(uAxisBackgroundTexture, uvAxisBackgroundTexture);
+    axisBackgroundTexture.a *= uAxisBackgroundTextureAlpha;
+
+    // Axis Machine
+    vec4 axisMachineTexture = texture2D(uAxisMachineTexture, vUv);
+
+    // Axis final output
+    vec4 axisFinal = axisMachineTexture * axisMachineTexture.a + axisBackgroundTexture * (1.0 - axisMachineTexture.a);;
+
     // Debug
     // float pct = plot(vUv.y, gradientY);
     // gl_FragColor = vec4(pct, 0.0, 0.0, 1.0);
@@ -92,7 +119,11 @@ void main() {
     // gl_FragColor = textureCombined;
 
     // Output
+    textureCurrent = mix(textureCurrent, axisFinal, uIsAxis);
     gl_FragColor = mix(textureCurrent, vec4(uGradientColor, 1.0), gradientX);
     gl_FragColor = mix(gl_FragColor, vec4(uGradientColor, 1.0), gradientY);
     gl_FragColor = mix(gl_FragColor, vec4(uOverlayColor, 1.0), uOverlayOpacity);
+
+    // Debug
+    // gl_FragColor = axisFinal;
 }

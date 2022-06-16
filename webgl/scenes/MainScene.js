@@ -1,5 +1,5 @@
 // Vendor
-import { Scene } from 'three';
+import { Color, Scene } from 'three';
 import { component } from '@/webgl/vendor/bidello';
 
 // Modules
@@ -105,7 +105,7 @@ export default class MainScene extends component(Scene) {
     _setupDebugger() {
         const folder = this.$debugger.addFolder({ title: 'Main Scene', expanded: false });
 
-        const cameras = folder.addFolder({ title: 'Cameras' });
+        const cameras = folder.addFolder({ title: 'Cameras', expanded: false });
         cameras.addInput(this._settings, 'isDebugCamera');
     }
 }

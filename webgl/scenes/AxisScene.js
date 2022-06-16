@@ -7,16 +7,17 @@ import { component } from '@/webgl/vendor/bidello';
 import Camera from '@/webgl/modules/Camera';
 import DebugCamera from '@/webgl/modules/DebugCamera';
 
-// Components
-import MachineComponent from '../components/MachineComponent';
+// Utils
 import degreesToRadians from '@/utils/number/degreesToRadians';
+
+// Components
+import MachineComponent from '@/webgl/components/MachineComponent';
 
 export default class MainScene extends component(Scene) {
     init(options = {}) {
         // Setup
         this._camera = this._createCamera();
         this._debugCamera = this._createDebugCamera();
-        this.background = new Color('blue');
 
         this._settings = {
             isDebugCamera: false,

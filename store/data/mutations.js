@@ -1,7 +1,7 @@
 // Config
 import placeholderGame from '@/config/placeholder-game';
 
-const min = 7;
+const min = 8;
 
 const mutations = {
     SET_GAMES(state, games) {

@@ -66,13 +66,15 @@ export default class MachineComponent extends component(Object3D) {
     _createMesh() {
         const mesh = ResourceLoader.get('axis-machine').scene;
         const texture = ResourceLoader.get('axis-machine-texture');
-        texture.flipY = true;
+        texture.flipY = false;
+        texture.needsUpdate = true;
 
         mesh.traverse((child) => {
-            if (child.isMesh) child.material = new MeshNormalMaterial();
-            // if (child.isMesh) child.material = new MeshBasicMaterial({
-            //     map: texture,
-            // });
+            // if (child.isMesh) child.material = new MeshNormalMaterial();
+            if (child.isMesh) child.material = new MeshBasicMaterial({
+                map: texture,
+                side: DoubleSide,
+            });
         });
 
         this.add(mesh);

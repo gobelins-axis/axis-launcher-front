@@ -1,6 +1,6 @@
 // Vendor
 import { gsap } from 'gsap';
-import { WebGLRenderer, Color, Clock, WebGLRenderTarget } from 'three';
+import { WebGLRenderer, Color, Clock, WebGLRenderTarget, LinearFilter, RGBAFormat, FloatType } from 'three';
 import bidello from '@/webgl/vendor/bidello';
 import { GPUStatsPanel } from 'three/examples/jsm/utils/GPUStatsPanel.js';
 import Stats from 'stats-js';
@@ -123,8 +123,10 @@ class WebGLApplication {
             powerPreference: 'high-performance',
             antialias: true,
             logarithmicDepthBuffer: true,
+            transparent: true,
         });
-        renderer.setClearColor(0x000000);
+        // renderer.setClearColor(0x000000);
+        renderer.setClearAlpha(0);
         return renderer;
     }
 
@@ -190,14 +192,21 @@ class WebGLApplication {
     _render() {
         this._statsGpuPanel?.startQuery();
 
-        if (this._isAxisSceneEnabled) {
-            this._renderer.setRenderTarget(this._renderTarget);
-            this._renderer.render(this._axisScene, this._axisScene.camera);
-            this._renderer.clear(true, false, false);
-        }
+        // if (this._isAxisSceneEnabled) {
+        //     this._renderer.setRenderTarget(this._renderTarget);
+        //     this._renderer.render(this._axisScene, this._axisScene.camera);
+        //     this._renderer.clear(true, false, false);
+        // }
+
+        this._renderer.setRenderTarget(this._renderTarget);
+        this._renderer.render(this._axisScene, this._axisScene.camera);
+        this._renderer.clear(true, false, false);
 
         this._renderer.setRenderTarget(null);
         this._renderer.render(this._mainScene, this._mainScene.camera);
+
+        // Debug Axis Scene
+        // this._renderer.render(this._axisScene, this._axisScene.camera);
 
         this._statsGpuPanel?.endQuery();
     }
@@ -223,7 +232,7 @@ class WebGLApplication {
     }
 
     _resizeRenderTarget(dimensions) {
-        this._renderTarget.setSize(dimensions.innerWidth, dimensions.innerHeight);
+        this._renderTarget.setSize(dimensions.innerWidth * dimensions.dpr, dimensions.innerHeight * dimensions.dpr);
     }
 
     _triggerBidelloResize(dimensions) {
@@ -268,7 +277,7 @@ class WebGLApplication {
      * Debugger
      */
     _setupDebugger() {
-        const folder = this._debugger.addFolder({ title: 'Performances' });
+        const folder = this._debugger.addFolder({ title: 'Performances', expanded: false });
         folder.addMonitor(this._renderer.info.memory, 'geometries', { interval: 1000 });
         folder.addMonitor(this._renderer.info.memory, 'textures', { interval: 1000 });
         folder.addMonitor(this._renderer.info.render, 'calls', { interval: 1000 });

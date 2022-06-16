@@ -19,14 +19,8 @@ const resources = [
     },
     {
         type: 'texture',
-        name: 'test-texture',
-        path: '/webgl/textures/test-texture.jpg',
-        preload: true,
-    },
-    {
-        type: 'texture',
-        name: 'test-texture-card',
-        path: '/webgl/textures/test-texture-card.png',
+        name: 'axis-background',
+        path: '/webgl/textures/axis-background.png',
         preload: true,
     },
     {
@@ -41,7 +35,7 @@ const resources = [
     {
         type: 'gltf',
         name: 'axis-machine',
-        path: '/webgl/models/axis-machine-v2.glb',
+        path: '/webgl/models/axis-machine-v3.glb',
         preload: true,
     },
 ];
