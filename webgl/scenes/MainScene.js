@@ -49,13 +49,6 @@ export default class MainScene extends component(Scene) {
     /**
      * Private
      */
-    _setupDebugger() {
-        const folder = this.$debugger.addFolder({ title: 'Main Scene', expanded: false });
-
-        const cameras = folder.addFolder({ title: 'Cameras' });
-        cameras.addInput(this._settings, 'isDebugCamera');
-    }
-
     _createCamera() {
         const camera = new PerspectiveCameraUI().camera;
         return camera;
@@ -104,5 +97,15 @@ export default class MainScene extends component(Scene) {
      */
     onWindowResize(dimensions) {
 
+    }
+
+    /**
+     * Debugger
+     */
+    _setupDebugger() {
+        const folder = this.$debugger.addFolder({ title: 'Main Scene', expanded: false });
+
+        const cameras = folder.addFolder({ title: 'Cameras' });
+        cameras.addInput(this._settings, 'isDebugCamera');
     }
 }

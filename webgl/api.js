@@ -21,6 +21,7 @@ export default {
         this.mainScene.components.gallery.focusIndex = index;
         this.mainScene.components.background.direction = direction;
         this.mainScene.components.background.focusIndex = index;
+        this.isAxisSceneEnabled = this._store.state.data.gameList[index].isPlaceholder;
     },
 
     hideGallery() {

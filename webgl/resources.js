@@ -29,13 +29,19 @@ const resources = [
         path: '/webgl/textures/test-texture-card.png',
         preload: true,
     },
+    {
+        type: 'texture',
+        name: 'axis-machine-texture',
+        path: '/webgl/textures/axis-machine.png',
+        preload: true,
+    },
     /**
      * Models
      */
     {
         type: 'gltf',
         name: 'axis-machine',
-        path: '/webgl/models/axis-machine.glb',
+        path: '/webgl/models/axis-machine-v2.glb',
         preload: true,
     },
 ];

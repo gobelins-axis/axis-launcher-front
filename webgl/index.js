@@ -41,6 +41,9 @@ class WebGLApplication {
         this._clock = this._createClock();
         this._renderer = this._createRenderer();
         this._renderTarget = this._createRenderTarget();
+
+        this._setupDebugger();
+
         this._mainScene = this._createMainScene();
         this._axisScene = this._createAxisScene();
 
@@ -48,6 +51,8 @@ class WebGLApplication {
             this._stats = this._createStats();
             this._statsGpuPanel = this._createStatsGpuPanel();
         }
+
+        this._isAxisSceneEnabled = false;
 
         this._bindAll();
         this._setupEventListeners();
@@ -72,6 +77,14 @@ class WebGLApplication {
         return this._renderTarget;
     }
 
+    get isAxisSceneEnabled() {
+        return this._isAxisSceneEnabled;
+    }
+
+    set isAxisSceneEnabled(isEnabled) {
+        this._isAxisSceneEnabled = isEnabled;
+    }
+
     /**
      * Public
      */
@@ -80,6 +93,7 @@ class WebGLApplication {
         this._removeEventListeners();
         this._mainScene?.destroy();
         this._axisScene?.destroy();
+        TextureManager.clear();
     }
 
     /**
@@ -176,9 +190,11 @@ class WebGLApplication {
     _render() {
         this._statsGpuPanel?.startQuery();
 
-        this._renderer.setRenderTarget(this._renderTarget);
-        this._renderer.render(this._axisScene, this._axisScene.camera);
-        this._renderer.clear(true, false, false);
+        if (this._isAxisSceneEnabled) {
+            this._renderer.setRenderTarget(this._renderTarget);
+            this._renderer.render(this._axisScene, this._axisScene.camera);
+            this._renderer.clear(true, false, false);
+        }
 
         this._renderer.setRenderTarget(null);
         this._renderer.render(this._mainScene, this._mainScene.camera);
@@ -246,6 +262,17 @@ class WebGLApplication {
 
     _tickHandler() {
         this._tick();
+    }
+
+    /**
+     * Debugger
+     */
+    _setupDebugger() {
+        const folder = this._debugger.addFolder({ title: 'Performances' });
+        folder.addMonitor(this._renderer.info.memory, 'geometries', { interval: 1000 });
+        folder.addMonitor(this._renderer.info.memory, 'textures', { interval: 1000 });
+        folder.addMonitor(this._renderer.info.render, 'calls', { interval: 1000 });
+        folder.addMonitor(this._renderer.info.render, 'triangles', { interval: 1000 });
     }
 }
 

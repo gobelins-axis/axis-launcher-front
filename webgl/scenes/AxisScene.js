@@ -16,6 +16,7 @@ export default class MainScene extends component(Scene) {
         // Setup
         this._camera = this._createCamera();
         this._debugCamera = this._createDebugCamera();
+        this.background = new Color('blue');
 
         this._settings = {
             isDebugCamera: false,

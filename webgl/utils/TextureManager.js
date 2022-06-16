@@ -44,6 +44,14 @@ class TextureManager {
         this._textures.push(texture);
     }
 
+    clear() {
+        for (let i = 0; i < this._textures.length; i++) {
+            this._textures[i].dispose();
+        }
+
+        this._textures = [];
+    }
+
     compute(renderer) {
         console.log(`Computing ${this._textures.length} textures...`);
         console.log(`Initial memory texture count ${renderer.info.memory.textures}`);
