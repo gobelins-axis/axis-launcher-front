@@ -54,6 +54,7 @@ export default class MainScene extends component(Scene) {
         this._timelineShow = new gsap.timeline();
         this._timelineShow.fromTo(this._components.machine.position, { x: -3 }, { duration: 1.5, x: 0, ease: 'power4.out' }, 0);
         this._timelineShow.fromTo(this._components.machine.rotation, { y: degreesToRadians(-180) }, { duration: 1.5, y: degreesToRadians(0), ease: 'power4.out' }, 0);
+        this._timelineShow.add(this._components.machine.show(), 0);
         return this._timelineShow;
     }
 
@@ -105,11 +106,18 @@ export default class MainScene extends component(Scene) {
         }
     }
 
+    _updateComponents({ time, delta }) {
+        if (!this._components) return;
+        for (const key in this._components) {
+            if (typeof this._components[key].update === 'function') this._components[key].update({ time, delta });
+        }
+    }
+
     /**
      * Update
      */
-    onUpdate({ time }) {
-
+    onUpdate({ time, delta }) {
+        this._updateComponents({ time, delta });
     }
 
     /**
