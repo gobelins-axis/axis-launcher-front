@@ -105,6 +105,7 @@ class WebGLApplication {
 
     _prepare() {
         TextureManager.compute(this._renderer);
+        this._compile();
     }
 
     _start() {
@@ -211,6 +212,11 @@ class WebGLApplication {
         this._statsGpuPanel?.endQuery();
     }
 
+    _compile() {
+        this._renderer.compile(this._axisScene, this._axisScene.camera);
+        this._renderer.compile(this._mainScene, this._mainScene.camera);
+    }
+
     /**
      * Resize
      */
@@ -227,12 +233,16 @@ class WebGLApplication {
     }
 
     _resizeRenderer(dimensions) {
-        this._renderer.setPixelRatio(dimensions.dpr);
+        // const dpr = dimensions.dpr;
+        const dpr = 1;
+        this._renderer.setPixelRatio(dpr);
         this._renderer.setSize(dimensions.innerWidth, dimensions.innerHeight, true);
     }
 
     _resizeRenderTarget(dimensions) {
-        this._renderTarget.setSize(dimensions.innerWidth * dimensions.dpr, dimensions.innerHeight * dimensions.dpr);
+        const dpr = dimensions.dpr;
+        // const dpr = 1;
+        this._renderTarget.setSize(dimensions.innerWidth * dpr, dimensions.innerHeight * dpr);
     }
 
     _triggerBidelloResize(dimensions) {

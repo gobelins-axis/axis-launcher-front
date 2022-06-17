@@ -56,5 +56,7 @@ void main() {
     border *= cardBorderAlpha;
     
     gl_FragColor = background + border;
-    // gl_FragColor = background;
+
+    // gl_FragColor = texture;
+    // gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
 }

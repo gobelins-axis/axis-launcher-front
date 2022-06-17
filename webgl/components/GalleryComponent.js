@@ -46,6 +46,7 @@ export default class GalleryComponent extends component(Object3D) {
                 borderColor: '#ffffff',
                 borderRadius: 50,
                 insetBorderRadius: 46,
+                borderAlpha: 1,
                 borderWidth: 6,
                 alphaOffset: 0.35,
                 overlayColor: '#000000',
@@ -142,6 +143,7 @@ export default class GalleryComponent extends component(Object3D) {
         folderCard.addInput(this._settings.card, 'insetBorderRadius').on('change', () => { this._updateCardsSettings(); });
         folderCard.addInput(this._settings.card, 'borderColor').on('change', () => { this._updateCardsSettings(); });
         folderCard.addInput(this._settings.card, 'borderWidth').on('change', () => { this._updateCardsSettings(); });
+        folderCard.addInput(this._settings.card, 'borderAlpha', { min: 0, max: 1 }).on('change', () => { this._updateCardsSettings(); });
         folderCard.addInput(this._settings.card, 'alphaOffset').on('change', () => { this._updateCardsSettings(); });
         folderCard.addInput(this._settings.card, 'overlayColor').on('change', () => { this._updateCardsSettings(); });
         folderCard.addInput(this._settings.card, 'visibilityThreshold').on('change', () => { this._updateCardsSettings(); });

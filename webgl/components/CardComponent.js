@@ -1,9 +1,11 @@
 // Vendor
 import { Object3D, ShaderMaterial, Vector2, PlaneGeometry, Mesh, Color, DoubleSide } from 'three';
 import { component } from '@/webgl/vendor/bidello';
+import ResourceLoader from '@/vendor/resource-loader';
 
 // Utils
 import Breakpoints from '@/utils/Breakpoints';
+import math from '@/utils/math';
 
 // Components
 import CardTextComponent from '@/webgl/components/CardTextComponent';
@@ -11,8 +13,6 @@ import CardTextComponent from '@/webgl/components/CardTextComponent';
 // Shaders
 import vertex from '@/webgl/shaders/card/vertex.glsl';
 import fragment from '@/webgl/shaders/card/fragment.glsl';
-import math from '@/utils/math';
-import ResourceLoader from '@/vendor/resource-loader';
 
 export default class CardComponent extends component(Object3D) {
     init(options = {}) {
@@ -29,13 +29,13 @@ export default class CardComponent extends component(Object3D) {
 
         this._properties = {
             target: {
-                borderAlpha: 0,
+                borderAlpha: 1,
                 scale: 1,
                 offsetX: 0,
                 borderWidth: 1,
             },
             current: {
-                borderAlpha: 0,
+                borderAlpha: 1,
                 scale: 1,
                 offsetX: 0,
                 borderWidth: 1,
@@ -69,6 +69,7 @@ export default class CardComponent extends component(Object3D) {
         this._material.uniforms.uInsetBorderRadius.value = this._settings.insetBorderRadius;
         this._material.uniforms.uBorderColor.value.set(this._settings.borderColor);
         this._material.uniforms.uBorderWidth.value = this._settings.borderWidth;
+        this._material.uniforms.uBorderAlpha.value = this._settings.borderAlpha;
         this._material.uniforms.uOverlayColor.value.set(this._settings.overlayColor);
 
         this._width = Breakpoints.rem(this._settings.width);
@@ -85,11 +86,13 @@ export default class CardComponent extends component(Object3D) {
         if (this._active) {
             this._properties.target.scale = this._settings.activeProperties.scale;
             this._properties.target.offsetX = Breakpoints.rem(this._settings.activeProperties.offsetX);
-            this._properties.target.borderAlpha = 1;
+            this._properties.target.borderAlpha = this._settings.borderAlpha;
             this._properties.target.borderWidth = this._settings.borderWidth;
         } else {
             this._properties.target.scale = 1;
             this._properties.target.offsetX = 0;
+            // this._properties.target.borderAlpha = this._settings.borderAlpha;
+            // this._properties.target.borderWidth = this._settings.borderWidth;
             this._properties.target.borderAlpha = 0;
             this._properties.target.borderWidth = 0;
         };
@@ -125,8 +128,8 @@ export default class CardComponent extends component(Object3D) {
     }
 
     _updateProperties() {
-        this._properties.current.borderAlpha = math.lerp(this._properties.current.borderAlpha, this._properties.target.borderAlpha, 0.1);
-        this._properties.current.borderWidth = math.lerp(this._properties.current.borderWidth, this._properties.target.borderWidth, 0.1);
+        this._properties.current.borderAlpha = math.lerp(this._properties.current.borderAlpha, this._properties.target.borderAlpha, 0.2);
+        this._properties.current.borderWidth = math.lerp(this._properties.current.borderWidth, this._properties.target.borderWidth, 0.2);
         this._properties.current.scale = math.lerp(this._properties.current.scale, this._properties.target.scale, 0.1);
         this._properties.current.offsetX = math.lerp(this._properties.current.offsetX, this._properties.target.offsetX, 0.1);
 
@@ -164,7 +167,7 @@ export default class CardComponent extends component(Object3D) {
                 uOverlayColor: { value: new Color(this._settings.overlayColor) },
                 uOverlayAlpha: { value: 0 },
                 uBorderWidth: { value: this._settings.borderWidth },
-                uBorderAlpha: { value: 1 },
+                uBorderAlpha: { value: this._settings.borderAlpha },
             },
             transparent: true,
             side: DoubleSide,
@@ -187,7 +190,7 @@ export default class CardComponent extends component(Object3D) {
 
     _createComponents() {
         const components = {};
-        components.text = this._createCardTextComponent();
+        // components.text = this._createCardTextComponent();
         return components;
     }
 
@@ -202,6 +205,6 @@ export default class CardComponent extends component(Object3D) {
     }
 
     _resizeCardTextComponent(dimensions) {
-        this._components.text.resize(dimensions);
+        this._components.text?.resize(dimensions);
     }
 }
