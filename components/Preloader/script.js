@@ -53,6 +53,9 @@ export default {
                     name: game.largeImage.name,
                     path: game.largeImage.url,
                     preload: true,
+                    options: {
+                        generateMipmaps: false,
+                    },
                 };
 
                 const textureMedium = {
@@ -60,6 +63,9 @@ export default {
                     name: game.mediumImage.name,
                     path: game.mediumImage.url,
                     preload: true,
+                    options: {
+                        generateMipmaps: false,
+                    },
                 };
 
                 // Don't load duplicated resource

@@ -1,6 +1,6 @@
 // Vendor
 import { gsap } from 'gsap';
-import { Box3, Color, DoubleSide, Mesh, MeshBasicMaterial, MeshNormalMaterial, MeshPhysicalMaterial, Object3D, PlaneGeometry, Vector3 } from 'three';
+import { Box3, Color, DoubleSide, Mesh, MeshBasicMaterial, MeshNormalMaterial, MeshPhysicalMaterial, Object3D, PlaneGeometry, ShaderMaterial, TextureLoader, UniformsLib, Vector3 } from 'three';
 import { component } from '@/webgl/vendor/bidello';
 import ResourceLoader from '@/vendor/resource-loader';
 
@@ -10,6 +10,11 @@ import degreesToRadians from '@/utils/number/degreesToRadians';
 
 // Modules
 import CanvasScreen from '@/webgl/modules/CanvasScreen';
+import CanvasLeds from '@/webgl/modules/CanvasLeds';
+
+// Shader
+import fragment from '@/webgl/shaders/matcap/fragment.glsl';
+import vertex from '@/webgl/shaders/matcap/vertex.glsl';
 
 export default class MachineComponent extends component(Object3D) {
     init(options = {}) {
@@ -46,9 +51,10 @@ export default class MachineComponent extends component(Object3D) {
         };
 
         this._canvasScreen = this._createCanvasScreen();
+        this._canvasLeds = this._createCanvasLeds();
+        this._materials = this._createMaterials();
         this._container = this._createContainer();
         this._mesh = this._createMesh();
-        this._screen = this._createScreen();
 
         this._setupDebugger();
     }
@@ -79,8 +85,8 @@ export default class MachineComponent extends component(Object3D) {
 
     update({ delta }) {
         this._canvasScreen.update();
+        this._canvasLeds.update();
         this._updateRotation();
-
         this._settings.animation.time += delta;
     }
 
@@ -110,6 +116,120 @@ export default class MachineComponent extends component(Object3D) {
         return canvasScreen;
     }
 
+    _createCanvasLeds() {
+        const canvasLeds = new CanvasLeds({
+            width: 10,
+            height: 300,
+        });
+
+        return canvasLeds;
+    }
+
+    _createMaterials() {
+        const materials = {};
+
+        // Screen
+        materials.screen = this._createMatcapMaterial(this._canvasScreen.texture, ResourceLoader.get('matcap-mirror-1'));
+        materials.screen.customSettings.color = '#151515';
+        materials.screen.uniforms.color.value.set(materials.screen.customSettings.color);
+
+        // Leds
+        materials.led = this._createEmissiveMaterial(this._canvasLeds.texture);
+
+        // Structure
+        materials.structure = this._createMatcapMaterial(null, ResourceLoader.get('matcap-mirror-2'));
+        materials.structure.customSettings.color = '#111111';
+        materials.structure.uniforms.color.value.set(materials.structure.customSettings.color);
+        materials.structure.defines.USE_DIFFUSE_COLOR = true;
+        materials.structure.needsUpdate = true;
+
+        // Ventilation
+        materials.ventilation = this._createMatcapMaterial(ResourceLoader.get('axis-machine-ventilation'), ResourceLoader.get('matcap-mirror-1'));
+
+        // Plexiglass
+        materials.plexiglass = this._createMatcapMaterial(null, ResourceLoader.get('matcap-grey-shine'));
+        materials.plexiglass.customSettings.color = '#aeaeae';
+        materials.plexiglass.uniforms.color.value.set(materials.plexiglass.customSettings.color);
+        materials.plexiglass.defines.USE_DIFFUSE_COLOR = true;
+        materials.plexiglass.needsUpdate = true;
+
+        // Bases
+        materials.base = this._createMatcapMaterial(null, ResourceLoader.get('matcap-clear-soft'));
+        materials.base.customSettings.color = '#151515';
+        materials.base.uniforms.color.value.set(materials.base.customSettings.color);
+        materials.base.defines.USE_DIFFUSE_COLOR = true;
+        materials.base.needsUpdate = true;
+
+        // Buttons
+        materials.button = this._createMatcapMaterial(null, ResourceLoader.get('matcap-white-soft'));
+        materials.button.customSettings.color = '#ffffff';
+        materials.button.uniforms.color.value.set(materials.button.customSettings.color);
+        materials.button.defines.USE_DIFFUSE_COLOR = true;
+        materials.button.needsUpdate = true;
+
+        // Joysticks
+        materials.joystickBall = this._createMatcapMaterial(null, ResourceLoader.get('matcap-grey-shine'));
+        materials.joystickBall.customSettings.color = '#111111';
+        materials.joystickBall.uniforms.color.value.set(materials.joystickBall.customSettings.color);
+        materials.joystickBall.defines.USE_DIFFUSE_COLOR = true;
+        materials.joystickBall.needsUpdate = true;
+
+        materials.joystickStick = this._createMatcapMaterial(null, ResourceLoader.get('matcap-mirror-1'));
+        materials.joystickStick.customSettings.color = '#ffffff';
+        materials.joystickStick.uniforms.color.value.set(materials.joystickStick.customSettings.color);
+        materials.joystickStick.defines.USE_DIFFUSE_COLOR = true;
+        materials.joystickStick.needsUpdate = true;
+
+        return materials;
+    }
+
+    _createMatcapMaterial(texture, matcap) {
+        const material = new ShaderMaterial({
+            fragmentShader: fragment,
+            vertexShader: vertex,
+            uniforms: {
+                uTexture: { value: texture },
+                ...UniformsLib.common,
+                ...UniformsLib.bumpmap,
+                ...UniformsLib.normalmap,
+                ...UniformsLib.displacementmap,
+                ...UniformsLib.fog,
+                matcap: { value: matcap },
+                color: { value: new Color('') },
+            },
+            extensions: {
+                derivatives: false,
+                fragDepth: false,
+                drawBuffers: false,
+                shaderTextureLOD: false,
+            },
+            defines: {
+                USE_DIFFUSE_COLOR: false,
+            },
+            wireframe: false,
+            transparent: false,
+            lights: false,
+            side: DoubleSide,
+        });
+
+        material.customSettings = { color: '#ff0000' };
+        material.uniforms.color.value.set(material.customSettings.color);
+
+        return material;
+    }
+
+    _createEmissiveMaterial(texture) {
+        const material = new MeshBasicMaterial({
+            map: texture,
+            wireframe: false,
+            transparent: false,
+            lights: false,
+            side: DoubleSide,
+        });
+
+        return material;
+    }
+
     _createContainer() {
         const container = new Object3D();
         this.add(container);
@@ -118,68 +238,53 @@ export default class MachineComponent extends component(Object3D) {
 
     _createMesh() {
         const mesh = ResourceLoader.get('axis-machine').scene;
-        const texture = ResourceLoader.get('axis-machine-texture');
-        texture.flipY = false;
-        texture.needsUpdate = true;
+
+        const configMaterials = {
+            structure: ['borne'],
+            plexiglass: ['plexiglass'],
+            ventilation: ['grille'],
+            base: ['bases'],
+            screen: ['écran'],
+            button: [
+                'bouton_start',
+                'buzzer_droite',
+                'buzzer_gauche',
+                'bouton_A_gauche',
+                'bouton_X_gauche',
+                'bouton_I_gauche',
+                'bouton_S_gauche',
+                'bouton_A_droite',
+                'bouton_X_droite',
+                'bouton_I_droite',
+                'bouton_S_droite',
+            ],
+            joystickBall: [
+                'joystick_gauche_boule',
+                'joystick_droite_boule',
+            ],
+            joystickStick: [
+                'joystick_gauche_tige',
+                'joystick_droite_tige',
+            ],
+            led: [
+                'LED_droite',
+                'LED_gauche',
+            ],
+        };
 
         mesh.traverse((child) => {
-            // if (child.isMesh) child.material = new MeshNormalMaterial();
+            if (!child.isMesh) return;
 
-            if (child.isMesh) {
-                child.material = new MeshBasicMaterial({
-                    map: texture,
-                    side: DoubleSide,
-                });
-            }
-
-            // Screen
-            if (child.name === 'écran') {
-                child.material = new MeshBasicMaterial({
-                    map: this._canvasScreen.texture,
-                    side: DoubleSide,
-                });
+            for (const key in configMaterials) {
+                if (configMaterials[key].includes(child.name)) {
+                    child.material = this._materials[key];
+                }
             }
         });
 
         this._container.add(mesh);
 
         return mesh;
-    }
-
-    _createScreen() {
-        const geometry = new PlaneGeometry(1, 1, 1);
-
-        const material = new MeshBasicMaterial({
-            map: this._canvasScreen.texture,
-            side: DoubleSide,
-        });
-
-        let parent = null;
-
-        this._mesh.traverse((child) => {
-            if (child.name === 'écran') {
-                parent = child.parent;
-                child.visible = false;
-                console.log(child);
-            }
-        });
-
-        // Container
-        const mesh = new Mesh(geometry, material);
-        mesh.scale.set(this._settings.screen.width, this._settings.screen.height, 1);
-        mesh.rotation.x = Math.PI * 0.14;
-        mesh.position.z = 0.23;
-
-        // Container
-        const container = new Object3D();
-        container.scale.x = -1;
-        container.position.y = 1.44;
-        container.rotation.y = -Math.PI / 2;
-
-        container.add(mesh);
-        parent.add(container);
-
-        return container;
     }
 
     _updateMesh() {
@@ -224,21 +329,34 @@ export default class MachineComponent extends component(Object3D) {
      * Debug
      */
     _setupDebugger() {
-        const folder = this.$debugger.getFolder('Axis Scene').addFolder({ title: 'Machine', expanded: false });
-
+        const folder = this.$debugger.getFolder('Axis Scene').addFolder({ title: 'Machine', expanded: true });
         folder.addInput(this._settings, 'scale').on('change', () => { this._updateMesh(); });
 
-        const position = folder.addFolder({ title: 'Position' });
+        const materials = folder.addFolder({ title: 'Materials', expanded: true });
+
+        for (const key in this._materials) {
+            if (!this._materials[key].uniforms) continue;
+
+            const material = materials.addFolder({ title: `Material ${key}`, expanded: false });
+
+            const inputImage = this.$debugger.addInputMedia(this._materials[key].uniforms.matcap.value.image, { type: 'image', title: 'Upload file', label: 'Matcap', folder: material });
+            inputImage.on('update', (image) => { this._materials[key].uniforms.matcap.value = new TextureLoader().load(image.src); });
+
+            material.addInput(this._materials[key].defines, 'USE_DIFFUSE_COLOR').on('change', () => { this._materials[key].needsUpdate = true; });
+            material.addInput(this._materials[key].customSettings, 'color').on('change', () => { this._materials[key].uniforms.color.value.set(this._materials[key].customSettings.color); });
+        }
+
+        const position = folder.addFolder({ title: 'Position', expanded: false });
         position.addInput(this._settings.position, 'x').on('change', () => { this._updateMesh(); });
         position.addInput(this._settings.position, 'y').on('change', () => { this._updateMesh(); });
         position.addInput(this._settings.position, 'z').on('change', () => { this._updateMesh(); });
 
-        const rotation = folder.addFolder({ title: 'Rotation' });
+        const rotation = folder.addFolder({ title: 'Rotation', expanded: false });
         rotation.addInput(this._settings.rotation, 'x').on('change', () => { this._updateMesh(); });
         rotation.addInput(this._settings.rotation, 'y').on('change', () => { this._updateMesh(); });
         rotation.addInput(this._settings.rotation, 'z').on('change', () => { this._updateMesh(); });
 
-        const animation = folder.addFolder({ title: 'Animation' });
+        const animation = folder.addFolder({ title: 'Animation', expanded: false });
         animation.addInput(this._settings.animation, 'speed', { min: 0, max: 1 });
         animation.addInput(this._settings.animation.rotation.amplitude, 'x', { min: -25, max: 25 });
         animation.addInput(this._settings.animation.rotation.amplitude, 'y', { min: -25, max: 25 });

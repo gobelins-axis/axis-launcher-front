@@ -15,11 +15,12 @@ class ThreeTextureLoader extends Loader {
     /**
      * Public
      */
-    load({ path }) {
+    load({ path, options = {} }) {
         const promise = new Promise((resolve, reject) => {
             this._loader.load(
                 path,
                 (texture) => {
+                    if (options.generateMipmaps) texture.generateMipmaps = options.generateMipmaps;
                     TextureManager.add(texture);
                     resolve(texture);
                 },

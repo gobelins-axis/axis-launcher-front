@@ -4,16 +4,16 @@ class TweakpaneInputMedia {
 
         this._isVideo = options.type === 'video';
 
-        this._media = media;
+        this._media = media.cloneNode(true);
         this._source = this._media.src;
         this._media.alt = this._source.replace(/^.*[\\\/]/, '');
         this._media.preview = '';
 
         this._button = this._createButton();
-        this._input = this._createInput();
-        this._optionsInput = this._createOptionsInput();
         this._monitor = this._createMonitor();
         this._previewMonitor = this._createPreviewMonitor();
+        this._input = this._createInput();
+        this._optionsInput = this._createOptionsInput();
         this._applyButton = this._createApplyButton();
         this._fileReader = this._createFileReader();
 
@@ -53,8 +53,17 @@ class TweakpaneInputMedia {
         const input = document.createElement('input');
         input.type = 'file';
         input.accept = this._isVideo ? 'video/mp4, video/mov' : 'image/png, image/jpeg, image/jpg';
-        input.style.display = 'none';
-        document.body.append(input);
+
+        input.style.position = 'absolute';
+        input.style.left = 0;
+        input.style.top = 0;
+        input.style.width = '100%';
+        input.style.height = '100%';
+        input.style.opacity = 0;
+
+        this._previewMonitor.el.style.position = 'relative';
+
+        this._previewMonitor.el.append(input);
 
         return input;
     }

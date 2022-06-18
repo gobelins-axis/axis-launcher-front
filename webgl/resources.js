@@ -25,8 +25,44 @@ const resources = [
     },
     {
         type: 'texture',
-        name: 'axis-machine-texture',
-        path: '/webgl/textures/axis-machine.png',
+        name: 'axis-machine-ventilation',
+        path: '/webgl/textures/axis-machine-ventilation.png',
+        preload: true,
+    },
+    {
+        type: 'texture',
+        name: 'matcap-clear-soft',
+        path: '/webgl/textures/matcaps/matcap-clear-soft.png',
+        preload: true,
+    },
+    {
+        type: 'texture',
+        name: 'matcap-black-shine',
+        path: '/webgl/textures/matcaps/matcap-black-shine.png',
+        preload: true,
+    },
+    {
+        type: 'texture',
+        name: 'matcap-grey-shine',
+        path: '/webgl/textures/matcaps/matcap-grey-shine.png',
+        preload: true,
+    },
+    {
+        type: 'texture',
+        name: 'matcap-mirror-1',
+        path: '/webgl/textures/matcaps/matcap-mirror-1.png',
+        preload: true,
+    },
+    {
+        type: 'texture',
+        name: 'matcap-mirror-2',
+        path: '/webgl/textures/matcaps/matcap-mirror-2.png',
+        preload: true,
+    },
+    {
+        type: 'texture',
+        name: 'matcap-white-soft',
+        path: '/webgl/textures/matcaps/matcap-white-soft.png',
         preload: true,
     },
     /**
@@ -35,7 +71,7 @@ const resources = [
     {
         type: 'gltf',
         name: 'axis-machine',
-        path: '/webgl/models/axis-machine-v3.glb',
+        path: '/webgl/models/axis-machine-v6.glb',
         preload: true,
     },
 ];

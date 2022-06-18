@@ -1,5 +1,5 @@
 // Vendor
-import { Color, Scene } from 'three';
+import { AmbientLight, Color, Scene } from 'three';
 import { gsap } from 'gsap';
 import { component } from '@/webgl/vendor/bidello';
 
@@ -18,6 +18,9 @@ export default class MainScene extends component(Scene) {
         // Setup
         this._camera = this._createCamera();
         this._debugCamera = this._createDebugCamera();
+        this._lights = this._createLights();
+
+        // this.background = new Color('red');
 
         this._settings = {
             isDebugCamera: false,
@@ -67,16 +70,6 @@ export default class MainScene extends component(Scene) {
     /**
      * Private
      */
-    _setupDebugger() {
-        const folder = this.$debugger.addFolder({ title: 'Axis Scene', expanded: false });
-
-        const cameras = folder.addFolder({ title: 'Cameras' });
-        cameras.addInput(this._settings, 'isDebugCamera');
-        cameras.addButton({ title: 'Print Debug Cam Settings' }).on('click', () => {
-            this._debugCamera.printCameraSettings();
-        });
-    }
-
     _createCamera() {
         const camera = new Camera();
         return camera;
@@ -85,6 +78,17 @@ export default class MainScene extends component(Scene) {
     _createDebugCamera() {
         const debugCamera = new DebugCamera();
         return debugCamera;
+    }
+
+    _createLights() {
+        const lights = {};
+        lights.ambient = this._createAmbientLight();
+        return lights;
+    }
+
+    _createAmbientLight() {
+        const light = new AmbientLight();
+        return light;
     }
 
     _createComponents() {
@@ -125,5 +129,18 @@ export default class MainScene extends component(Scene) {
      */
     onWindowResize(dimensions) {
 
+    }
+
+    /**
+     * Debug
+     */
+    _setupDebugger() {
+        const folder = this.$debugger.addFolder({ title: 'Axis Scene', expanded: true });
+
+        const cameras = folder.addFolder({ title: 'Cameras', expanded: false });
+        cameras.addInput(this._settings, 'isDebugCamera');
+        cameras.addButton({ title: 'Print Debug Cam Settings' }).on('click', () => {
+            this._debugCamera.printCameraSettings();
+        });
     }
 }

@@ -20,6 +20,7 @@ export default class CardComponent extends component(Object3D) {
         this._index = options.index;
         this._data = options.data;
         this._settings = options.settings;
+        this._geometry = options.geometry;
 
         // Setup
         this._active = false;
@@ -171,14 +172,14 @@ export default class CardComponent extends component(Object3D) {
             },
             transparent: true,
             side: DoubleSide,
+            precision: 'lowp',
         });
 
         return material;
     }
 
     _createMesh() {
-        const geometry = new PlaneGeometry(1, 1, 1);
-        const mesh = new Mesh(geometry, this._material);
+        const mesh = new Mesh(this._geometry, this._material);
         this.add(mesh);
         return mesh;
     }

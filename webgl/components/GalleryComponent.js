@@ -1,6 +1,6 @@
 // Vendor
 import { gsap } from 'gsap';
-import { Object3D } from 'three';
+import { Object3D, PlaneGeometry } from 'three';
 import { component } from '@/webgl/vendor/bidello';
 
 // Components
@@ -180,12 +180,14 @@ export default class GalleryComponent extends component(Object3D) {
 
     _createCards() {
         const cards = [];
+        const cardGeometry = new PlaneGeometry(1, 1, 1);
 
         for (let i = 0; i < this._data.length; i++) {
             const card = new CardComponent({
                 index: i,
                 data: this._data[i],
                 settings: this._settings.card,
+                geometry: cardGeometry,
             });
 
             if (i === this._activeIndex) card.active = true;
