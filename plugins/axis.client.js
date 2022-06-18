@@ -3,9 +3,10 @@ import Axis from 'axis-api';
 import { gsap } from 'gsap';
 
 export default (context, inject) => {
-    Axis.registerKeys('Enter', 'a', 1);
+    Axis.registerKeys(['Enter', 'a'], 'a', 1);
     Axis.registerKeys('x', 'x', 1);
     Axis.registerKeys('i', 'i', 1);
+    Axis.registerKeys('s', 's', 1);
 
     const gamepadEmulator = Axis.createGamepadEmulator(0);
     Axis.joystick1.setGamepadEmulatorJoystick(gamepadEmulator, 0); // Left

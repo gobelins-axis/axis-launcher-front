@@ -11,6 +11,8 @@ import degreesToRadians from '@/utils/number/degreesToRadians';
 // Modules
 import CanvasScreen from '@/webgl/modules/CanvasScreen';
 import CanvasLeds from '@/webgl/modules/CanvasLeds';
+import JoystickManager from '@/webgl/modules/JoystickManager';
+import ButtonManager from '@/webgl/modules/ButtonManager';
 
 // Shader
 import fragment from '@/webgl/shaders/matcap/fragment.glsl';
@@ -50,11 +52,16 @@ export default class MachineComponent extends component(Object3D) {
             },
         };
 
+        this._joysticks = [];
+        this._buttons = [];
+
         this._canvasScreen = this._createCanvasScreen();
         this._canvasLeds = this._createCanvasLeds();
         this._materials = this._createMaterials();
         this._container = this._createContainer();
         this._mesh = this._createMesh();
+        this._joystickManager = this._createJoystickManager();
+        this._buttonManager = this._createButtonManager();
 
         this._setupDebugger();
     }
@@ -78,14 +85,18 @@ export default class MachineComponent extends component(Object3D) {
             }
         });
 
+        this._canvasLeds.dispose();
         this._canvasScreen.dispose();
 
         this._mesh.remove(this._screen);
+
+        this._joystickManager?.destroy();
+        this._buttonManager?.destroy();
     }
 
-    update({ delta }) {
-        this._canvasScreen.update();
-        this._canvasLeds.update();
+    update({ delta, time }) {
+        this._canvasScreen.update({ time });
+        this._canvasLeds.update({ time });
         this._updateRotation();
         this._settings.animation.time += delta;
     }
@@ -223,7 +234,6 @@ export default class MachineComponent extends component(Object3D) {
             map: texture,
             wireframe: false,
             transparent: false,
-            lights: false,
             side: DoubleSide,
         });
 
@@ -273,6 +283,21 @@ export default class MachineComponent extends component(Object3D) {
         };
 
         mesh.traverse((child) => {
+            if (child.name === 'joystick_gauche') this._joysticks.push({ id: 1, mesh: child });
+            if (child.name === 'joystick_droite') this._joysticks.push({ id: 2, mesh: child });
+
+            if (child.name === 'bouton_A_gauche') this._buttons.push({ id: 1, key: 'a', mesh: child });
+            if (child.name === 'bouton_X_gauche') this._buttons.push({ id: 1, key: 'x', mesh: child });
+            if (child.name === 'bouton_I_gauche') this._buttons.push({ id: 1, key: 'i', mesh: child });
+            if (child.name === 'bouton_S_gauche') this._buttons.push({ id: 1, key: 's', mesh: child });
+            if (child.name === 'buzzer_gauche') this._buttons.push({ id: 1, key: 'w', mesh: child });
+
+            if (child.name === 'bouton_A_droite') this._buttons.push({ id: 2, key: 'a', mesh: child });
+            if (child.name === 'bouton_X_droite') this._buttons.push({ id: 2, key: 'x', mesh: child });
+            if (child.name === 'bouton_I_droite') this._buttons.push({ id: 2, key: 'i', mesh: child });
+            if (child.name === 'bouton_S_droite') this._buttons.push({ id: 2, key: 's', mesh: child });
+            if (child.name === 'buzzer_droite') this._buttons.push({ id: 2, key: 'w', mesh: child });
+
             if (!child.isMesh) return;
 
             for (const key in configMaterials) {
@@ -285,6 +310,22 @@ export default class MachineComponent extends component(Object3D) {
         this._container.add(mesh);
 
         return mesh;
+    }
+
+    _createJoystickManager() {
+        const joystickManager = new JoystickManager({
+            joysticks: this._joysticks,
+        });
+
+        return joystickManager;
+    }
+
+    _createButtonManager() {
+        const buttonManager = new ButtonManager({
+            buttons: this._buttons,
+        });
+
+        return buttonManager;
     }
 
     _updateMesh() {

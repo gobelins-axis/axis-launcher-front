@@ -1,5 +1,7 @@
 // Vendor
-import { CanvasTexture } from 'three';
+import { CanvasTexture, Color } from 'three';
+
+const AMOUNT = 51;
 
 export default class CanvadLeds {
     constructor(options = {}) {
@@ -9,6 +11,13 @@ export default class CanvadLeds {
         this._canvas = document.createElement('canvas');
         this._context = this._canvas.getContext('2d');
         this._texture = new CanvasTexture(this._canvas);
+
+        this._settings = {
+            delta: 15,
+            speed: -0.02,
+        };
+
+        this._leds = this._createLeds();
 
         // Debug
         // this._canvas.style.position = 'fixed';
@@ -51,33 +60,57 @@ export default class CanvadLeds {
     /**
      * Private
      */
+    _createLeds() {
+        const leds = [];
+
+        const width = this._width;
+        const height = this._height / AMOUNT;
+
+        for (let i = 0; i < AMOUNT; i++) {
+            const led = {
+                position: { x: 0, y: height * i },
+                width,
+                height,
+                color: new Color(`hsl(${i * this._settings.delta}, 100%, 50%)`),
+                // color: `hsl(${i}, 100%, 50%)`,
+            };
+            leds.push(led);
+        }
+
+        return leds;
+    }
+
     _resizeCanvas() {
         this._canvas.width = this._width;
         this._canvas.height = this._height;
     }
 
     _update() {
+        this._updateLedColors();
+    }
 
+    _updateLedColors() {
+        for (let i = 0; i < this._leds.length; i++) {
+            const led = this._leds[i];
+            led.color.offsetHSL(this._settings.speed, 0, 0);
+        }
     }
 
     _draw() {
         this._context.fillStyle = 'black';
-        // this._context.clearRect(0, 0, this._width, this._height);
         this._context.fillRect(0, 0, this._width, this._height);
 
         this._drawLeds();
     }
 
     _drawLeds() {
-        const amount = 50;
-        const width = this._width;
-        const height = this._height / amount;
+        this._context.filter = 'blur(1px)';
 
-        this._context.filter = 'blur(4px)';
-
-        for (let i = 0; i < amount; i++) {
-            this._context.fillStyle = i % 2 === 0 ? 'blue' : 'red';
-            this._context.fillRect(0, height * i, width, height);
+        for (let i = 0; i < this._leds.length; i++) {
+            const led = this._leds[i];
+            this._context.fillStyle = `#${led.color.getHexString()}`;
+            // this._context.fillStyle = led.color;
+            this._context.fillRect(led.position.x, led.position.y, led.width, led.height);
         }
     }
 }
