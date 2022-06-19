@@ -146,6 +146,8 @@ export default class MachineComponent extends component(Object3D) {
 
         // Leds
         materials.led = this._createEmissiveMaterial(this._canvasLeds.texture);
+        materials.led.customSettings = {};
+        materials.led.customSettings.bloom = true;
 
         // Structure
         materials.structure = this._createMatcapMaterial(null, ResourceLoader.get('matcap-mirror-2'));
@@ -174,6 +176,7 @@ export default class MachineComponent extends component(Object3D) {
         // Buttons
         materials.button = this._createMatcapMaterial(null, ResourceLoader.get('matcap-white-soft'));
         materials.button.customSettings.color = '#ffffff';
+        materials.button.customSettings.bloom = true;
         materials.button.uniforms.color.value.set(materials.button.customSettings.color);
         materials.button.defines.USE_DIFFUSE_COLOR = true;
         materials.button.needsUpdate = true;
@@ -223,7 +226,7 @@ export default class MachineComponent extends component(Object3D) {
             side: DoubleSide,
         });
 
-        material.customSettings = { color: '#ff0000' };
+        material.customSettings = { color: '#ff0000', bloom: false };
         material.uniforms.color.value.set(material.customSettings.color);
 
         return material;
@@ -236,6 +239,8 @@ export default class MachineComponent extends component(Object3D) {
             transparent: false,
             side: DoubleSide,
         });
+
+        material.customSettings = { bloom: true };
 
         return material;
     }

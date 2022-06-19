@@ -32,8 +32,6 @@ uniform float uAxisBackgroundTextureRotate;
 uniform vec2 uAxisBackgroundTextureTranslate;
 uniform float uAxisBackgroundTextureAlpha;
 
-uniform sampler2D uAxisMachineTexture;
-
 uniform float uIsAxis;
 
 // Varyings
@@ -106,12 +104,6 @@ void main() {
     vec4 axisBackgroundTexture = texture2D(uAxisBackgroundTexture, uvAxisBackgroundTexture);
     axisBackgroundTexture.a *= uAxisBackgroundTextureAlpha;
 
-    // Axis Machine
-    vec4 axisMachineTexture = texture2D(uAxisMachineTexture, vUv);
-
-    // Axis final output
-    vec4 axisFinal = axisMachineTexture * axisMachineTexture.a + axisBackgroundTexture * (1.0 - axisMachineTexture.a);;
-
     // Debug
     // float pct = plot(vUv.y, gradientY);
     // gl_FragColor = vec4(pct, 0.0, 0.0, 1.0);
@@ -119,11 +111,8 @@ void main() {
     // gl_FragColor = textureCombined;
 
     // Output
-    textureCurrent = mix(textureCurrent, axisFinal, uIsAxis);
+    textureCurrent = mix(textureCurrent, axisBackgroundTexture, uIsAxis);
     gl_FragColor = mix(textureCurrent, vec4(uGradientColor, 1.0), gradientX);
     gl_FragColor = mix(gl_FragColor, vec4(uGradientColor, 1.0), gradientY);
     gl_FragColor = mix(gl_FragColor, vec4(uOverlayColor, 1.0), uOverlayOpacity);
-
-    // Debug
-    // gl_FragColor = axisFinal;
 }

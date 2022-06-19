@@ -42,7 +42,7 @@ void main() {
   #else
 
     vec4 diffuseColor = texture2D(uTexture, vUv);
-    if (diffuseColor.a == 0.0) diffuseColor.rgb = color;
+    // if (diffuseColor.a == 0.0) diffuseColor.rgb = color;
     diffuseColor.a = 1.0;
 
   #endif

@@ -113,7 +113,6 @@ export default class BackgroundComponent extends component(Object3D) {
     _showAxisBackground() {
         this._timelineShowAxisBackground?.kill();
         this._timelineShowAxisBackground = new gsap.timeline();
-        this._timelineShowAxisBackground.add(this.$root.axisScene.show(), 0);
         this._timelineShowAxisBackground.fromTo(this._material.uniforms.uAxisBackgroundTextureScale, { value: this._settings.axisBackground.initial.scale }, { duration: 1, value: this._settings.axisBackground.target.scale, ease: 'circ.out' }, 0);
         this._timelineShowAxisBackground.fromTo(this._material.uniforms.uAxisBackgroundTextureRotate, { value: degreesToRadians(this._settings.axisBackground.initial.rotation) }, { duration: 1, value: degreesToRadians(this._settings.axisBackground.target.rotation), ease: 'circ.out' }, 0);
         this._timelineShowAxisBackground.fromTo(this._material.uniforms.uAxisBackgroundTextureTranslate.value, { x: this._settings.axisBackground.initial.translate.x }, { duration: 1, x: this._settings.axisBackground.target.translate.x, ease: 'circ.out' }, 0);
@@ -255,8 +254,6 @@ export default class BackgroundComponent extends component(Object3D) {
                 uAxisBackgroundTextureTranslate: { value: new Vector2(this._settings.axisBackground.initial.translate.x, this._settings.axisBackground.initial.translate.y) },
                 uAxisBackgroundTextureAlpha: { value: 1 },
                 // Axis Machine
-
-                uAxisMachineTexture: { value: this.$root.renderTarget.texture },
                 uIsAxis: { value: 0 },
             },
         });

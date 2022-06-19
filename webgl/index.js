@@ -9,9 +9,12 @@ import Stats from 'stats-js';
 import WindowResizeObserver from '@/utils/WindowResizeObserver';
 import TextureManager from '@/webgl/utils/TextureManager';
 
+// Modules
+import BloomManager from '@/webgl/modules/BloomManager';
+
 // Scenes
-import MainScene from './scenes/MainScene';
-import AxisScene from './scenes/AxisScene';
+import MainScene from '@/webgl/scenes/MainScene';
+import AxisScene from '@/webgl/scenes/AxisScene';
 
 // API
 import API from '@/webgl/api';
@@ -36,6 +39,14 @@ class WebGLApplication {
         this._debugger = options.debugger;
 
         // Setup
+        this._settings = {
+            bloom: {
+                quality: 0.2,
+                blurIntensity: 0.3,
+                strength: 0.5,
+            },
+        };
+
         this._registerBidelloGlobals();
 
         this._clock = this._createClock();
@@ -46,6 +57,8 @@ class WebGLApplication {
 
         this._mainScene = this._createMainScene();
         this._axisScene = this._createAxisScene();
+
+        this._bloomManager = this._createBloomManager();
 
         if (this._context.isDevelopment) {
             this._stats = this._createStats();
@@ -83,6 +96,14 @@ class WebGLApplication {
 
     set isAxisSceneEnabled(isEnabled) {
         this._isAxisSceneEnabled = isEnabled;
+    }
+
+    get bloomManager() {
+        return this._bloomManager;
+    }
+
+    get settings() {
+        return this._settings;
     }
 
     /**
@@ -134,6 +155,7 @@ class WebGLApplication {
     _createRenderTarget() {
         const renderTarget = new WebGLRenderTarget();
         renderTarget.samples = 1;
+        renderTarget.texture.generateMipmaps = false;
         return renderTarget;
     }
 
@@ -145,6 +167,18 @@ class WebGLApplication {
     _createAxisScene() {
         const scene = new AxisScene();
         return scene;
+    }
+
+    _createBloomManager() {
+        const bloomManager = new BloomManager({
+            width: 0,
+            height: 0,
+            renderer: this._renderer,
+            scene: this._axisScene,
+            camera: this._axisScene.camera,
+            settings: this._settings.bloom,
+        });
+        return bloomManager;
     }
 
     _createStats() {
@@ -203,6 +237,8 @@ class WebGLApplication {
         this._renderer.render(this._axisScene, this._axisScene.camera);
         this._renderer.clear(true, false, false);
 
+        this._bloomManager.render();
+
         this._renderer.setRenderTarget(null);
         this._renderer.render(this._mainScene, this._mainScene.camera);
 
@@ -224,6 +260,7 @@ class WebGLApplication {
         this._resizeCanvas(dimensions);
         this._resizeRenderer(dimensions);
         this._resizeRenderTarget(dimensions);
+        this._resizeBloomManager(dimensions);
         this._triggerBidelloResize(dimensions);
     }
 
@@ -243,6 +280,10 @@ class WebGLApplication {
         const dpr = dimensions.dpr;
         // const dpr = 1;
         this._renderTarget.setSize(dimensions.innerWidth * dpr, dimensions.innerHeight * dpr);
+    }
+
+    _resizeBloomManager(dimensions) {
+        this._bloomManager.resize(dimensions.innerWidth, dimensions.innerHeight);
     }
 
     _triggerBidelloResize(dimensions) {
@@ -287,11 +328,15 @@ class WebGLApplication {
      * Debugger
      */
     _setupDebugger() {
-        const folder = this._debugger.addFolder({ title: 'Performances', expanded: false });
-        folder.addMonitor(this._renderer.info.memory, 'geometries', { interval: 1000 });
-        folder.addMonitor(this._renderer.info.memory, 'textures', { interval: 1000 });
-        folder.addMonitor(this._renderer.info.render, 'calls', { interval: 1000 });
-        folder.addMonitor(this._renderer.info.render, 'triangles', { interval: 1000 });
+        const performanceFolder = this._debugger.addFolder({ title: 'Performances', expanded: false });
+        performanceFolder.addMonitor(this._renderer.info.memory, 'geometries', { interval: 1000 });
+        performanceFolder.addMonitor(this._renderer.info.memory, 'textures', { interval: 1000 });
+        performanceFolder.addMonitor(this._renderer.info.render, 'calls', { interval: 1000 });
+        performanceFolder.addMonitor(this._renderer.info.render, 'triangles', { interval: 1000 });
+
+        const bloomFolder = this._debugger.addFolder({ title: 'Bloom', expanded: false });
+        bloomFolder.addInput(this._settings.bloom, 'blurIntensity').on('change', () => { this._bloomManager.settings = this._settings.bloom; });
+        bloomFolder.addInput(this._settings.bloom, 'strength');
     }
 }
 

@@ -1,8 +1,6 @@
 // Modules
 import BlurPlaneBuffer from './BlurPlaneBuffer';
 
-const BUFFER_QUALITY_FACTOR = 0.5;
-
 export default class BlurManager {
     constructor(options = {}) {
         // Props
@@ -80,6 +78,7 @@ export default class BlurManager {
             readBuffer = t;
         }
 
+        // this._renderer.clear(true, false, false);
         this._renderer.setRenderTarget(null);
 
         this._output = readBuffer.texture;
@@ -92,8 +91,8 @@ export default class BlurManager {
         this._width = width;
         this._height = height;
 
-        this._bufferA.resize(this._width * BUFFER_QUALITY_FACTOR, this._height * BUFFER_QUALITY_FACTOR);
-        this._bufferB.resize(this._width * BUFFER_QUALITY_FACTOR, this._height * BUFFER_QUALITY_FACTOR);
+        this._bufferA.resize(this._width, this._height);
+        this._bufferB.resize(this._width, this._height);
     }
 
     destroy() {
@@ -105,12 +104,12 @@ export default class BlurManager {
      * Private
      */
     _createBufferA() {
-        const buffer = new BlurPlaneBuffer(this._width * BUFFER_QUALITY_FACTOR, this._height * BUFFER_QUALITY_FACTOR, this._texture, this._intensity);
+        const buffer = new BlurPlaneBuffer(this._width, this._height, this._texture, this._intensity);
         return buffer;
     }
 
     _createBufferB() {
-        const buffer = new BlurPlaneBuffer(this._width * BUFFER_QUALITY_FACTOR, this._height * BUFFER_QUALITY_FACTOR, this._texture, this._intensity);
+        const buffer = new BlurPlaneBuffer(this._width, this._height, this._texture, this._intensity);
         return buffer;
     }
 }

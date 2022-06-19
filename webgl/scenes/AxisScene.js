@@ -20,8 +20,6 @@ export default class MainScene extends component(Scene) {
         this._debugCamera = this._createDebugCamera();
         this._lights = this._createLights();
 
-        // this.background = new Color('red');
-
         this._settings = {
             isDebugCamera: false,
         };
@@ -53,6 +51,7 @@ export default class MainScene extends component(Scene) {
     }
 
     show() {
+        this._timelineShow?.kill();
         this._timelineHide?.kill();
         this._timelineShow = new gsap.timeline();
         this._timelineShow.fromTo(this._components.machine.position, { x: -3 }, { duration: 1.5, x: 0, ease: 'power4.out' }, 0);
@@ -63,6 +62,7 @@ export default class MainScene extends component(Scene) {
 
     hide() {
         this._timelineShow?.kill();
+        this._timelineHide?.kill();
         this._timelineHide = new gsap.timeline();
         return this._timelineHide;
     }

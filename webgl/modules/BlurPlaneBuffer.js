@@ -9,6 +9,8 @@ class BlurPlaneBuffer extends WebGLRenderTarget {
     constructor(width, height, texture, intensity) {
         super(width, height);
 
+        this.texture.generateMipmaps = false;
+
         this._width = width;
         this._height = height;
         this._texture = texture;
