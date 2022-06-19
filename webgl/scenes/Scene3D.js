@@ -20,7 +20,7 @@ export default class Scene3D extends component(Scene) {
         this._debugCamera = this._createDebugCamera();
 
         this._settings = {
-            isDebugCamera: true,
+            isDebugCamera: false,
         };
 
         this._setupDebugger();
@@ -123,6 +123,8 @@ export default class Scene3D extends component(Scene) {
      * Debug
      */
     _setupDebugger() {
+        if (!this.$debugger) return;
+
         const folder = this.$debugger.addFolder({ title: 'Axis Scene', expanded: true });
 
         const cameras = folder.addFolder({ title: 'Cameras', expanded: false });

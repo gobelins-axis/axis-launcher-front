@@ -121,6 +121,8 @@ export default class BackgroundComponent extends component(Object3D) {
     }
 
     _setupDebug() {
+        if (!this.$debugger) return;
+
         const folder = this.$debugger.getFolder('Main Scene').addFolder({ title: 'Background' });
 
         // Transition

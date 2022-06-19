@@ -28,6 +28,7 @@ export default class UIPerspectiveCamera extends component() {
     }
 
     _setupDebugger() {
+        // if (!this.$debugger) return;
         // const folder = this.$debugger.getFolder('Main Scene').addFolder({ title: 'UI Perspective Camera', expanded: false });
     }
 

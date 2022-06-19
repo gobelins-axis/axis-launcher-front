@@ -56,7 +56,8 @@ export default class Postprocessing extends component() {
     }
 
     set is3DSceneEnabled(enabled) {
-        this._is3DSceneEnabled = enabled;
+        this._is3DSceneEnabled = !!enabled;
+        this._layer3D.visible = !!enabled;
     }
 
     /**
@@ -76,14 +77,16 @@ export default class Postprocessing extends component() {
         this._renderer.clear();
         this._renderer.render(this._sceneUI, this._sceneUI.camera);
 
-        // Bloom
-        if (!this._layer3D.material.uniforms.uBloomTexture.value) this._layer3D.material.uniforms.uBloomTexture.value = this._bloomManager.bloomTexture;
-        this._bloomManager.render();
+        if (this._is3DSceneEnabled) {
+            // Bloom
+            if (!this._layer3D.material.uniforms.uBloomTexture.value) this._layer3D.material.uniforms.uBloomTexture.value = this._bloomManager.bloomTexture;
+            this._bloomManager.render();
 
-        // 3D
-        this._renderer.setRenderTarget(this._renderTarget3D);
-        this._renderer.clear();
-        this._renderer.render(this._scene3D, this._scene3D.camera);
+            // 3D
+            this._renderer.setRenderTarget(this._renderTarget3D);
+            this._renderer.clear();
+            this._renderer.render(this._scene3D, this._scene3D.camera);
+        }
 
         // Output
         this._renderer.setRenderTarget(null);
@@ -182,6 +185,8 @@ export default class Postprocessing extends component() {
      * Debug
      */
     _setupDebugger() {
+        if (!this.$debugger) return;
+
         const folder = this.$debugger.addFolder({ title: 'Postprocessing', expanded: true });
         const bloom = folder.addFolder({ title: 'Bloom' });
         bloom.addInput(this._settings.bloom, 'strength', { min: 0, max: 3 }).on('change', () => { this._layer3D.bloomSettings = this._settings.bloom; });

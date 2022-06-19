@@ -372,6 +372,8 @@ export default class MachineComponent extends component(Object3D) {
      * Debug
      */
     _setupDebugger() {
+        if (!this.$debugger) return;
+
         const folder = this.$debugger.getFolder('Axis Scene').addFolder({ title: 'Machine', expanded: true });
         folder.addInput(this._settings, 'scale').on('change', () => { this._updateMesh(); });
 

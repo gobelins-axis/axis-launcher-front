@@ -274,6 +274,8 @@ class WebGLApplication {
      * Debugger
      */
     _setupDebugger() {
+        if (!this._debugger) return;
+
         const performanceFolder = this._debugger.addFolder({ title: 'Performances', expanded: false });
         performanceFolder.addMonitor(this._renderer.info.memory, 'geometries', { interval: 1000 });
         performanceFolder.addMonitor(this._renderer.info.memory, 'textures', { interval: 1000 });

@@ -118,6 +118,8 @@ export default class GalleryComponent extends component(Object3D) {
      * Private
      */
     _setupDebugger() {
+        if (!this.$debugger) return;
+
         const folder = this.$debugger.getFolder('Main Scene').addFolder({ title: 'Gallery', expanded: false });
 
         folder.addInput(this._settings, 'velocityFactor');

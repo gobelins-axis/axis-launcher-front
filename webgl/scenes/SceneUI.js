@@ -103,6 +103,8 @@ export default class SceneUI extends component(Scene) {
      * Debugger
      */
     _setupDebugger() {
+        if (!this.$debugger) return;
+
         const folder = this.$debugger.addFolder({ title: 'Main Scene', expanded: false });
 
         const cameras = folder.addFolder({ title: 'Cameras', expanded: false });
