@@ -2,19 +2,20 @@
 import { Scene, WebGLRenderTarget, OrthographicCamera, PlaneGeometry, Vector2, ShaderMaterial, Mesh } from 'three';
 
 // Shader
-import vertex from '@/webgl/shaders/blur/vertex.glsl';
-import fragment from '@/webgl/shaders/blur/fragment.glsl';
+import vertex from '@/webgl/shaders/bloom/vertex.glsl';
+import fragment from '@/webgl/shaders/bloom/fragment.glsl';
 
-export default class BlurPlaneBuffer extends WebGLRenderTarget {
-    constructor(width, height, texture, intensity) {
-        super(width, height);
+export default class BloomPlaneButter extends WebGLRenderTarget {
+    constructor(options = {}) {
+        super(options.width, options.height);
 
         this.texture.generateMipmaps = false;
 
-        this._width = width;
-        this._height = height;
-        this._texture = texture;
-        this._intensity = intensity;
+        this._width = options.width;
+        this._height = options.height;
+        this._bloomTexture = options.bloomTexture;
+        this._bloomMaskTexture = options.bloomMaskTexture;
+        this._bloomThreshold = options.bloomThreshold;
 
         this._camera = this._createCamera();
         this._scene = this._createScene();
@@ -36,13 +37,13 @@ export default class BlurPlaneBuffer extends WebGLRenderTarget {
         return this._plane;
     }
 
-    get intensity() {
-        return this._intensity;
+    get threshold() {
+        return this._threshold;
     }
 
-    set intensity(intensity) {
-        this._intensity = intensity;
-        this._plane.material.uniforms.uIntensity.value = this._intensity;
+    set threshold(value) {
+        this._threshold = value;
+        this._plane.material.uniforms.uBloomThreshold.value = value;
     }
 
     /**
@@ -91,10 +92,10 @@ export default class BlurPlaneBuffer extends WebGLRenderTarget {
         const geometry = new PlaneGeometry(1, 1, 1);
 
         const uniforms = {
-            uTexture: { value: this._texture },
-            uDirection: { value: new Vector2(0, 0) },
-            uIntensity: { value: this._intensity },
+            uBloomTexture: { value: this._bloomTexture },
+            uBloomMaskTexture: { value: this._bloomMaskTexture },
             uResolution: { value: new Vector2(this._width, this._height) },
+            uBloomThreshold: { value: this._bloomThreshold },
         };
 
         const material = new ShaderMaterial({

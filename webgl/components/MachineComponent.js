@@ -147,7 +147,7 @@ export default class MachineComponent extends component(Object3D) {
         // Leds
         materials.led = this._createEmissiveMaterial(this._canvasLeds.texture);
         materials.led.customSettings = {};
-        materials.led.customSettings.bloom = true;
+        materials.led.userData.bloom = true;
 
         // Structure
         materials.structure = this._createMatcapMaterial(null, ResourceLoader.get('matcap-mirror-2'));
@@ -174,12 +174,7 @@ export default class MachineComponent extends component(Object3D) {
         materials.base.needsUpdate = true;
 
         // Buttons
-        materials.button = this._createMatcapMaterial(null, ResourceLoader.get('matcap-white-soft'));
-        materials.button.customSettings.color = '#ffffff';
-        materials.button.customSettings.bloom = true;
-        materials.button.uniforms.color.value.set(materials.button.customSettings.color);
-        materials.button.defines.USE_DIFFUSE_COLOR = true;
-        materials.button.needsUpdate = true;
+        materials.button = this._createEmissiveMaterial(null, new Color('#ffffff'));
 
         // Joysticks
         materials.joystickBall = this._createMatcapMaterial(null, ResourceLoader.get('matcap-grey-shine'));
@@ -209,7 +204,7 @@ export default class MachineComponent extends component(Object3D) {
                 ...UniformsLib.displacementmap,
                 ...UniformsLib.fog,
                 matcap: { value: matcap },
-                color: { value: new Color('') },
+                color: { value: new Color('#ffffff') },
             },
             extensions: {
                 derivatives: false,
@@ -226,21 +221,23 @@ export default class MachineComponent extends component(Object3D) {
             side: DoubleSide,
         });
 
-        material.customSettings = { color: '#ff0000', bloom: false };
+        material.userData.bloom = false;
+        material.customSettings = { color: '#ff0000' };
         material.uniforms.color.value.set(material.customSettings.color);
 
         return material;
     }
 
-    _createEmissiveMaterial(texture) {
+    _createEmissiveMaterial(texture, color) {
         const material = new MeshBasicMaterial({
             map: texture,
+            color: color || null,
             wireframe: false,
             transparent: false,
             side: DoubleSide,
         });
 
-        material.customSettings = { bloom: true };
+        material.userData.bloom = true;
 
         return material;
     }

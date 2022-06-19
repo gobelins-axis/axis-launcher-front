@@ -13,8 +13,8 @@ export default class CanvadLeds {
         this._texture = new CanvasTexture(this._canvas);
 
         this._settings = {
-            delta: 15,
-            speed: -0.02,
+            delta: 5,
+            speed: -2,
         };
 
         this._leds = this._createLeds();
@@ -67,12 +67,13 @@ export default class CanvadLeds {
         const height = this._height / AMOUNT;
 
         for (let i = 0; i < AMOUNT; i++) {
+            const hue = i * this._settings.delta;
             const led = {
                 position: { x: 0, y: height * i },
                 width,
                 height,
-                color: new Color(`hsl(${i * this._settings.delta}, 100%, 50%)`),
-                // color: `hsl(${i}, 100%, 50%)`,
+                hue,
+                color: `hsl(${hue}, 100%, 50%)`,
             };
             leds.push(led);
         }
@@ -92,7 +93,8 @@ export default class CanvadLeds {
     _updateLedColors() {
         for (let i = 0; i < this._leds.length; i++) {
             const led = this._leds[i];
-            led.color.offsetHSL(this._settings.speed, 0, 0);
+            led.hue += this._settings.speed;
+            led.color = `hsl(${led.hue}, 100%, 50%)`;
         }
     }
 
@@ -104,12 +106,11 @@ export default class CanvadLeds {
     }
 
     _drawLeds() {
-        this._context.filter = 'blur(1px)';
+        // this._context.filter = 'blur(1px)';
 
         for (let i = 0; i < this._leds.length; i++) {
             const led = this._leds[i];
-            this._context.fillStyle = `#${led.color.getHexString()}`;
-            // this._context.fillStyle = led.color;
+            this._context.fillStyle = led.color;
             this._context.fillRect(led.position.x, led.position.y, led.width, led.height);
         }
     }

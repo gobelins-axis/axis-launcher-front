@@ -9,6 +9,7 @@ export default class BlurManager {
         this._texture = options.texture;
         this._intensity = options.intensity;
         this._renderer = options.renderer;
+        this._bloom = options.bloom;
 
         // Setup
         this._output = null;
@@ -78,7 +79,7 @@ export default class BlurManager {
             readBuffer = t;
         }
 
-        // this._renderer.clear(true, false, false);
+        this._renderer.clear(true, false, false);
         this._renderer.setRenderTarget(null);
 
         this._output = readBuffer.texture;

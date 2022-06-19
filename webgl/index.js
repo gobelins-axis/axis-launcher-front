@@ -1,6 +1,6 @@
 // Vendor
 import { gsap } from 'gsap';
-import { WebGLRenderer, Color, Clock, WebGLRenderTarget, LinearFilter, RGBAFormat, FloatType } from 'three';
+import { WebGLRenderer, Color, Clock, LinearFilter, RGBAFormat, FloatType } from 'three';
 import bidello from '@/webgl/vendor/bidello';
 import { GPUStatsPanel } from 'three/examples/jsm/utils/GPUStatsPanel.js';
 import Stats from 'stats-js';
@@ -9,15 +9,13 @@ import Stats from 'stats-js';
 import WindowResizeObserver from '@/utils/WindowResizeObserver';
 import TextureManager from '@/webgl/utils/TextureManager';
 
-// Modules
-import BloomManager from '@/webgl/modules/BloomManager';
-
 // Scenes
-import MainScene from '@/webgl/scenes/MainScene';
-import AxisScene from '@/webgl/scenes/AxisScene';
+import SceneUI from '@/webgl/scenes/SceneUI';
+import Scene3D from '@/webgl/scenes/Scene3D';
 
 // API
 import API from '@/webgl/api';
+import Postprocessing from './modules/Postprocessing';
 
 // Watch hot reload
 let isHotReload = false;
@@ -39,33 +37,24 @@ class WebGLApplication {
         this._debugger = options.debugger;
 
         // Setup
-        this._settings = {
-            bloom: {
-                quality: 0.2,
-                blurIntensity: 0.3,
-                strength: 0.5,
-            },
-        };
-
         this._registerBidelloGlobals();
 
         this._clock = this._createClock();
         this._renderer = this._createRenderer();
-        this._renderTarget = this._createRenderTarget();
 
         this._setupDebugger();
 
-        this._mainScene = this._createMainScene();
-        this._axisScene = this._createAxisScene();
+        this._is3DSceneEnabled = false;
 
-        this._bloomManager = this._createBloomManager();
+        this._sceneUI = this._createSceneUI();
+        this._scene3D = this._createScene3D();
+
+        this._postprocessing = this._createPostprocessing();
 
         if (this._context.isDevelopment) {
             this._stats = this._createStats();
             this._statsGpuPanel = this._createStatsGpuPanel();
         }
-
-        this._isAxisSceneEnabled = false;
 
         this._bindAll();
         this._setupEventListeners();
@@ -78,32 +67,27 @@ class WebGLApplication {
         return this._renderer;
     }
 
-    get mainScene() {
-        return this._mainScene;
+    get sceneUI() {
+        return this._sceneUI;
     }
 
-    get axisScene() {
-        return this._axisScene;
-    }
-
-    get renderTarget() {
-        return this._renderTarget;
-    }
-
-    get isAxisSceneEnabled() {
-        return this._isAxisSceneEnabled;
-    }
-
-    set isAxisSceneEnabled(isEnabled) {
-        this._isAxisSceneEnabled = isEnabled;
-    }
-
-    get bloomManager() {
-        return this._bloomManager;
+    get scene3D() {
+        return this._scene3D;
     }
 
     get settings() {
         return this._settings;
+    }
+
+    get is3DSceneEnabled() {
+        return this._is3DSceneEnabled;
+    }
+
+    set is3DSceneEnabled(enabled) {
+        if (!this._is3DSceneEnabled && enabled) this._scene3D.show();
+
+        this._is3DSceneEnabled = enabled;
+        this._postprocessing.is3DSceneEnabled = enabled;
     }
 
     /**
@@ -112,8 +96,8 @@ class WebGLApplication {
     destroy() {
         this._removeStats();
         this._removeEventListeners();
-        this._mainScene?.destroy();
-        this._axisScene?.destroy();
+        this._sceneUI?.destroy();
+        this._scene3D?.destroy();
         TextureManager.clear();
     }
 
@@ -130,8 +114,8 @@ class WebGLApplication {
     }
 
     _start() {
-        this._mainScene.start();
-        this._axisScene.start();
+        this._sceneUI.start();
+        this._scene3D.start();
     }
 
     _createClock() {
@@ -152,33 +136,23 @@ class WebGLApplication {
         return renderer;
     }
 
-    _createRenderTarget() {
-        const renderTarget = new WebGLRenderTarget();
-        renderTarget.samples = 1;
-        renderTarget.texture.generateMipmaps = false;
-        return renderTarget;
-    }
-
-    _createMainScene() {
-        const scene = new MainScene();
-        return scene;
-    }
-
-    _createAxisScene() {
-        const scene = new AxisScene();
-        return scene;
-    }
-
-    _createBloomManager() {
-        const bloomManager = new BloomManager({
-            width: 0,
-            height: 0,
-            renderer: this._renderer,
-            scene: this._axisScene,
-            camera: this._axisScene.camera,
-            settings: this._settings.bloom,
+    _createPostprocessing() {
+        const postprocessing = new Postprocessing({
+            sceneUI: this._sceneUI,
+            scene3D: this._scene3D,
         });
-        return bloomManager;
+        bidello.registerGlobal('postprocessing', postprocessing);
+        return postprocessing;
+    }
+
+    _createSceneUI() {
+        const scene = new SceneUI();
+        return scene;
+    }
+
+    _createScene3D() {
+        const scene = new Scene3D();
+        return scene;
     }
 
     _createStats() {
@@ -227,30 +201,14 @@ class WebGLApplication {
     _render() {
         this._statsGpuPanel?.startQuery();
 
-        // if (this._isAxisSceneEnabled) {
-        //     this._renderer.setRenderTarget(this._renderTarget);
-        //     this._renderer.render(this._axisScene, this._axisScene.camera);
-        //     this._renderer.clear(true, false, false);
-        // }
-
-        this._renderer.setRenderTarget(this._renderTarget);
-        this._renderer.render(this._axisScene, this._axisScene.camera);
-        this._renderer.clear(true, false, false);
-
-        this._bloomManager.render();
-
-        this._renderer.setRenderTarget(null);
-        this._renderer.render(this._mainScene, this._mainScene.camera);
-
-        // Debug Axis Scene
-        // this._renderer.render(this._axisScene, this._axisScene.camera);
+        this._postprocessing.render();
 
         this._statsGpuPanel?.endQuery();
     }
 
     _compile() {
-        this._renderer.compile(this._axisScene, this._axisScene.camera);
-        this._renderer.compile(this._mainScene, this._mainScene.camera);
+        this._renderer.compile(this._scene3D, this._scene3D.camera);
+        this._renderer.compile(this._sceneUI, this._sceneUI.camera);
     }
 
     /**
@@ -259,8 +217,6 @@ class WebGLApplication {
     _resize(dimensions) {
         this._resizeCanvas(dimensions);
         this._resizeRenderer(dimensions);
-        this._resizeRenderTarget(dimensions);
-        this._resizeBloomManager(dimensions);
         this._triggerBidelloResize(dimensions);
     }
 
@@ -274,16 +230,6 @@ class WebGLApplication {
         const dpr = 1;
         this._renderer.setPixelRatio(dpr);
         this._renderer.setSize(dimensions.innerWidth, dimensions.innerHeight, true);
-    }
-
-    _resizeRenderTarget(dimensions) {
-        const dpr = dimensions.dpr;
-        // const dpr = 1;
-        this._renderTarget.setSize(dimensions.innerWidth * dpr, dimensions.innerHeight * dpr);
-    }
-
-    _resizeBloomManager(dimensions) {
-        this._bloomManager.resize(dimensions.innerWidth, dimensions.innerHeight);
     }
 
     _triggerBidelloResize(dimensions) {
@@ -333,10 +279,6 @@ class WebGLApplication {
         performanceFolder.addMonitor(this._renderer.info.memory, 'textures', { interval: 1000 });
         performanceFolder.addMonitor(this._renderer.info.render, 'calls', { interval: 1000 });
         performanceFolder.addMonitor(this._renderer.info.render, 'triangles', { interval: 1000 });
-
-        const bloomFolder = this._debugger.addFolder({ title: 'Bloom', expanded: false });
-        bloomFolder.addInput(this._settings.bloom, 'blurIntensity').on('change', () => { this._bloomManager.settings = this._settings.bloom; });
-        bloomFolder.addInput(this._settings.bloom, 'strength');
     }
 }
 

@@ -1,5 +1,5 @@
 // Vendor
-import { Color, Scene } from 'three';
+import { Color, LinearFilter, RGBAFormat, Scene, WebGLRenderTarget } from 'three';
 import { component } from '@/webgl/vendor/bidello';
 
 // Modules
@@ -9,9 +9,8 @@ import DebugCamera from '@/webgl/modules/DebugCamera';
 // Components
 import GalleryComponent from '@/webgl/components/GalleryComponent';
 import BackgroundComponent from '@/webgl/components/BackgroundComponent';
-import BackgroundMachineComponent from '@/webgl/components/BackgroundMachineComponent';
 
-export default class MainScene extends component(Scene) {
+export default class SceneUI extends component(Scene) {
     init(options = {}) {
         // Setup
         this._camera = this._createCamera();
@@ -63,7 +62,6 @@ export default class MainScene extends component(Scene) {
     _createComponents() {
         const components = {};
         components.background = this._createBackgroundComponent();
-        components.backgroundMachine = this._createBackgroundMachine();
         components.gallery = this._createGalleryComponent();
         return components;
     }
@@ -78,12 +76,6 @@ export default class MainScene extends component(Scene) {
         const background = new BackgroundComponent();
         this.add(background);
         return background;
-    }
-
-    _createBackgroundMachine() {
-        const backgroundMachine = new BackgroundMachineComponent();
-        this.add(backgroundMachine);
-        return backgroundMachine;
     }
 
     _destroyComponents() {

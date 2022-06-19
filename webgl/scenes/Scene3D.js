@@ -1,5 +1,5 @@
 // Vendor
-import { AmbientLight, Color, Scene } from 'three';
+import { Color, LinearFilter, RGBAFormat, Scene, WebGLRenderTarget } from 'three';
 import { gsap } from 'gsap';
 import { component } from '@/webgl/vendor/bidello';
 
@@ -13,15 +13,14 @@ import degreesToRadians from '@/utils/number/degreesToRadians';
 // Components
 import MachineComponent from '@/webgl/components/MachineComponent';
 
-export default class MainScene extends component(Scene) {
+export default class Scene3D extends component(Scene) {
     init(options = {}) {
         // Setup
         this._camera = this._createCamera();
         this._debugCamera = this._createDebugCamera();
-        this._lights = this._createLights();
 
         this._settings = {
-            isDebugCamera: false,
+            isDebugCamera: true,
         };
 
         this._setupDebugger();
@@ -78,17 +77,6 @@ export default class MainScene extends component(Scene) {
     _createDebugCamera() {
         const debugCamera = new DebugCamera();
         return debugCamera;
-    }
-
-    _createLights() {
-        const lights = {};
-        lights.ambient = this._createAmbientLight();
-        return lights;
-    }
-
-    _createAmbientLight() {
-        const light = new AmbientLight();
-        return light;
     }
 
     _createComponents() {

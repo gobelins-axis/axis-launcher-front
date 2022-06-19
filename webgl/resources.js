@@ -71,7 +71,7 @@ const resources = [
     {
         type: 'gltf',
         name: 'axis-machine',
-        path: '/webgl/models/axis-machine-v6.glb',
+        path: '/webgl/models/axis-machine-v7.glb',
         preload: true,
     },
 ];
