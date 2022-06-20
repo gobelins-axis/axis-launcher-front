@@ -20,4 +20,19 @@
 
 .name {
     opacity: 0;
+
+    position: relative;
+}
+
+.loading-icon {
+    position: absolute;
+    top: rem(45px, 'large');
+    left: rem(-80px, 'large');
+
+    width: rem(50px, 'large');
+    height: rem(50px, 'large');
+
+    margin: auto;
+
+    will-change: transform;
 }

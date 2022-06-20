@@ -2,6 +2,7 @@
     <div class="game-splash-screen">
 
         <div ref="name" class="name">
+            <Loading ref="loadingIcon" class="loading-icon" />
             {{ data ? data.fields.name : '' }}
         </div>
 
