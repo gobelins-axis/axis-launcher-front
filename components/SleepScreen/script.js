@@ -17,8 +17,8 @@ export default {
         this.height = 197 * scale;
 
         const speed = 5;
-        this._position = { x: this.$windowResizeObserver.innerWidth / 2, y: this.$windowResizeObserver.innerHeight / 2 };
-        this._velocity = { x: speed * randomArbitrary(-1, 1), y: speed * randomArbitrary(-1, 1) };
+        this.position = { x: this.$windowResizeObserver.innerWidth / 2, y: this.$windowResizeObserver.innerHeight / 2 };
+        this.velocity = { x: speed * randomArbitrary(-1, 1), y: speed * randomArbitrary(-1, 1) };
 
         this.colorIndex = 0;
         this.colors = [
@@ -28,12 +28,12 @@ export default {
             '#FFD600',
         ];
 
-        this._setupStyle();
-        this._setupEventListeners();
+        this.setupStyle();
+        this.setupEventListeners();
     },
 
     beforeDestroy() {
-        this._removeEventListeners();
+        this.removeEventListeners();
     },
 
     methods: {
@@ -53,7 +53,7 @@ export default {
         /**
          * Private
          */
-        _setupStyle() {
+        setupStyle() {
             this.$refs.logo.style.width = `${this.width}px`;
             this.$refs.logo.style.height = `${this.height}px`;
             this.$refs.logo.style.height = `${this.height}px`;
@@ -62,48 +62,60 @@ export default {
             this.paths[1].style.fill = `${this.colors[this.colorIndex]}`;
         },
 
-        _setupEventListeners() {
-            gsap.ticker.add(this.tickHandler);
+        updateVelocity() {
+            if (this.position.x - this.width / 2 < 0 || this.position.x + this.width / 2 > this.$windowResizeObserver.innerWidth) {
+                this.velocity.x *= -1;
+
+                this.colorIndex++;
+                this.colorIndex = modulo(this.colorIndex, this.colors.length);
+
+                this.paths[0].style.fill = `${this.colors[this.colorIndex]}`;
+                this.paths[1].style.fill = `${this.colors[this.colorIndex]}`;
+            }
+
+            if (this.position.y - this.height / 2 < 0 || this.position.y + this.height / 2 > this.$windowResizeObserver.innerHeight) {
+                this.velocity.y *= -1;
+
+                this.colorIndex++;
+                this.colorIndex = modulo(this.colorIndex, this.colors.length);
+
+                this.paths[0].style.fill = `${this.colors[this.colorIndex]}`;
+                this.paths[1].style.fill = `${this.colors[this.colorIndex]}`;
+            }
         },
 
-        _removeEventListeners() {
+        updatePosition() {
+            this.position.x += this.velocity.x;
+            this.position.y += this.velocity.y;
+
+            this.$refs.logo.style.transform = `translate(${this.position.x - this.width / 2}px, ${this.position.y - this.height / 2}px)`;
+        },
+
+        setupEventListeners() {
+            gsap.ticker.add(this.tickHandler);
+            this.$axis.addEventListener('sleep', this.axisSleepHandler);
+            this.$axis.addEventListener('awake', this.axisAwakeHandler);
+        },
+
+        removeEventListeners() {
             gsap.ticker.remove(this.tickHandler);
         },
 
         tickHandler() {
             if (!this.isVisible) return;
 
-            this._updateVelocity();
-            this._updatePosition();
+            this.updateVelocity();
+            this.updatePosition();
         },
 
-        _updateVelocity() {
-            if (this._position.x - this.width / 2 < 0 || this._position.x + this.width / 2 > this.$windowResizeObserver.innerWidth) {
-                this._velocity.x *= -1;
-
-                this.colorIndex++;
-                this.colorIndex = modulo(this.colorIndex, this.colors.length);
-
-                this.paths[0].style.fill = `${this.colors[this.colorIndex]}`;
-                this.paths[1].style.fill = `${this.colors[this.colorIndex]}`;
-            }
-
-            if (this._position.y - this.height / 2 < 0 || this._position.y + this.height / 2 > this.$windowResizeObserver.innerHeight) {
-                this._velocity.y *= -1;
-
-                this.colorIndex++;
-                this.colorIndex = modulo(this.colorIndex, this.colors.length);
-
-                this.paths[0].style.fill = `${this.colors[this.colorIndex]}`;
-                this.paths[1].style.fill = `${this.colors[this.colorIndex]}`;
-            }
+        axisSleepHandler() {
+            this.$store.dispatch('sleep/sleeping', true);
+            this.show();
         },
 
-        _updatePosition() {
-            this._position.x += this._velocity.x;
-            this._position.y += this._velocity.y;
-
-            this.$refs.logo.style.transform = `translate(${this._position.x - this.width / 2}px, ${this._position.y - this.height / 2}px)`;
+        axisAwakeHandler() {
+            this.$store.dispatch('sleep/sleeping', false);
+            this.hide();
         },
     },
 

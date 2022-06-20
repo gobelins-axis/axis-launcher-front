@@ -33,6 +33,7 @@ export default {
         transitionIn(done, routeInfos) {
             this.timelineIn = new gsap.timeline();
             this.timelineIn.add(this.$refs.gameList.transitionIn(), 1.5);
+            this.timelineIn.call(this.$refs.gameList.enableNavigation, null, 1.8);
             this.timelineIn.add(this.$refs.inputs.transitionIn(), 2);
             if (done) this.timelineIn.call(done, null);
         },

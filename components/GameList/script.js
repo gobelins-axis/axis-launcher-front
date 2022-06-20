@@ -26,10 +26,22 @@ export default {
     computed: {
         ...mapGetters({
             gameList: 'data/gameList',
+            isSleeping: 'sleep/isSleeping',
         }),
     },
 
+    watch: {
+        isSleeping(isSleeping) {
+            if (isSleeping) {
+                this.disableNavigation();
+            } else {
+                setTimeout(() => { this.enableNavigation(); }, 500);
+            }
+        },
+    },
+
     mounted() {
+        this.isNavigationEnabled = false;
         this.isGameSelected = false;
         this.direction = 0;
         this.setupEventListeners();
@@ -44,35 +56,51 @@ export default {
          * Public
          */
         transitionIn() {
-            this._timelineIn = new gsap.timeline();
-            this._timelineIn.add(this.$refs.details[this.gameIndex].show());
-            return this._timelineIn;
+            this.timelineIn = new gsap.timeline();
+            this.timelineIn.add(this.$refs.details[this.gameIndex].show());
+            return this.timelineIn;
+        },
+
+        enableNavigation() {
+            console.log('ENABLE NAVIGATION');
+            this.isNavigationEnabled = true;
+        },
+
+        disableNavigation() {
+            console.log('DISABLE NAVIGATION');
+            this.isNavigationEnabled = false;
         },
 
         /**
          * Private
          */
         goToPrevious() {
+            if (!this.isNavigationEnabled) return;
+
             const previousIndex = this.gameIndex;
             this.$refs.details[previousIndex].hide();
             this.index--;
             this.direction = -1;
             this.gameIndex = modulo(this.index, this.gameList.length);
-            this.$root.webgl.updateGalleryIndex(this.index);
+            this.$root.webgl?.updateGalleryIndex(this.index);
             this.debounceKeyDown = debounce(this.keydownDebouncedHandler, DEBOUNCE_DELAY * 1000, this.debounceKeyDown);
         },
 
         goToNext() {
+            if (!this.isNavigationEnabled) return;
+
             const previousIndex = this.gameIndex;
             this.$refs.details[previousIndex].hide();
             this.index++;
             this.direction = 1;
             this.gameIndex = modulo(this.index, this.gameList.length);
-            this.$root.webgl.updateGalleryIndex(this.index);
+            this.$root.webgl?.updateGalleryIndex(this.index);
             this.debounceKeyDown = debounce(this.keydownDebouncedHandler, DEBOUNCE_DELAY * 1000, this.debounceKeyDown);
         },
 
         selectGame() {
+            if (!this.isNavigationEnabled) return;
+
             if (this.games[this.gameIndex].isPlaceholder) return;
             this.isGameSelected = true;
             this.$refs.details[this.gameIndex].select();
@@ -81,10 +109,14 @@ export default {
         },
 
         openScores() {
+            if (!this.isNavigationEnabled) return;
+
             if (this.$refs.details[this.gameIndex] && this.$refs.details[this.gameIndex].openScores) this.$refs.details[this.gameIndex].openScores();
         },
 
         closeScores() {
+            if (!this.isNavigationEnabled) return;
+
             if (this.$refs.details[this.gameIndex] && this.$refs.details[this.gameIndex].closeScores) this.$refs.details[this.gameIndex].closeScores();
         },
 
