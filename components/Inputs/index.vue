@@ -1,7 +1,11 @@
 <template>
     <div class="inputs">
 
-        <InputIndicator v-for="(item, index) in currentInputs" :key="index" :input="item" />
+        <div ref="container" class="container">
+
+            <InputIndicator v-for="(item, index) in currentInputs" :key="index" :input="item" />
+
+        </div>
 
     </div>
 </template>

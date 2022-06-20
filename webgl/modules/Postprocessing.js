@@ -23,7 +23,7 @@ export default class Postprocessing extends component() {
 
         this._settings = {
             bloom: {
-                strength: 0.5,
+                strength: 0.7,
                 radius: 0.53,
                 threshold: 0.9,
             },

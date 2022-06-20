@@ -125,7 +125,7 @@ export default class Scene3D extends component(Scene) {
     _setupDebugger() {
         if (!this.$debugger) return;
 
-        const folder = this.$debugger.addFolder({ title: 'Scene 3D', expanded: true });
+        const folder = this.$debugger.addFolder({ title: 'Scene 3D', expanded: false });
 
         const cameras = folder.addFolder({ title: 'Cameras', expanded: false });
         cameras.addInput(this._settings, 'isDebugCamera');

@@ -30,16 +30,16 @@ export default class CardComponent extends component(Object3D) {
 
         this._properties = {
             target: {
-                borderAlpha: 1,
+                borderAlpha: 0,
                 scale: 1,
                 offsetX: 0,
-                borderWidth: 1,
+                borderWidth: 0,
             },
             current: {
-                borderAlpha: 1,
+                borderAlpha: 0,
                 scale: 1,
                 offsetX: 0,
-                borderWidth: 1,
+                borderWidth: 0,
             },
         };
 
@@ -65,7 +65,6 @@ export default class CardComponent extends component(Object3D) {
 
     set settings(settings) {
         this._settings = settings;
-        this.active = this._active;
         this._material.uniforms.uBorderRadius.value = this._settings.borderRadius;
         this._material.uniforms.uInsetBorderRadius.value = this._settings.insetBorderRadius;
         this._material.uniforms.uBorderColor.value.set(this._settings.borderColor);

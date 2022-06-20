@@ -31,8 +31,8 @@ export default {
     methods: {
         _transitionIn() {
             this.timelineIn = new gsap.timeline();
-            this.timelineIn.to(this.$refs.logo, { duration: 0.5, alpha: 1, ease: 'sine.inOut' });
-            this.timelineIn.add(this.$refs.canvasWebGL.transitionIn());
+            this.timelineIn.add(this.$refs.canvasWebGL.transitionIn(), 0);
+            this.timelineIn.to(this.$refs.logo, { duration: 0.5, alpha: 1, ease: 'sine.inOut' }, 1.5);
             return this.timelineIn;
         },
     },

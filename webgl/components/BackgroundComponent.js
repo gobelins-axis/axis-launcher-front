@@ -15,6 +15,14 @@ export default class BackgroundComponent extends component(Object3D) {
     init(options = {}) {
         // Setup
         this._settings = {
+            animation: {
+                scale: 1.5,
+                rotation: 0,
+                translate: {
+                    x: 0,
+                    y: 0,
+                },
+            },
             transition: {
                 scale: 1.06,
                 rotation: 0,
@@ -113,6 +121,13 @@ export default class BackgroundComponent extends component(Object3D) {
     transitionIn() {
         this._timelineIn?.kill();
         this._timelineIn = new gsap.timeline();
+
+        this._timelineIn.fromTo(this._material.uniforms.uAlphaCurrent, { value: 0 }, { duration: 1, value: 1, ease: 'sine.inOut' }, 0);
+        this._timelineIn.fromTo(this._material.uniforms.uScaleCurrent, { value: this._settings.animation.scale }, { duration: 2.5, value: 1, ease: 'circ.out' }, 0);
+        this._timelineIn.fromTo(this._material.uniforms.uRotateCurrent, { value: this._settings.animation.rotation * this._direction }, { duration: 1.5, value: 0, ease: 'circ.out' }, 0);
+        this._timelineIn.fromTo(this._material.uniforms.uTranslateCurrent.value, { x: this._settings.animation.translate.x * this._direction }, { duration: 1.5, x: 0, ease: 'circ.out' }, 0);
+        this._timelineIn.fromTo(this._material.uniforms.uTranslateCurrent.value, { y: this._settings.animation.translate.y * this._direction }, { duration: 1.5, y: 0, ease: 'circ.out' }, 0);
+
         return this._timelineIn;
     }
 
@@ -132,7 +147,7 @@ export default class BackgroundComponent extends component(Object3D) {
     _setupDebug() {
         if (!this.$debugger) return;
 
-        const folder = this.$debugger.getFolder('Scene UI').addFolder({ title: 'Background' });
+        const folder = this.$debugger.getFolder('Scene UI').addFolder({ title: 'Background', expanded: false });
 
         // Transition
         const folderTransition = folder.addFolder({ title: 'Transition', expanded: false });
@@ -247,7 +262,7 @@ export default class BackgroundComponent extends component(Object3D) {
                 uScaleCurrent: { value: 1 },
                 uRotateCurrent: { value: 0 },
                 uTranslateCurrent: { value: new Vector2(0, 0) },
-                uAlphaCurrent: { value: 1 },
+                uAlphaCurrent: { value: 0 },
                 // Gradient
                 uGradientColor: { value: new Color(this._settings.gradient.color) },
                 uGradientCurveX: { value: new Vector4(0.06, 0.78, 0.33, 1.12) },

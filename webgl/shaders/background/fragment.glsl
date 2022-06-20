@@ -80,7 +80,7 @@ void main() {
     uvCurrent.y += uTranslateCurrent.y;
 
     vec4 textureCurrent = texture2D(uTextureCurrent, uvCurrent);
-    textureCurrent.a *= uAlphaCurrent;
+    textureCurrent *= uAlphaCurrent;
 
     // Horizontal Gradient
     vec3 gradientXcp1 = vec3(uGradientCurveX.x, uGradientCurveX.y, 0.0);

@@ -32,11 +32,11 @@ export default {
          * Public
          */
         transitionIn() {
-            gsap.to(this.$el, { duration: 0.5, alpha: 1 });
+            return gsap.to(this.$refs.container, { duration: 1, alpha: 1, ease: 'sine.inOut' });
         },
 
         transitionOut() {
-            gsap.to(this.$el, { duration: 0.5, alpha: 0 });
+            return gsap.to(this.$refs.container, { duration: 1, alpha: 0, ease: 'sine.inOut' });
         },
     },
 

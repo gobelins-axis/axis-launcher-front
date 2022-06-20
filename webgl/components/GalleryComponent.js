@@ -17,17 +17,37 @@ export default class GalleryComponent extends component(Object3D) {
     init(options = {}) {
         // Setup
         this._damping = 0.1;
+        this._introAnimation = { offset: 0 };
         this._offsetFactor = { target: 0, current: 0 };
         this._index = 0;
         this._activeIndex = 0;
         this._focusIndex = 0;
+        this._activeCard = null;
         this._speed = 0;
 
         this._settings = {
             velocityFactor: 0.5,
+            initialPosition: {
+                x: -1000,
+                y: 100,
+            },
+            targetPosition: {
+                x: 422,
+                y: 0,
+            },
             position: {
                 x: 422,
                 y: 0,
+            },
+            initialOffset: {
+                x: 1000,
+                y: 1000,
+                z: 800,
+            },
+            targetOffset: {
+                x: 222,
+                y: 350,
+                z: 119,
             },
             offset: {
                 x: 222,
@@ -104,7 +124,16 @@ export default class GalleryComponent extends component(Object3D) {
     transitionIn() {
         this._timelineIn?.kill();
         this._timelineIn = new gsap.timeline();
-        // this._timelineIn.fromTo(this._offsetFactor, { target: 100 }, { duration: 2, target: 0, ease: 'power3.inOut' }, 0);
+
+        this._timelineIn.fromTo(this._settings.position, { x: this._settings.initialPosition.x }, { duration: 1.5, x: this._settings.targetPosition.x, ease: 'power3.out', onUpdate: () => { this._updatePosition(); } }, 0);
+        this._timelineIn.fromTo(this._settings.position, { y: this._settings.initialPosition.y }, { duration: 1.5, y: this._settings.targetPosition.y, ease: 'power3.out', onUpdate: () => { this._updatePosition(); } }, 0);
+        this._timelineIn.fromTo(this._settings.offset, { x: this._settings.initialOffset.x }, { duration: 1.5, x: this._settings.targetOffset.x, ease: 'power3.out' }, 0);
+        this._timelineIn.fromTo(this._settings.offset, { y: this._settings.initialOffset.y }, { duration: 1.5, y: this._settings.targetOffset.y, ease: 'power3.out' }, 0);
+        this._timelineIn.fromTo(this._settings.offset, { z: this._settings.initialOffset.z }, { duration: 1.5, z: this._settings.targetOffset.z, ease: 'power3.out' }, 0);
+        this._timelineIn.call(() => { this._activeCard.active = true; }, null, 0.7);
+        this._timelineIn.fromTo(this._introAnimation, { offset: -10 }, { duration: 2, offset: 0, ease: 'power3.out' }, 0);
+
+        return this._timelineIn;
     }
 
     hide() {
@@ -123,44 +152,6 @@ export default class GalleryComponent extends component(Object3D) {
     /**
      * Private
      */
-    _setupDebugger() {
-        if (!this.$debugger) return;
-
-        const folder = this.$debugger.getFolder('Scene UI').addFolder({ title: 'Gallery', expanded: false });
-
-        folder.addInput(this._settings, 'velocityFactor');
-
-        const folderPosition = folder.addFolder({ title: 'Container Position' });
-        folderPosition.addInput(this._settings.position, 'x').on('change', () => { WindowResizeObserver.triggerResize(); });
-        folderPosition.addInput(this._settings.position, 'y').on('change', () => { WindowResizeObserver.triggerResize(); });
-
-        const folderCardsOffset = folder.addFolder({ title: 'Cards position offset' });
-        folderCardsOffset.addInput(this._settings.offset, 'x');
-        folderCardsOffset.addInput(this._settings.offset, 'y');
-        folderCardsOffset.addInput(this._settings.offset, 'z');
-
-        const folderCardsRotationOffset = folder.addFolder({ title: 'Cards rotation offset' });
-        folderCardsRotationOffset.addInput(this._settings.rotationOffset, 'x');
-        folderCardsRotationOffset.addInput(this._settings.rotationOffset, 'y');
-        folderCardsRotationOffset.addInput(this._settings.rotationOffset, 'z');
-
-        const folderCard = folder.addFolder({ title: 'Card properties' });
-        folderCard.addInput(this._settings.card, 'width').on('change', () => { this._updateCardsSettings(); });
-        folderCard.addInput(this._settings.card, 'height').on('change', () => { this._updateCardsSettings(); });
-        folderCard.addInput(this._settings.card, 'borderRadius').on('change', () => { this._updateCardsSettings(); });
-        folderCard.addInput(this._settings.card, 'insetBorderRadius').on('change', () => { this._updateCardsSettings(); });
-        folderCard.addInput(this._settings.card, 'borderColor').on('change', () => { this._updateCardsSettings(); });
-        folderCard.addInput(this._settings.card, 'borderWidth').on('change', () => { this._updateCardsSettings(); });
-        folderCard.addInput(this._settings.card, 'borderAlpha', { min: 0, max: 1 }).on('change', () => { this._updateCardsSettings(); });
-        folderCard.addInput(this._settings.card, 'alphaOffset').on('change', () => { this._updateCardsSettings(); });
-        folderCard.addInput(this._settings.card, 'overlayColor').on('change', () => { this._updateCardsSettings(); });
-        folderCard.addInput(this._settings.card, 'visibilityThreshold').on('change', () => { this._updateCardsSettings(); });
-
-        const folderActiveCard = folderCard.addFolder({ title: 'Active Card properties' });
-        folderActiveCard.addInput(this._settings.card.activeProperties, 'scale').on('change', () => { this._updateCardsSettings(); });
-        folderActiveCard.addInput(this._settings.card.activeProperties, 'offsetX').on('change', () => { this._updateCardsSettings(); });
-    }
-
     _getData() {
         const data = this.$store.state.data.gameList;
         return data;
@@ -198,8 +189,9 @@ export default class GalleryComponent extends component(Object3D) {
                 geometry: cardGeometry,
             });
 
-            if (i === this._activeIndex) card.active = true;
-            else card.active = false;
+            if (i === this._activeIndex) this._activeCard = card;
+            // if (i === this._activeIndex) card.active = true;
+            // else card.active = false;
 
             this.add(card);
             cards.push(card);
@@ -249,7 +241,7 @@ export default class GalleryComponent extends component(Object3D) {
 
         for (let i = 0; i < this._cards.length; i++) {
             const card = this._cards[i];
-            const index = this._map[i] + this._offsetFactor.current;
+            const index = this._map[i] + this._offsetFactor.current + this._introAnimation.offset;
             const distanceFromCenter = Math.abs(modulo(index, this._cards.length) - center);
             card.distanceFromCenter = distanceFromCenter;
             card.position.z = -offsetZ * distanceFromCenter;
@@ -273,9 +265,7 @@ export default class GalleryComponent extends component(Object3D) {
      */
     onWindowResize(dimensions) {
         this._resizeCards(dimensions);
-
-        this.position.x = -dimensions.innerWidth / 2 + Breakpoints.rem(this._settings.position.x);
-        this.position.y = Breakpoints.rem(this._settings.position.y);
+        this._updatePosition();
     }
 
     _resizeCards(dimensions) {
@@ -283,5 +273,53 @@ export default class GalleryComponent extends component(Object3D) {
             const card = this._cards[i];
             card.resize(dimensions);
         }
+    }
+
+    _updatePosition() {
+        this.position.x = -WindowResizeObserver.innerWidth / 2 + Breakpoints.rem(this._settings.position.x);
+        this.position.y = Breakpoints.rem(this._settings.position.y);
+    }
+
+    /**
+     * Debug
+     */
+    _setupDebugger() {
+        if (!this.$debugger) return;
+
+        const folder = this.$debugger.getFolder('Scene UI').addFolder({ title: 'Gallery', expanded: false });
+
+        folder.addButton({ title: 'Transition In' }).on('click', () => { this.transitionIn(); });
+
+        folder.addInput(this._settings, 'velocityFactor');
+
+        const folderPosition = folder.addFolder({ title: 'Container Position' });
+        folderPosition.addInput(this._settings.position, 'x').on('change', () => { this._updatePosition(); });
+        folderPosition.addInput(this._settings.position, 'y').on('change', () => { this._updatePosition(); });
+
+        const folderCardsOffset = folder.addFolder({ title: 'Cards position offset' });
+        folderCardsOffset.addInput(this._settings.offset, 'x');
+        folderCardsOffset.addInput(this._settings.offset, 'y');
+        folderCardsOffset.addInput(this._settings.offset, 'z');
+
+        const folderCardsRotationOffset = folder.addFolder({ title: 'Cards rotation offset' });
+        folderCardsRotationOffset.addInput(this._settings.rotationOffset, 'x');
+        folderCardsRotationOffset.addInput(this._settings.rotationOffset, 'y');
+        folderCardsRotationOffset.addInput(this._settings.rotationOffset, 'z');
+
+        const folderCard = folder.addFolder({ title: 'Card properties' });
+        folderCard.addInput(this._settings.card, 'width').on('change', () => { this._updateCardsSettings(); });
+        folderCard.addInput(this._settings.card, 'height').on('change', () => { this._updateCardsSettings(); });
+        folderCard.addInput(this._settings.card, 'borderRadius').on('change', () => { this._updateCardsSettings(); });
+        folderCard.addInput(this._settings.card, 'insetBorderRadius').on('change', () => { this._updateCardsSettings(); });
+        folderCard.addInput(this._settings.card, 'borderColor').on('change', () => { this._updateCardsSettings(); });
+        folderCard.addInput(this._settings.card, 'borderWidth').on('change', () => { this._updateCardsSettings(); });
+        folderCard.addInput(this._settings.card, 'borderAlpha', { min: 0, max: 1 }).on('change', () => { this._updateCardsSettings(); });
+        folderCard.addInput(this._settings.card, 'alphaOffset').on('change', () => { this._updateCardsSettings(); });
+        folderCard.addInput(this._settings.card, 'overlayColor').on('change', () => { this._updateCardsSettings(); });
+        folderCard.addInput(this._settings.card, 'visibilityThreshold').on('change', () => { this._updateCardsSettings(); });
+
+        const folderActiveCard = folderCard.addFolder({ title: 'Active Card properties' });
+        folderActiveCard.addInput(this._settings.card.activeProperties, 'scale').on('change', () => { this._updateCardsSettings(); });
+        folderActiveCard.addInput(this._settings.card.activeProperties, 'offsetX').on('change', () => { this._updateCardsSettings(); });
     }
 }

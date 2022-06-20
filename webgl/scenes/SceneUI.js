@@ -49,8 +49,8 @@ export default class SceneUI extends component(Scene) {
 
     transitionIn() {
         this._timelineIn = new gsap.timeline();
-        this._timelineIn.add(this._components.gallery.transitionIn(), 0);
         this._timelineIn.add(this._components.background.transitionIn(), 0);
+        this._timelineIn.add(this._components.gallery.transitionIn(), 0);
         return this._timelineIn;
     }
 
@@ -113,7 +113,7 @@ export default class SceneUI extends component(Scene) {
     _setupDebugger() {
         if (!this.$debugger) return;
 
-        const folder = this.$debugger.addFolder({ title: 'Scene UI', expanded: false });
+        const folder = this.$debugger.addFolder({ title: 'Scene UI', expanded: true });
 
         const cameras = folder.addFolder({ title: 'Cameras', expanded: false });
         cameras.addInput(this._settings, 'isDebugCamera');
