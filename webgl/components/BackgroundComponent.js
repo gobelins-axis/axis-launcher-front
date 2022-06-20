@@ -40,8 +40,6 @@ export default class BackgroundComponent extends component(Object3D) {
             },
         };
 
-        // initial: {"scale":1.0869565217391304,"rotation":3,"translate":{"x":-0.06521739130434778,"y":-0.021739130434782594}}, target: {"scale":1.15,"rotation":0,"translate":{"x":-0.1,"y":0}}
-
         this._focusIndex = 0;
         this._direction = 0;
         this._data = this.$store.state.data.gameList;
@@ -107,6 +105,15 @@ export default class BackgroundComponent extends component(Object3D) {
         super.destroy();
         this._material.dispose();
         this._mesh.geometry.dispose();
+        this._timelineIn?.kill();
+        this._timelineUpdate?.kill();
+        this._timelineShowAxisBackground?.kill();
+    }
+
+    transitionIn() {
+        this._timelineIn?.kill();
+        this._timelineIn = new gsap.timeline();
+        return this._timelineIn;
     }
 
     /**
@@ -125,7 +132,7 @@ export default class BackgroundComponent extends component(Object3D) {
     _setupDebug() {
         if (!this.$debugger) return;
 
-        const folder = this.$debugger.getFolder('Main Scene').addFolder({ title: 'Background' });
+        const folder = this.$debugger.getFolder('Scene UI').addFolder({ title: 'Background' });
 
         // Transition
         const folderTransition = folder.addFolder({ title: 'Transition', expanded: false });

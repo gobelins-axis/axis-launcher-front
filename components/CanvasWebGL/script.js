@@ -11,7 +11,7 @@ export default {
     computed: {
         ...mapGetters({
             context: 'context/context',
-            isLoadingCompleted: 'preloader/isCompleted',
+            isLoadingCompleted: 'preloader/isLoadingCompleted',
         }),
     },
 
@@ -20,6 +20,10 @@ export default {
             if (isCompleted) {
                 this.$root.webgl.prepare();
                 this.$root.webgl.start();
+
+                setTimeout(() => {
+                    this.$store.dispatch('preloader/setCompleted');
+                }, 500);
             }
         },
     },
@@ -36,6 +40,13 @@ export default {
     },
 
     methods: {
+        /**
+         * Public
+         */
+        transitionIn() {
+            return this.$root.webgl.transitionIn();
+        },
+
         /**
          * Private
          */

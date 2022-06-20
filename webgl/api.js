@@ -11,6 +11,11 @@ export default {
         this._start();
     },
 
+    transitionIn() {
+        if (!this.sceneUI.components.gallery) return;
+        return this.sceneUI.transitionIn();
+    },
+
     updateGalleryIndex(index) {
         if (!this.sceneUI.components.gallery) return;
         this.sceneUI.components.gallery.index = index;

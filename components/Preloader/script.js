@@ -21,12 +21,13 @@ export default {
     computed: {
         ...mapGetters({
             isLoadingCompleted: 'preloader/isLoadingCompleted',
+            isCompleted: 'preloader/isCompleted',
             games: 'data/gameList',
         }),
     },
 
     watch: {
-        isLoadingCompleted(isComplete) {
+        isCompleted(isComplete) {
             if (isComplete) this.$el.style.display = 'none';
         },
     },
@@ -96,7 +97,6 @@ export default {
 
         loadingCompleteHandler() {
             this.$store.dispatch('preloader/setLoadingCompleted');
-            this.$store.dispatch('preloader/setCompleted');
         },
     },
 

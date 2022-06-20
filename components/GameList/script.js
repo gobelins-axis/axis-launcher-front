@@ -1,5 +1,6 @@
 // Vendor
 import { mapGetters } from 'vuex';
+import { gsap } from 'gsap';
 
 // Components
 import GameDetails from '@/components/GameDetails';
@@ -43,7 +44,9 @@ export default {
          * Public
          */
         transitionIn() {
-            return this.$refs.details[this.gameIndex].show();
+            this._timelineIn = new gsap.timeline();
+            // this._timelineIn.add(this.$refs.details[this.gameIndex].show());
+            return this._timelineIn;
         },
 
         /**

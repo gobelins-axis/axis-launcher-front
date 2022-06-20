@@ -30,7 +30,10 @@ export default {
 
     methods: {
         _transitionIn() {
-            gsap.to(this.$refs.logo, { duration: 0.5, alpha: 1, ease: 'sine.inOut' });
+            this.timelineIn = new gsap.timeline();
+            this.timelineIn.to(this.$refs.logo, { duration: 0.5, alpha: 1, ease: 'sine.inOut' });
+            this.timelineIn.add(this.$refs.canvasWebGL.transitionIn());
+            return this.timelineIn;
         },
     },
 

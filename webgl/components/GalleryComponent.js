@@ -101,6 +101,12 @@ export default class GalleryComponent extends component(Object3D) {
         this._timelineHide?.kill();
     }
 
+    transitionIn() {
+        this._timelineIn?.kill();
+        this._timelineIn = new gsap.timeline();
+        // this._timelineIn.fromTo(this._offsetFactor, { target: 100 }, { duration: 2, target: 0, ease: 'power3.inOut' }, 0);
+    }
+
     hide() {
         const offsetX = -WindowResizeObserver.innerWidth / 2 + Breakpoints.rem(-500);
         this._settings.position.x = offsetX;
@@ -120,7 +126,7 @@ export default class GalleryComponent extends component(Object3D) {
     _setupDebugger() {
         if (!this.$debugger) return;
 
-        const folder = this.$debugger.getFolder('Main Scene').addFolder({ title: 'Gallery', expanded: false });
+        const folder = this.$debugger.getFolder('Scene UI').addFolder({ title: 'Gallery', expanded: false });
 
         folder.addInput(this._settings, 'velocityFactor');
 

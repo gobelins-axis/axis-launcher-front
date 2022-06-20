@@ -10,6 +10,7 @@ export default (context, inject) => {
 
     const gamepadEmulator = Axis.createGamepadEmulator(0);
     Axis.joystick1.setGamepadEmulatorJoystick(gamepadEmulator, 0); // Left
+    Axis.joystick2.setGamepadEmulatorJoystick(gamepadEmulator, 1); // Right
     Axis.registerGamepadEmulatorKeys(gamepadEmulator, 0, 'a', 1);
     Axis.registerGamepadEmulatorKeys(gamepadEmulator, 1, 'x', 1);
     Axis.registerGamepadEmulatorKeys(gamepadEmulator, 2, 'i', 1);

@@ -91,6 +91,10 @@ export default class Postprocessing extends component() {
         // Output
         this._renderer.setRenderTarget(null);
         this._renderer.render(this._scene, this._camera);
+
+        // Debug Scene 3D
+        this._renderer.setRenderTarget(null);
+        this._renderer.render(this._scene3D, this._scene3D.camera);
     }
 
     /**

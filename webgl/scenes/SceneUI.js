@@ -1,6 +1,7 @@
 // Vendor
 import { Color, LinearFilter, RGBAFormat, Scene, WebGLRenderTarget } from 'three';
 import { component } from '@/webgl/vendor/bidello';
+import { gsap } from 'gsap';
 
 // Modules
 import PerspectiveCameraUI from '@/webgl/modules/PerspectiveCameraUI';
@@ -37,13 +38,20 @@ export default class SceneUI extends component(Scene) {
     /**
      * Public
      */
+    destroy() {
+        super.destroy();
+        this._destroyComponents();
+    }
+
     start() {
         this._components = this._createComponents();
     }
 
-    destroy() {
-        super.destroy();
-        this._destroyComponents();
+    transitionIn() {
+        this._timelineIn = new gsap.timeline();
+        this._timelineIn.add(this._components.gallery.transitionIn(), 0);
+        this._timelineIn.add(this._components.background.transitionIn(), 0);
+        return this._timelineIn;
     }
 
     /**
@@ -105,7 +113,7 @@ export default class SceneUI extends component(Scene) {
     _setupDebugger() {
         if (!this.$debugger) return;
 
-        const folder = this.$debugger.addFolder({ title: 'Main Scene', expanded: false });
+        const folder = this.$debugger.addFolder({ title: 'Scene UI', expanded: false });
 
         const cameras = folder.addFolder({ title: 'Cameras', expanded: false });
         cameras.addInput(this._settings, 'isDebugCamera');
