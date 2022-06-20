@@ -28,17 +28,19 @@ export default class BackgroundComponent extends component(Object3D) {
             },
             axisBackground: {
                 initial: {
-                    scale: 1,
-                    rotation: 0,
-                    translate: { x: 0, y: 0 },
+                    scale: 1.0869565217391304,
+                    rotation: 3,
+                    translate: { x: -0.06521739130434778, y: -0.021739130434782594 },
                 },
                 target: {
-                    scale: 1,
+                    scale: 1.15,
                     rotation: 0,
-                    translate: { x: 0, y: 0 },
+                    translate: { x: -0.1, y: 0 },
                 },
             },
         };
+
+        // initial: {"scale":1.0869565217391304,"rotation":3,"translate":{"x":-0.06521739130434778,"y":-0.021739130434782594}}, target: {"scale":1.15,"rotation":0,"translate":{"x":-0.1,"y":0}}
 
         this._focusIndex = 0;
         this._direction = 0;

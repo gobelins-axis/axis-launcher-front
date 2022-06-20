@@ -1,6 +1,8 @@
 // Modules
 import BlurPlaneBuffer from './BlurPlaneBuffer';
 
+const ITERATIONS = 6;
+
 export default class BlurManager {
     constructor(options = {}) {
         // Props
@@ -52,7 +54,7 @@ export default class BlurManager {
      * Public
      */
     render() {
-        const iterations = 8;
+        const iterations = ITERATIONS;
 
         let writeBuffer = this._bufferA; // Execute blur
         let readBuffer = this._bufferB; // Recieve blur

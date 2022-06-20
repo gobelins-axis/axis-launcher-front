@@ -25,7 +25,7 @@ export default {
     },
 
     mounted() {
-        this.webglDebugger = new Debugger();
+        if (this.context.isDevelopment) this.webglDebugger = new Debugger();
         this.setupWebGLApplication();
     },
 

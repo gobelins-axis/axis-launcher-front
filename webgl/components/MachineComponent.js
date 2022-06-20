@@ -151,7 +151,7 @@ export default class MachineComponent extends component(Object3D) {
 
         // Structure
         materials.structure = this._createMatcapMaterial(null, ResourceLoader.get('matcap-mirror-2'));
-        materials.structure.customSettings.color = '#111111';
+        materials.structure.customSettings.color = '#414141';
         materials.structure.uniforms.color.value.set(materials.structure.customSettings.color);
         materials.structure.defines.USE_DIFFUSE_COLOR = true;
         materials.structure.needsUpdate = true;
@@ -160,8 +160,8 @@ export default class MachineComponent extends component(Object3D) {
         materials.ventilation = this._createMatcapMaterial(ResourceLoader.get('axis-machine-ventilation'), ResourceLoader.get('matcap-mirror-1'));
 
         // Plexiglass
-        materials.plexiglass = this._createMatcapMaterial(null, ResourceLoader.get('matcap-grey-shine'));
-        materials.plexiglass.customSettings.color = '#aeaeae';
+        materials.plexiglass = this._createMatcapMaterial(null, ResourceLoader.get('matcap-mirror-1'));
+        materials.plexiglass.customSettings.color = '#7e7e7e';
         materials.plexiglass.uniforms.color.value.set(materials.plexiglass.customSettings.color);
         materials.plexiglass.defines.USE_DIFFUSE_COLOR = true;
         materials.plexiglass.needsUpdate = true;
@@ -177,8 +177,8 @@ export default class MachineComponent extends component(Object3D) {
         materials.button = this._createEmissiveMaterial(null, new Color('#ffffff'));
 
         // Joysticks
-        materials.joystickBall = this._createMatcapMaterial(null, ResourceLoader.get('matcap-grey-shine'));
-        materials.joystickBall.customSettings.color = '#111111';
+        materials.joystickBall = this._createMatcapMaterial(null, ResourceLoader.get('matcap-mirror-2'));
+        materials.joystickBall.customSettings.color = '#313131';
         materials.joystickBall.uniforms.color.value.set(materials.joystickBall.customSettings.color);
         materials.joystickBall.defines.USE_DIFFUSE_COLOR = true;
         materials.joystickBall.needsUpdate = true;

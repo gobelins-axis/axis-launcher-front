@@ -5,8 +5,8 @@ import { LinearFilter, MeshBasicMaterial, RGBAFormat, ShaderMaterial, WebGLRende
 import BlurManager from '@/webgl/modules/BlurManager';
 import BloomPlaneBuffer from './BloomPlaneBuffer';
 
-const BLUR_QUALITY = 0.3;
-const MASK_QUALITY = 0.5;
+const BLUR_QUALITY = 0.2;
+const MASK_QUALITY = 0.2;
 
 export default class BloomManager {
     constructor(options = {}) {

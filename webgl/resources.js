@@ -20,7 +20,7 @@ const resources = [
     {
         type: 'texture',
         name: 'axis-background',
-        path: '/webgl/textures/axis-background.png',
+        path: '/webgl/textures/axis-background.jpg',
         preload: true,
     },
     {
