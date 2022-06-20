@@ -10,6 +10,7 @@ export default class JoystickManager {
         // Setup
         this._settings = {
             amplitude: 0.02,
+            amplitudeBuzzer: 0.03,
         };
 
         this._bindAll();
@@ -55,13 +56,29 @@ export default class JoystickManager {
         if (button.isKeydown) return;
 
         button.isKeydown = true;
-        button.mesh.position.y -= this._settings.amplitude;
+
+        if (button.key === 'w') {
+            button.mesh.position.z += this._settings.amplitudeBuzzer * (button.id === 1 ? -1 : 1);
+        } else {
+            button.mesh.position.y -= this._settings.amplitude;
+        }
+
+        button.mesh.material.color.set(`hsl(${Math.random() * 100}, 100%, 50%)`);
     }
 
     _keyupHandler(e) {
         const button = this._getButton(e.id, e.key);
 
+        if (!button.isKeydown) return;
+
         button.isKeydown = false;
-        button.mesh.position.y += this._settings.amplitude;
+
+        if (button.key === 'w') {
+            button.mesh.position.z -= this._settings.amplitudeBuzzer * (button.id === 1 ? -1 : 1);
+        } else {
+            button.mesh.position.y += this._settings.amplitude;
+        }
+
+        button.mesh.material.color.set('#ffffff');
     }
 }

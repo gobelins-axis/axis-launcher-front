@@ -7,6 +7,7 @@ export default (context, inject) => {
     Axis.registerKeys('x', 'x', 1);
     Axis.registerKeys('i', 'i', 1);
     Axis.registerKeys('s', 's', 1);
+    Axis.registerKeys('w', 'w', 2);
 
     const gamepadEmulator = Axis.createGamepadEmulator(0);
     Axis.joystick1.setGamepadEmulatorJoystick(gamepadEmulator, 0); // Left

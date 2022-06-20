@@ -9,7 +9,7 @@ export default class JoystickManager {
 
         // Setup
         this._settings = {
-            amplitude: 35,
+            amplitude: 30,
         };
 
         this._bindAll();
@@ -40,20 +40,18 @@ export default class JoystickManager {
 
     _setupEventListeners() {
         Axis.addEventListener('joystick:move', this._joystickMoveHandler);
-        window.addEventListener('mousemove', this._mousemoveHandler);
+        // window.addEventListener('mousemove', this._mousemoveHandler);
     }
 
     _removeEventListeners() {
         Axis.removeEventListener('joystick:move', this._joystickMoveHandler);
-        window.removeEventListener('mousemove', this._mousemoveHandler);
+        // window.removeEventListener('mousemove', this._mousemoveHandler);
     }
 
     _joystickMoveHandler(e) {
         const id = e.id;
         const x = e.position.x;
         const y = e.position.y;
-
-        console.log(e);
 
         const joystick = this._getJoystick(id);
 
@@ -65,6 +63,6 @@ export default class JoystickManager {
         const x = (e.clientX - WindowResizeObserver.innerWidth / 2) / (WindowResizeObserver.innerWidth / 2);
         const y = (e.clientY - WindowResizeObserver.innerHeight / 2) / (WindowResizeObserver.innerHeight / 2);
 
-        // this._joystickMoveHandler({ id: 2, position: { x, y } });
+        this._joystickMoveHandler({ id: 2, position: { x, y } });
     }
 }

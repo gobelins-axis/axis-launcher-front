@@ -45,7 +45,7 @@ export default {
          */
         transitionIn() {
             this._timelineIn = new gsap.timeline();
-            // this._timelineIn.add(this.$refs.details[this.gameIndex].show());
+            this._timelineIn.add(this.$refs.details[this.gameIndex].show());
             return this._timelineIn;
         },
 
@@ -81,11 +81,11 @@ export default {
         },
 
         openScores() {
-            this.$refs.details[this.gameIndex].openScores();
+            if (this.$refs.details[this.gameIndex] && this.$refs.details[this.gameIndex].openScores) this.$refs.details[this.gameIndex].openScores();
         },
 
         closeScores() {
-            this.$refs.details[this.gameIndex].closeScores();
+            if (this.$refs.details[this.gameIndex] && this.$refs.details[this.gameIndex].closeScores) this.$refs.details[this.gameIndex].closeScores();
         },
 
         /**

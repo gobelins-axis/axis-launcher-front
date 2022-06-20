@@ -1,5 +1,6 @@
 // Vendor
 import { CanvasTexture, Color } from 'three';
+import Axis from 'axis-api';
 
 const AMOUNT = 51;
 
@@ -11,6 +12,8 @@ export default class CanvadLeds {
         this._canvas = document.createElement('canvas');
         this._context = this._canvas.getContext('2d');
         this._texture = new CanvasTexture(this._canvas);
+
+        this._isBuzzerKeydown = false;
 
         this._settings = {
             delta: 5,
@@ -26,6 +29,8 @@ export default class CanvadLeds {
         // this._canvas.style.zIndex = 10000;
         // document.body.appendChild(this._canvas);
 
+        this._bindAll();
+        this._setupEventListeners();
         this._resizeCanvas();
     }
 
@@ -55,6 +60,7 @@ export default class CanvadLeds {
 
     dispose() {
         this._canvas.remove();
+        this._removeEventListeners();
     }
 
     /**
@@ -112,6 +118,39 @@ export default class CanvadLeds {
             const led = this._leds[i];
             this._context.fillStyle = led.color;
             this._context.fillRect(led.position.x, led.position.y, led.width, led.height);
+        }
+    }
+
+    _bindAll() {
+        this._keydownHandler = this._keydownHandler.bind(this);
+        this._keyupHandler = this._keyupHandler.bind(this);
+    }
+
+    _setupEventListeners() {
+        Axis.addEventListener('keydown', this._keydownHandler);
+        Axis.addEventListener('keyup', this._keyupHandler);
+    }
+
+    _removeEventListeners() {
+        Axis.removeEventListener('keydown', this._keydownHandler);
+        Axis.removeEventListener('keyup', this._keyupHandler);
+    }
+
+    _keydownHandler(e) {
+        if (this._isBuzzerKeydown) return;
+
+        if (e.key === 'w') {
+            this._isBuzzerKeydown = true;
+            this._settings.speed *= 5;
+        }
+    }
+
+    _keyupHandler(e) {
+        if (!this._isBuzzerKeydown) return;
+
+        if (e.key === 'w') {
+            this._isBuzzerKeydown = false;
+            this._settings.speed /= 5;
         }
     }
 }

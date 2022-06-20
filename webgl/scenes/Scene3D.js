@@ -20,7 +20,7 @@ export default class Scene3D extends component(Scene) {
         this._debugCamera = this._createDebugCamera();
 
         this._settings = {
-            isDebugCamera: true,
+            isDebugCamera: false,
         };
 
         this._setupDebugger();

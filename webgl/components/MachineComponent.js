@@ -304,7 +304,8 @@ export default class MachineComponent extends component(Object3D) {
 
             for (const key in configMaterials) {
                 if (configMaterials[key].includes(child.name)) {
-                    child.material = this._materials[key];
+                    if (key === 'button') child.material = this._materials[key].clone();
+                    else child.material = this._materials[key];
                 }
             }
         });

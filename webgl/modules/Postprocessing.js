@@ -18,6 +18,9 @@ export default class Postprocessing extends component() {
 
         this._is3DSceneEnabled = false;
 
+        // Debug
+        // this._is3DSceneEnabled = true;
+
         this._settings = {
             bloom: {
                 strength: 0.5,
@@ -93,8 +96,8 @@ export default class Postprocessing extends component() {
         this._renderer.render(this._scene, this._camera);
 
         // Debug Scene 3D
-        this._renderer.setRenderTarget(null);
-        this._renderer.render(this._scene3D, this._scene3D.camera);
+        // this._renderer.setRenderTarget(null);
+        // this._renderer.render(this._scene3D, this._scene3D.camera);
     }
 
     /**
