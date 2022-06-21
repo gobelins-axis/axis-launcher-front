@@ -62,7 +62,7 @@ export default {
 
             this.timelineShow.call(() => {
                 for (let i = 0; i < this.$axis.ledManager.leds.length; i++) {
-                    this.$axis.ledManager.leds[i].setColor('#ff0000');
+                    this.$axis.ledManager.leds[i].setColor(this.game.fields.colors.first);
                 }
             }, null, 0.1);
 
@@ -73,9 +73,10 @@ export default {
                 const ledRight = this.$axis.ledManager.ledGroups[1].leds[i];
                 const stagger = 0.05;
                 const delay = 0.1;
+                const color = i % 2 === 0 ? this.game.fields.colors.first : this.game.fields.colors.secondary;
 
-                timeline.call(() => { ledLeft.setColor('#ff0000'); }, null, i * stagger + delay);
-                timeline.call(() => { ledRight.setColor('#ff0000'); }, null, i * stagger + delay);
+                timeline.call(() => { ledLeft.setColor(color); }, null, i * stagger + delay);
+                timeline.call(() => { ledRight.setColor(color); }, null, i * stagger + delay);
             }
 
             this.timelineShow.add(timeline);

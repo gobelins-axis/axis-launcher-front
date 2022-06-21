@@ -65,12 +65,10 @@ export default {
         },
 
         enableNavigation() {
-            console.log('ENABLE NAVIGATION');
             this.isNavigationEnabled = true;
         },
 
         disableNavigation() {
-            console.log('DISABLE NAVIGATION');
             this.isNavigationEnabled = false;
         },
 
