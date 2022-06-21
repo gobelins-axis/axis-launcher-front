@@ -14,6 +14,7 @@ export default {
     props: ['game', 'active'],
 
     mounted() {
+        console.log(this.game);
         this.isLeaderboardOpen = false;
         this.isLeaderboardAvailable = this.game.fields.leaderboardActive && this.game.scores.length > 0;
         this.setupStyle();
@@ -57,6 +58,27 @@ export default {
             this.timelineHide?.kill();
             this.timelineShow = new gsap.timeline();
             this.timelineShow.to(this.$el, { duration: 1, alpha: 1, ease: 'sine.inOut' });
+            this.timelineShow.to(this.$el, { duration: 1, alpha: 1, ease: 'sine.inOut' });
+
+            this.timelineShow.call(() => {
+                for (let i = 0; i < this.$axis.ledManager.leds.length; i++) {
+                    this.$axis.ledManager.leds[i].setColor('#ff0000');
+                }
+            }, null, 0.1);
+
+            const timeline = new gsap.timeline();
+
+            for (let i = 0; i < this.$axis.ledManager.ledGroups[0].leds.length; i++) {
+                const ledLeft = this.$axis.ledManager.ledGroups[0].leds[i];
+                const ledRight = this.$axis.ledManager.ledGroups[1].leds[i];
+                const stagger = 0.05;
+                const delay = 0.1;
+
+                timeline.call(() => { ledLeft.setColor('#ff0000'); }, null, i * stagger + delay);
+                timeline.call(() => { ledRight.setColor('#ff0000'); }, null, i * stagger + delay);
+            }
+
+            this.timelineShow.add(timeline);
 
             this.setInputs();
 
@@ -67,6 +89,14 @@ export default {
             this.timelineShow?.kill();
             this.timelineHide = new gsap.timeline();
             this.timelineHide.to(this.$el, { duration: 0.1, alpha: 0, ease: 'sine.inOut' });
+
+            for (let i = 0; i < this.$axis.ledManager.leds.length; i++) {
+                this.$axis.ledManager.leds[i].setColor('#000000');
+            }
+
+            for (let i = 0; i < this.$axis.ledManager.ledGroups.length; i++) {
+                this.$axis.ledManager.ledGroups[i].setColor('#000000');
+            }
 
             return this.timelineHide;
         },
