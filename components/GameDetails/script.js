@@ -1,6 +1,9 @@
 // Vendor
 import { gsap } from 'gsap';
 
+// Utils
+import AudioManager from '@/utils/AudioManager';
+
 // Components
 import GameCredits from '@/components/GameCredits';
 import GameDate from '@/components/GameDate';
@@ -46,6 +49,8 @@ export default {
             this.timelineSelect = new gsap.timeline();
             this.timelineSelect.to(this.$el, { duration: 0.5, alpha: 0, ease: 'sine.inOut' });
             this.timelineSelect.call(() => { this.$axis.ipcRenderer?.send('url:changed', { url: this.game.fields.url }); }, null, 3.5);
+
+            AudioManager.playEffect('start-game');
         },
 
         show() {
@@ -72,6 +77,8 @@ export default {
             this.isLeaderboardOpen = true;
             this.$refs.leaderboard?.open();
             this.setInputs();
+
+            AudioManager.playEffect('open');
         },
 
         closeScores() {
@@ -80,6 +87,8 @@ export default {
             this.isLeaderboardOpen = false;
             this.$refs.leaderboard?.close();
             this.setInputs();
+
+            AudioManager.playEffect('close');
         },
 
         resetScores() {

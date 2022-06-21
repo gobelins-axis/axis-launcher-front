@@ -21,8 +21,9 @@ export default {
                 this.$root.webgl.prepare();
                 this.$root.webgl.start();
 
+                // TMP
                 setTimeout(() => {
-                    this.$store.dispatch('preloader/setCompleted');
+                    this.$store.dispatch('webgl/setReady', true);
                 }, 500);
             }
         },

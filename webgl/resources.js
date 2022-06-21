@@ -74,6 +74,39 @@ const resources = [
         path: '/webgl/models/axis-machine-v7.glb',
         preload: true,
     },
+    /**
+     * Sounds
+     */
+    {
+        type: 'sound',
+        name: 'navigation',
+        path: '/sounds/V1/navigation.mp3',
+        preload: true,
+    },
+    {
+        type: 'sound',
+        name: 'open',
+        path: '/sounds/V1/open.mp3',
+        preload: true,
+    },
+    {
+        type: 'sound',
+        name: 'close',
+        path: '/sounds/V1/close.mp3',
+        preload: true,
+    },
+    {
+        type: 'sound',
+        name: 'start-game',
+        path: '/sounds/V1/start-game.mp3',
+        preload: true,
+    },
+    // {
+    //     type: 'sound',
+    //     name: 'power-on',
+    //     path: '/sounds/V1/power-on.mp3',
+    //     preload: true,
+    // },
 ];
 
 export default resources;

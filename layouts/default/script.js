@@ -20,7 +20,7 @@ export default {
         },
 
         isCompleted(isCompleted) {
-            this._transitionIn();
+            this.transitionIn();
         },
     },
 
@@ -29,8 +29,8 @@ export default {
     },
 
     methods: {
-        _transitionIn() {
-            this.timelineIn = new gsap.timeline();
+        transitionIn() {
+            this.timelineIn = new gsap.timeline({ delay: 0.5 });
             this.timelineIn.add(this.$refs.canvasWebGL.transitionIn(), 0);
             this.timelineIn.to(this.$refs.logo, { duration: 0.5, alpha: 1, ease: 'sine.inOut' }, 1.5);
             return this.timelineIn;
@@ -49,6 +49,11 @@ export default {
 
         SleepScreen: () => {
             if (process.client) return import('@/components/SleepScreen');
+        },
+
+        // TPM
+        RevealScreen: () => {
+            if (process.client) return import('@/components/RevealScreen');
         },
 
         Logo,

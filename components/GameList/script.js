@@ -9,6 +9,7 @@ import modulo from '@/utils/number/modulo';
 
 // Utils
 import debounce from '@/utils/debounce';
+import AudioManager from '@/utils/AudioManager';
 
 // Seconds
 const DEBOUNCE_DELAY = 0.2;
@@ -84,6 +85,8 @@ export default {
             this.gameIndex = modulo(this.index, this.gameList.length);
             this.$root.webgl?.updateGalleryIndex(this.index);
             this.debounceKeyDown = debounce(this.keydownDebouncedHandler, DEBOUNCE_DELAY * 1000, this.debounceKeyDown);
+
+            AudioManager.playEffect('navigation');
         },
 
         goToNext() {
@@ -96,6 +99,8 @@ export default {
             this.gameIndex = modulo(this.index, this.gameList.length);
             this.$root.webgl?.updateGalleryIndex(this.index);
             this.debounceKeyDown = debounce(this.keydownDebouncedHandler, DEBOUNCE_DELAY * 1000, this.debounceKeyDown);
+
+            AudioManager.playEffect('navigation');
         },
 
         selectGame() {

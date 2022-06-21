@@ -2,10 +2,13 @@
 import ResourceLoader from '@/vendor/resource-loader';
 import ThreeTextureLoader from '@/vendor/loaders/ThreeTextureLoader';
 import ThreeGLTFDracoLoader from '@/vendor/loaders/ThreeGLTFDracoLoader';
+import AudioLoader from '@/vendor/loaders/AudioLoader';
 import { mapGetters } from 'vuex';
+import { gsap } from 'gsap';
 
 // Utils
 import BMFontLoader from '@/utils/loaders/BMFontLoader';
+import AudioManager from '@/utils/AudioManager';
 
 // Resources
 import resources from '@/webgl/resources';
@@ -16,19 +19,24 @@ import Logo from '@/assets/icons/logo.svg?inline';
 ResourceLoader.registerLoader(BMFontLoader, 'fnt');
 ResourceLoader.registerLoader(ThreeTextureLoader, 'texture');
 ResourceLoader.registerLoader(ThreeGLTFDracoLoader, 'gltf');
+ResourceLoader.registerLoader(AudioLoader, 'sound');
 
 export default {
     computed: {
         ...mapGetters({
-            isLoadingCompleted: 'preloader/isLoadingCompleted',
             isCompleted: 'preloader/isCompleted',
+            isWebGLReady: 'webgl/isReady',
             games: 'data/gameList',
         }),
     },
 
     watch: {
         isCompleted(isComplete) {
-            if (isComplete) this.$el.style.display = 'none';
+            if (isComplete) this.hide();
+        },
+
+        isWebGLReady(isReady) {
+            if (isReady) this.webglReadyHandler();
         },
     },
 
@@ -37,12 +45,38 @@ export default {
         this.resourceLoader = this.createResourceLoader();
         this.resourceLoader.add({ resources: this._resources });
 
-        this.setupEventListeners();
+        ResourceLoader.loadResource({
+            type: 'sound',
+            name: 'power-on',
+            path: '/sounds/V1/power-on.mp3',
+            preload: true,
+        }).then(() => {
+            this.show();
+        });
 
+        this.setupEventListeners();
         this.resourceLoader.preload();
     },
 
     methods: {
+        /**
+         * Public
+         */
+        show() {
+            this.timelineShow = new gsap.timeline();
+            this.timelineShow.to(this.$el, { duration: 1, alpha: 1, ease: 'sine.inOut' });
+            this.timelineShow.call(() => { AudioManager.playEffect('power-on'); }, null, 0);
+            this.timelineShow.call(this.showCompletedHandler, null, 3);
+        },
+
+        hide() {
+            this.timelineHide = new gsap.timeline();
+            this.timelineHide.to(this.$el, { duration: 0.5, alpha: 0, ease: 'sine.inOut' });
+        },
+
+        /**
+         * Private
+         */
         getResources() {
             const clonedResources = JSON.parse(JSON.stringify(resources));
 
@@ -96,7 +130,19 @@ export default {
         },
 
         loadingCompleteHandler() {
-            this.$store.dispatch('preloader/setLoadingCompleted');
+            this.isResourcesReady = true;
+
+            if (this.isShowCompleted) this.$store.dispatch('preloader/setLoadingCompleted');
+        },
+
+        showCompletedHandler() {
+            this.isShowCompleted = true;
+
+            if (this.isResourcesReady) this.$store.dispatch('preloader/setLoadingCompleted');
+        },
+
+        webglReadyHandler() {
+            if (this.isResourcesReady) this.$store.dispatch('preloader/setCompleted');
         },
     },
 

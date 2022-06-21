@@ -17,6 +17,11 @@
             <SleepScreen />
         </client-only>
 
+        <!-- TPM -->
+        <client-only>
+            <RevealScreen />
+        </client-only>
+
     </div>
 </template>
 
