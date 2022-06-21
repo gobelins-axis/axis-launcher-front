@@ -10,6 +10,17 @@ const mutations = {
 
         // Game List
         state.gameList = games;
+
+        // Sort per created
+        state.gameList = state.gameList.sort((a, b) => {
+            return new Date(b.fields.createdAt) - new Date(a.fields.createdAt);
+        });
+
+        // Put coming soon games at the end
+        state.gameList = state.gameList.sort((a) => {
+            return a.fields.isComingSoon ? -1 : 1;
+        });
+
         state.gameList.push(placeholderGame);
 
         while (state.gameList.length < min) {

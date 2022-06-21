@@ -4,6 +4,7 @@ import { gsap } from 'gsap';
 
 // Components
 import GameDetails from '@/components/GameDetails';
+import GameDetailsComingSoon from '@/components/GameDetailsComingSoon';
 import AxisDetails from '@/components/AxisDetails';
 import modulo from '@/utils/number/modulo';
 
@@ -42,6 +43,7 @@ export default {
     },
 
     mounted() {
+        console.log(this.gameList);
         this.isNavigationEnabled = false;
         this.isGameSelected = false;
         this.direction = 0;
@@ -178,6 +180,7 @@ export default {
 
     components: {
         GameDetails,
+        GameDetailsComingSoon,
         AxisDetails,
     },
 };

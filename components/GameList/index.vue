@@ -3,7 +3,8 @@
 
         <li v-for="(item, i) in gameList" ref="listItem" :key="i" class="game-list-item">
 
-            <GameDetails v-if="!item.isPlaceholder" ref="details" :game="item" :active="gameIndex === i" />
+            <GameDetailsComingSoon v-if="item.fields.isComingSoon" ref="details" :game="item" :active="gameIndex === i" />
+            <GameDetails v-else-if="!item.isPlaceholder" ref="details" :game="item" :active="gameIndex === i" />
             <AxisDetails v-else ref="details" :game="item" :active="gameIndex === i" />
 
         </li>
