@@ -14,7 +14,6 @@ export default {
     props: ['game', 'active'],
 
     mounted() {
-        console.log(this.game);
         this.isLeaderboardOpen = false;
         this.isLeaderboardAvailable = this.game.fields.leaderboardActive && this.game.scores.length > 0;
         this.setupStyle();
@@ -51,7 +50,7 @@ export default {
             this.timelineSelect.to(this.$el, { duration: 0.5, alpha: 0, ease: 'sine.inOut' });
             this.timelineSelect.call(() => { this.$axis.ipcRenderer?.send('url:changed', { url: this.game.fields.url }); }, null, 3.5);
 
-            AudioManager.playEffect('start-game');
+            AudioManager.playEffect('start-game', 0.5);
         },
 
         show() {
@@ -71,15 +70,15 @@ export default {
             for (let i = 0; i < this.$axis.ledManager.ledGroups[0].leds.length; i++) {
                 const ledLeft = this.$axis.ledManager.ledGroups[0].leds[i];
                 const ledRight = this.$axis.ledManager.ledGroups[1].leds[i];
-                const stagger = 0.05;
-                const delay = 0.1;
-                const color = i % 2 === 0 ? this.game.fields.colors.first : this.game.fields.colors.secondary;
+                const stagger = 0.01;
+                const delay = 0;
+                const color = this.game.fields.colors.first;
 
                 timeline.call(() => { ledLeft.setColor(color); }, null, i * stagger + delay);
                 timeline.call(() => { ledRight.setColor(color); }, null, i * stagger + delay);
             }
 
-            this.timelineShow.add(timeline);
+            this.timelineShow.add(timeline, 0);
 
             this.setInputs();
 
@@ -91,13 +90,13 @@ export default {
             this.timelineHide = new gsap.timeline();
             this.timelineHide.to(this.$el, { duration: 0.1, alpha: 0, ease: 'sine.inOut' });
 
-            for (let i = 0; i < this.$axis.ledManager.leds.length; i++) {
-                this.$axis.ledManager.leds[i].setColor('#000000');
-            }
+            // for (let i = 0; i < this.$axis.ledManager.leds.length; i++) {
+            //     this.$axis.ledManager.leds[i].setColor('#000000');
+            // }
 
-            for (let i = 0; i < this.$axis.ledManager.ledGroups.length; i++) {
-                this.$axis.ledManager.ledGroups[i].setColor('#000000');
-            }
+            // for (let i = 0; i < this.$axis.ledManager.ledGroups.length; i++) {
+            //     this.$axis.ledManager.ledGroups[i].setColor('#000000');
+            // }
 
             return this.timelineHide;
         },
@@ -109,7 +108,7 @@ export default {
             this.$refs.leaderboard?.open();
             this.setInputs();
 
-            AudioManager.playEffect('open');
+            AudioManager.playEffect('open', 0.5);
         },
 
         closeScores() {
@@ -119,7 +118,7 @@ export default {
             this.$refs.leaderboard?.close();
             this.setInputs();
 
-            AudioManager.playEffect('close');
+            AudioManager.playEffect('close', 0.5);
         },
 
         resetScores() {

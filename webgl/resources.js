@@ -80,25 +80,25 @@ const resources = [
     {
         type: 'sound',
         name: 'navigation',
-        path: '/sounds/V1/navigation.mp3',
+        path: '/sounds/V3/navigation.mp3',
         preload: true,
     },
     {
         type: 'sound',
         name: 'open',
-        path: '/sounds/V1/open.mp3',
+        path: '/sounds/V3/open.mp3',
         preload: true,
     },
     {
         type: 'sound',
         name: 'close',
-        path: '/sounds/V1/close.mp3',
+        path: '/sounds/V3/close.mp3',
         preload: true,
     },
     {
         type: 'sound',
         name: 'start-game',
-        path: '/sounds/V1/start-game.mp3',
+        path: '/sounds/V3/start-game.mp3',
         preload: true,
     },
     // {

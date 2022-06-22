@@ -48,7 +48,7 @@ export default {
         ResourceLoader.loadResource({
             type: 'sound',
             name: 'power-on',
-            path: '/sounds/V1/power-on.mp3',
+            path: '/sounds/V3/power-on.mp3',
             preload: true,
         }).then(() => {
             this.show();

@@ -11,6 +11,7 @@ import modulo from '@/utils/number/modulo';
 // Utils
 import debounce from '@/utils/debounce';
 import AudioManager from '@/utils/AudioManager';
+import math from '@/utils/math';
 
 // Seconds
 const DEBOUNCE_DELAY = 0.2;
@@ -43,7 +44,11 @@ export default {
     },
 
     mounted() {
-        console.log(this.gameList);
+        this.settings = {
+            speedFactor: 0.1,
+            maxFrequency: 1.1,
+        };
+        this.frequencyOffset = 0;
         this.isNavigationEnabled = false;
         this.isGameSelected = false;
         this.direction = 0;
@@ -86,7 +91,10 @@ export default {
             this.$root.webgl?.updateGalleryIndex(this.index);
             this.debounceKeyDown = debounce(this.keydownDebouncedHandler, DEBOUNCE_DELAY * 1000, this.debounceKeyDown);
 
-            AudioManager.playEffect('navigation');
+            AudioManager.playEffect('navigation', 0.5, this.frequencyOffset);
+
+            this.frequencyOffset += this.settings.speedFactor;
+            this.frequencyOffset = Math.min(this.frequencyOffset, this.settings.maxFrequency);
         },
 
         goToNext() {
@@ -100,7 +108,10 @@ export default {
             this.$root.webgl?.updateGalleryIndex(this.index);
             this.debounceKeyDown = debounce(this.keydownDebouncedHandler, DEBOUNCE_DELAY * 1000, this.debounceKeyDown);
 
-            AudioManager.playEffect('navigation');
+            AudioManager.playEffect('navigation', 0.5, this.frequencyOffset);
+
+            this.frequencyOffset += this.settings.speedFactor;
+            this.frequencyOffset = Math.min(this.frequencyOffset, this.settings.maxFrequency);
         },
 
         selectGame() {
@@ -169,6 +180,8 @@ export default {
 
         keydownDebouncedHandler() {
             if (this.isGameSelected) return;
+
+            this.frequencyOffset = 0;
 
             this.$refs.details[this.gameIndex].show();
             this.$root.webgl.updateGalleryFocusIndex(this.gameIndex, this.direction);
