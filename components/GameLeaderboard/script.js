@@ -10,9 +10,13 @@ export default {
     computed: {
         scores() {
             if (this.data && this.data.length > 0) {
+                const max = 8;
                 const min = 8;
-                const scores = [...this.data];
+                const allScores = [...this.data];
+                const scores = allScores.slice(0, max);
                 const placeholder = { value: '-', username: '-', date: '-', isPlaceholder: false };
+
+                console.log(scores);
 
                 while (scores.length < min) {
                     scores.push(placeholder);

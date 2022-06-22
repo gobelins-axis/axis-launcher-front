@@ -12,7 +12,7 @@ export default {
 
         this.paths = this.$refs.logo.querySelectorAll('path');
 
-        const scale = 0.5;
+        const scale = 1;
         this.width = 500 * scale;
         this.height = 197 * scale;
 
