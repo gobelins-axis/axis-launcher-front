@@ -18,7 +18,7 @@ class AudioManager {
     /**
      * Public
      */
-    playEffect(name, volume = 1, frequency = 0) {
+    playEffect(name, volume = 2, frequency = 0) {
         this._gain.gain.value = volume;
         const source = this._context.createBufferSource();
         source.buffer = ResourceLoader.get(name);

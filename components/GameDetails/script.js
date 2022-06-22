@@ -50,7 +50,7 @@ export default {
             this.timelineSelect.to(this.$el, { duration: 0.5, alpha: 0, ease: 'sine.inOut' });
             this.timelineSelect.call(() => { this.$axis.ipcRenderer?.send('url:changed', { url: this.game.fields.url }); }, null, 3.5);
 
-            AudioManager.playEffect('start-game', 0.5);
+            AudioManager.playEffect('start-game');
         },
 
         show() {
@@ -108,7 +108,7 @@ export default {
             this.$refs.leaderboard?.open();
             this.setInputs();
 
-            AudioManager.playEffect('open', 0.5);
+            AudioManager.playEffect('open');
         },
 
         closeScores() {
@@ -118,7 +118,7 @@ export default {
             this.$refs.leaderboard?.close();
             this.setInputs();
 
-            AudioManager.playEffect('close', 0.5);
+            AudioManager.playEffect('close');
         },
 
         resetScores() {

@@ -91,7 +91,7 @@ export default {
             this.$root.webgl?.updateGalleryIndex(this.index);
             this.debounceKeyDown = debounce(this.keydownDebouncedHandler, DEBOUNCE_DELAY * 1000, this.debounceKeyDown);
 
-            AudioManager.playEffect('navigation', 0.5, this.frequencyOffset);
+            AudioManager.playEffect('navigation', 1, this.frequencyOffset);
 
             this.frequencyOffset += this.settings.speedFactor;
             this.frequencyOffset = Math.min(this.frequencyOffset, this.settings.maxFrequency);
@@ -108,7 +108,7 @@ export default {
             this.$root.webgl?.updateGalleryIndex(this.index);
             this.debounceKeyDown = debounce(this.keydownDebouncedHandler, DEBOUNCE_DELAY * 1000, this.debounceKeyDown);
 
-            AudioManager.playEffect('navigation', 0.5, this.frequencyOffset);
+            AudioManager.playEffect('navigation', 1, this.frequencyOffset);
 
             this.frequencyOffset += this.settings.speedFactor;
             this.frequencyOffset = Math.min(this.frequencyOffset, this.settings.maxFrequency);
