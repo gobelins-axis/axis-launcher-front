@@ -24,6 +24,12 @@ export default {
         this.elementSetterX = gsap.quickSetter(this.$el, 'x', 'px');
         this.valueSetterAlpha = gsap.quickSetter(this.$refs.value, 'alpha');
         this.dateSetterAlpha = gsap.quickSetter(this.$refs.date, 'alpha');
+
+        setTimeout(() => {
+            gsap.set(this.$el, { x: this.$breakpoints.rem(273) });
+            gsap.set(this.$refs.value, { alpha: 0 });
+            gsap.set(this.$refs.date, { alpha: 0 });
+        }, 1000);
     },
 
     methods: {

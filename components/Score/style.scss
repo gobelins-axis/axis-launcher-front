@@ -15,7 +15,7 @@
 
     background: linear-gradient(180deg, rgba(255, 255, 255, 0) 47.4%, rgba(255, 255, 255, 0.3) 100%), rgba(255, 255, 255, 0.2);
 
-    transform: translateX(rem(273px, 'large'));
+    // transform: translateX(rem(273px, 'large'));
 
     border-top-left-radius: rem(10px, 'large');
     border-top-right-radius: rem(0, 'large');
@@ -90,10 +90,10 @@
     font-weight: 800;
     font-size: rem(28px, 'large');
     line-height: rem(38px, 'large');  
-    }
+}
 
 .value {
-    opacity: 0;
+    // opacity: 0;
 
     position: relative;
 
@@ -116,7 +116,7 @@
 }
 
 .date {
-    opacity: 0;
+    // opacity: 0;
 
     margin-top: rem(4px, 'large');
 

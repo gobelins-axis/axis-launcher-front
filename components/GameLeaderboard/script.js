@@ -16,8 +16,6 @@ export default {
                 const scores = allScores.slice(0, max);
                 const placeholder = { value: '-', username: '-', date: '-', isPlaceholder: false };
 
-                console.log(scores);
-
                 while (scores.length < min) {
                     scores.push(placeholder);
                 }
