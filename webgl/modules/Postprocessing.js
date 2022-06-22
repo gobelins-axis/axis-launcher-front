@@ -162,7 +162,8 @@ export default class Postprocessing extends component() {
     }
 
     _resizeRenderTarget3D(dimensions) {
-        const dpr = dimensions.dpr;
+        const dpr = 1;
+        // const dpr = dimensions.dpr;
         this._renderTarget3D.setSize(dimensions.innerWidth * dpr, dimensions.innerHeight * dpr);
     }
 
