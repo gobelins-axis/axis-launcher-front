@@ -18,7 +18,7 @@ const mutations = {
 
         // Put coming soon games at the end
         state.gameList = state.gameList.sort((a) => {
-            return a.fields.isComingSoon ? -1 : 1;
+            return a.fields.isComingSoon ? 1 : -1;
         });
 
         state.gameList.push(placeholderGame);
