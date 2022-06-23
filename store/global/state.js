@@ -1,5 +1,5 @@
 const state = () => ({
-    isStartAllowed: false,
+    isStartAllowed: true,
 });
 
 export default state;

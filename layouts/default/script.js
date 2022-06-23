@@ -29,11 +29,11 @@ export default {
         this.$store.dispatch('router/setCurrent', this.$route);
 
         // TPM
-        if (window.__axis__history__index === 0) {
-            this.setupEventListeners();
-        } else {
-            this.$store.dispatch('global/allowStart');
-        }
+        // if (window.__axis__history__index === 0) {
+        //     this.setupEventListeners();
+        // } else {
+        //     this.$store.dispatch('global/allowStart');
+        // }
     },
 
     methods: {
@@ -48,14 +48,14 @@ export default {
         },
 
         // TPM
-        setupEventListeners() {
-            this.$axis.addEventListener('start', this.axisStartHandler);
-        },
+        // setupEventListeners() {
+        //     this.$axis.addEventListener('start', this.axisStartHandler);
+        // },
 
         // TPM
-        axisStartHandler() {
-            this.$store.dispatch('global/allowStart');
-        },
+        // axisStartHandler() {
+        //     this.$store.dispatch('global/allowStart');
+        // },
     },
 
     components: {
