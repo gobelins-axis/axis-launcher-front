@@ -1,5 +1,6 @@
 // Vendor
 import { gsap } from 'gsap';
+import { mapGetters } from 'vuex';
 
 // Components
 import Logo from '@/assets/icons/logo.svg?inline';
@@ -7,6 +8,19 @@ import randomArbitrary from '@/utils/math/randomArbitrary';
 import modulo from '@/utils/number/modulo';
 
 export default {
+    computed: {
+        ...mapGetters({
+            isSleeping: 'sleep/isSleeping',
+        }),
+    },
+
+    watch: {
+        isSleeping(isSleeping) {
+            if (isSleeping) this.show();
+            else this.hide();
+        },
+    },
+
     mounted() {
         this.isVisible = true;
 
@@ -110,12 +124,10 @@ export default {
 
         axisSleepHandler() {
             this.$store.dispatch('sleep/sleeping', true);
-            this.show();
         },
 
         axisAwakeHandler() {
             this.$store.dispatch('sleep/sleeping', false);
-            this.hide();
         },
     },
 

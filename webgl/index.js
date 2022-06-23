@@ -178,6 +178,8 @@ class WebGLApplication {
      * Update
      */
     _tick() {
+        if (this._store.state.sleep.isSleeping) return;
+
         this._stats?.begin();
         this._update();
         this._render();
