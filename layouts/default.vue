@@ -5,21 +5,16 @@
             <CanvasWebGL ref="canvasWebGL" />
         </client-only>
 
-        <Logo ref="logo" class="logo" />
+        <Logo v-if="isStartAllowed" ref="logo" class="logo" />
 
-        <Nuxt class="page" />
+        <Nuxt v-if="isStartAllowed" class="page" />
 
         <client-only>
-            <Preloader />
+            <Preloader v-if="isStartAllowed" />
         </client-only>
 
         <client-only>
-            <SleepScreen />
-        </client-only>
-
-        <!-- TPM -->
-        <client-only>
-            <RevealScreen />
+            <SleepScreen v-if="isStartAllowed" />
         </client-only>
 
     </div>

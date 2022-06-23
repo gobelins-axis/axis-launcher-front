@@ -8,6 +8,7 @@ import Logo from '@/assets/icons/logo.svg?inline';
 export default {
     computed: {
         ...mapGetters({
+            isStartAllowed: 'global/isStartAllowed',
             isCompleted: 'preloader/isCompleted',
         }),
     },
@@ -26,14 +27,34 @@ export default {
 
     mounted() {
         this.$store.dispatch('router/setCurrent', this.$route);
+
+        // TPM
+        if (window.__axis__history__index === 0) {
+            this.setupEventListeners();
+        } else {
+            this.$store.dispatch('global/allowStart');
+        }
     },
 
     methods: {
+        /**
+         * Private
+         */
         transitionIn() {
             this.timelineIn = new gsap.timeline({ delay: 0.5 });
             this.timelineIn.add(this.$refs.canvasWebGL.transitionIn(), 0);
             this.timelineIn.to(this.$refs.logo, { duration: 0.5, alpha: 1, ease: 'sine.inOut' }, 1.5);
             return this.timelineIn;
+        },
+
+        // TPM
+        setupEventListeners() {
+            this.$axis.addEventListener('start', this.axisStartHandler);
+        },
+
+        // TPM
+        axisStartHandler() {
+            this.$store.dispatch('global/allowStart');
         },
     },
 
@@ -49,11 +70,6 @@ export default {
 
         SleepScreen: () => {
             if (process.client) return import('@/components/SleepScreen');
-        },
-
-        // TPM
-        RevealScreen: () => {
-            if (process.client) return import('@/components/RevealScreen');
         },
 
         Logo,
