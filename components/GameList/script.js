@@ -117,7 +117,7 @@ export default {
         selectGame() {
             if (!this.isNavigationEnabled) return;
 
-            if (this.games[this.gameIndex].isPlaceholder) return;
+            if (this.games[this.gameIndex].isPlaceholder || this.games[this.gameIndex].fields.isComingSoon) return;
             this.isGameSelected = true;
             this.$refs.details[this.gameIndex].select();
             this.$root.webgl.hideGallery();
