@@ -216,14 +216,14 @@ export default class GalleryComponent extends component(Object3D) {
      * Update
      */
     onUpdate({ time, delta }) {
-        this._updateOffset();
-        this._updateCardsPosition();
+        this._updateOffset({ time, delta });
+        this._updateCardsPosition({ time, delta });
         this._updateCards({ time, delta });
     }
 
-    _updateOffset() {
+    _updateOffset({ time, delta }) {
         const previous = this._offsetFactor.current;
-        this._offsetFactor.current = math.lerp(this._offsetFactor.current, this._offsetFactor.target, this._damping);
+        this._offsetFactor.current = math.lerp(this._offsetFactor.current, this._offsetFactor.target, this._damping * (delta / 0.016));
         this._speed = this._offsetFactor.current - previous;
     }
 
