@@ -160,7 +160,7 @@ export default class GalleryComponent extends component(Object3D) {
     _createPositionMap() {
         const map = [];
 
-        const middle = Math.round(this._data.length / 2);
+        const middle = this._data.length % 2 === 0 ? Math.round(this._data.length / 2) : Math.floor(this._data.length / 2);
         let a = -middle;
         let b = 0;
 
