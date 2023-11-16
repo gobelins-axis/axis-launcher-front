@@ -20,7 +20,7 @@
         <div class="col-right">
 
             <div ref="value" class="value">
-                {{ data.value }}
+                {{ data.valueString || data.value }}
             </div>
 
             <div ref="date" class="date">
