@@ -6,7 +6,7 @@ export default {
         description: [
             'Axis est bien plus qu’une borne interactive, c’est un véritable outil pour les développeurs et les designers!',
             'Tu souhaites en savoir plus sur la borne ou ajouter ton jeu sur la borne?',
-            'Rendez-vous sur axis.hub.com',
+            'Rendez-vous sur axis-hub.netlify.com',
         ],
         credits: '',
         url: '',
