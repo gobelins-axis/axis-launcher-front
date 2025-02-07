@@ -49,7 +49,13 @@ export default ({ store }, inject) => {
                         games[i].scores = scores;
                     }
 
-                    resolve(games);
+                    // Filter disabled games
+                    const filteredGames = games.filter((item) => {
+                        return !item.fields.disabled;
+                    })
+
+                    resolve(filteredGames);
+                    // resolve(games);
                     // resolve(debugGames);
                 });
             });
