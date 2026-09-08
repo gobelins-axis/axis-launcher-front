@@ -49,6 +49,7 @@ void main() {
 
     vec4 background = texture;
     background.rgb = mix(uOverlayColor, background.rgb, uOverlayAlpha);
+    background.a = 1.0;
     background *= cardAlpha - cardBorderAlpha;
     // background.a *= cardAlpha;
 

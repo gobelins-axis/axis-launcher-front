@@ -1,8 +1,8 @@
 <template>
     <div class="game-details">
 
-        <h2 class="title">
-            <span>{{ game.fields.name }}</span>
+        <h2 ref="title" class="title">
+            <span ref="titleLabel" class="title-label">{{ game.fields.name }}</span>
         </h2>
 
         <GameTags v-if="game.fields.filters" :data="game.fields" />

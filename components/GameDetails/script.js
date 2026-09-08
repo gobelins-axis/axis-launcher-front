@@ -10,6 +10,11 @@ import GameDate from '@/components/GameDate';
 import GameLeaderboard from '@/components/GameLeaderboard';
 import GameTags from '@/components/GameTags';
 
+// Title fitting: the title shrinks (as a ratio of its CSS font-size) until it fits
+// on one line. Below TITLE_MIN_SCALE it stops shrinking and wraps on two lines,
+// which is the point where two lines fit in the title's max-height.
+const TITLE_MIN_SCALE = 0.5;
+
 export default {
     props: ['game', 'active'],
 
@@ -17,6 +22,8 @@ export default {
         this.isLeaderboardOpen = false;
         this.isLeaderboardAvailable = this.game.fields.leaderboardActive && this.game.scores.length > 0;
         this.setupStyle();
+        this.fitTitle();
+        document.fonts?.ready.then(() => this.fitTitle());
     },
 
     beforeDestroy() {
@@ -26,6 +33,10 @@ export default {
     },
 
     watch: {
+        'game.fields.name'() {
+            this.$nextTick(() => this.fitTitle());
+        },
+
         active(current, previous) {
             if (current) clearTimeout(this.resetTimeout);
             if (previous && !current) {
@@ -132,6 +143,27 @@ export default {
         setupStyle() {
             // if (this.active) this.$el.style.opacity = 1;
             // else this.$el.style.opacity = 0;
+        },
+
+        fitTitle() {
+            const title = this.$refs.title;
+            const label = this.$refs.titleLabel;
+            if (!title || !label) return;
+
+            // Measure at the natural size on a single line
+            label.style.fontSize = '';
+            label.classList.remove('is-wrapping');
+            const available = title.clientWidth;
+            const needed = label.scrollWidth;
+            if (!available || !needed) return;
+
+            const scale = Math.min(1, available / needed);
+            if (scale >= TITLE_MIN_SCALE) {
+                label.style.fontSize = scale < 1 ? `${scale}em` : '';
+            } else {
+                label.style.fontSize = `${TITLE_MIN_SCALE}em`;
+                label.classList.add('is-wrapping');
+            }
         },
 
         setInputs() {

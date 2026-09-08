@@ -1,6 +1,6 @@
 .game-details {
     opacity: 0;
-    
+
     // Debug
     // display: none;
 
@@ -24,6 +24,20 @@
     font-weight: 800;
     font-size: rem(128px, 'large');
     line-height: rem(115px, 'large');
+}
+
+// Font-size is set inline (in em) by fitTitle() when the name is too long for one
+// line, so the line-height must scale with it; 115/128 keeps the design ratio.
+.title-label {
+    display: block;
+
+    line-height: 0.9; // 115 / 128
+
+    white-space: nowrap;
+
+    &.is-wrapping {
+        white-space: normal;
+    }
 }
 
 .game-tags {
